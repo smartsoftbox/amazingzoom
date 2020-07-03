@@ -25,3 +25,14 @@
 * Don't forget to prefix your containers with your own identifier
 * to avoid any conflicts with others containers.
 */
+
+$(document).ready(function() {
+  $('input[type="range"]').each(function(){
+    $(this).rangeslider({
+      // Callback function
+      onSlide: function(position, value) {
+        $(this).parent().find('.input-range-slider').val(value);
+      }
+    });
+  });
+});

@@ -1,5 +1,6 @@
-/**
-* 2007-2020 PrestaShop
+<?php
+/*
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -17,33 +18,18 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2020 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author PrestaShop SA <contact@prestashop.com>
+*  @copyright  2007-2013 PrestaShop SA
+*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
 */
-
-.inline-radio {
-  display: inline-block !important;
-  border: 1px solid #c7d6db;
-  border-radius: 3px;
-  padding: 5px;
-}
-
-.inline-radio:hover {
-  background: #00aff0;
-  color: #fff;
-}
-
-.range-slider {
-  display: inline-block !important;
-  height: 10px;
-}
-
-.input-range-slider {
-  display: inline-block !important;
-  width: 50px;
-}
+                        
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+                        
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+                        
+header("Location: ../");
+exit;

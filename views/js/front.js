@@ -25,3 +25,14 @@
 * Don't forget to prefix your containers with your own identifier
 * to avoid any conflicts with others containers.
 */
+
+$(document).ready(function() {
+  // document is loaded and DOM is ready
+  $(".js-qv-product-cover").each(function() {
+    $(this).attr('xoriginal', $(this).attr('src').replace('-large_default', ''));
+  });
+
+  /* calling script */
+  $(".js-qv-product-cover, .thumbs").xzoom({tint: '#333', Xoffset: 15});
+
+});
