@@ -27,12 +27,17 @@
 */
 
 $(document).ready(function() {
-  $('input[type="range"]').each(function(){
-    $(this).rangeslider({
-      // Callback function
-      onSlide: function(position, value) {
-        $(this).parent().find('.input-range-slider').val(value);
-      }
-    });
+  // Initialize a new plugin instance for one element or NodeList of elements.
+  const slider = document.querySelector('input[type="range"]');
+  rangeSlider.create(slider, {
+    polyfill: true,     // Boolean, if true, custom markup will be created
+    root: document,
+    vertical: false,    // Boolean, if true slider will be displayed in vertical orientation
+    borderRadius: 3,   // Number, if you're using buffer + border-radius in css
+    onInit: function () {
+    },
+    onSlide: function (position, value) {
+       $(slider).closest('.col-lg-9').find('.input-range-slider').val(Math.round(value * 100));
+    }
   });
 });

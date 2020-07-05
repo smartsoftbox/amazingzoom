@@ -45,5 +45,11 @@
 
 .input-range-slider {
   display: inline-block !important;
-  width: 50px;
+  width: 50px !important;
+}
+
+.rangeSlider {
+  width: 200px !important;
+  display: inline-block;
+  height: 10px;
 }

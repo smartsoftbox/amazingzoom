@@ -33,6 +33,41 @@ $(document).ready(function() {
   });
 
   /* calling script */
-  $(".js-qv-product-cover, .thumbs").xzoom({tint: '#333', Xoffset: 15});
+  $(".js-qv-product-cover, .thumbs").xzoom({
+    'position': AMAIZINGZOOM_position,
+    'mposition': AMAIZINGZOOM_mposition,
+    'rootOutput': AMAIZINGZOOM_rootOutput,
+    'Xoffset': AMAIZINGZOOM_Xoffset,
+    'Yoffset': AMAIZINGZOOM_Yoffset,
+    'fadeIn': AMAIZINGZOOM_fadeIn,
+    'fadeTrans': AMAIZINGZOOM_fadeTrans,
+    'fadeOut': AMAIZINGZOOM_fadeOut,
+    'smoothZoomMove': AMAIZINGZOOM_smoothZoomMove,
+    'smoothLensMove': AMAIZINGZOOM_smoothLensMove,
+    'smoothScale': AMAIZINGZOOM_smoothScale,
+    'defaultScale': AMAIZINGZOOM_defaultScale,
+    'scroll': AMAIZINGZOOM_scroll,
+    'tint': AMAIZINGZOOM_tint,
+    'tintOpacity': AMAIZINGZOOM_tintOpacity,
+    'lens': AMAIZINGZOOM_lens,
+    'lensOpacity': AMAIZINGZOOM_lensOpacity,
+    'lensShape': AMAIZINGZOOM_lensShape,
+    'lensCollision': AMAIZINGZOOM_lensCollision,
+    'lensReverse': AMAIZINGZOOM_lensReverse,
+    'openOnSmall': AMAIZINGZOOM_openOnSmall,
+    'zoomWidth': AMAIZINGZOOM_zoomWidth,
+    'zoomHeight': AMAIZINGZOOM_zoomHeight,
+    'sourceClass': AMAIZINGZOOM_sourceClass,
+    'loadingClass': AMAIZINGZOOM_loadingClass,
+    'lensClass': AMAIZINGZOOM_lensClass,
+    'zoomClass': AMAIZINGZOOM_zoomClass,
+    'activeClass': AMAIZINGZOOM_activeClass,
+    'hover': AMAIZINGZOOM_hover,
+    'adaptive': AMAIZINGZOOM_adaptive,
+    'adaptiveReverse': AMAIZINGZOOM_adaptiveReverse,
+    'title': AMAIZINGZOOM_title,
+    'titleClass': AMAIZINGZOOM_titleClass,
+    'bg': AMAIZINGZOOM_bg
+  });
 
 });
