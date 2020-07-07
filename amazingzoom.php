@@ -146,29 +146,29 @@ class Amazingzoom extends Module
                 ),
                 'input' => array(
                     array(
-                        'type' => 'radio',
+                        'type' => 'radio-icon',
                         'name' => Config::AMAZINGZOOM_position,
                         'class' => 'inline-radio',
                         'label' => $this->l('Position of zoom output window'),
                         'desc' => $this->l('Position of zoom output window, one of the next properties is available "top", "left", "right", "bottom", "inside", "lens", "#ID".'),
                         'values' => array(
-                            array('id' => 'top', 'value' => 'top', 'label' => $this->l('Top')),
-                            array('id' => 'left', 'value' => 'left', 'label' => $this->l('Left')),
-                            array('id' => 'right', 'value' => 'right', 'label' => $this->l('Right')),
-                            array('id' => 'bottom', 'value' => 'bottom', 'label' => $this->l('Bottom')),
-                            array('id' => 'inside', 'value' => 'inside', 'label' => $this->l('Inside')),
-                            array('id' => 'lens', 'value' => 'lens', 'label' => $this->l('Lens'))
+                            array('id' => 'icon-top', 'value' => 'top', 'label' => $this->l('Top')),
+                            array('id' => 'icon-right', 'value' => 'right', 'label' => $this->l('Right')),
+                            array('id' => 'icon-bottom', 'value' => 'bottom', 'label' => $this->l('Bottom')),
+                            array('id' => 'icon-left', 'value' => 'left', 'label' => $this->l('Left')),
+                            array('id' => 'icon-inside', 'value' => 'inside', 'label' => $this->l('Inside')),
+                            array('id' => 'icon-circles', 'value' => 'lens', 'label' => $this->l('Lens'))
                         ),
                     ),
                     array(
-                        'type' => 'radio',
+                        'type' => 'radio-icon',
                         'name' => Config::AMAZINGZOOM_mposition,
                         'class' => 'inline-radio',
                         'label' => $this->l('Position of zoom output window for mobile devices'),
                         'desc' => $this->l('Position of zoom output window in adaptive mode (i.e. for mobile devices) available properties: "inside", "fullscreen"'),
                         'values' => array(
-                            array('id' => 'inside', 'value' => 'inside', 'label' => $this->l('Inside')),
-                            array('id' => 'lens', 'value' => 'lens', 'label' => $this->l('Fullscreen'))
+                            array('id' => 'icon-inside', 'value' => 'inside', 'label' => $this->l('Inside')),
+                            array('id' => 'icon-fullscreens', 'value' => 'lens', 'label' => $this->l('Fullscreen'))
                         ),
                     ),
                     array(
@@ -201,11 +201,14 @@ class Amazingzoom extends Module
                         'maxlength' => 1 //step
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Zoom output window vertical offset in pixels from output base position.'),
                         'name' => Config::AMAZINGZOOM_Yoffset,
                         'label' => $this->l('Yoffset'),
+                        'size' => 0, //min
+                        'maxchar' => 100, //maxx
+                        'maxlength' => 1 //step
                     ),
                     array(
                         'type' => 'switch',
@@ -265,32 +268,44 @@ class Amazingzoom extends Module
                         ),
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Smooth move effect of the big zoomed image in the zoom output window. The higher value will make movement smoother.'),
                         'name' => Config::AMAZINGZOOM_smoothZoomMove,
                         'label' => $this->l('smoothZoomMove'),
+                        'size' => 1, //min
+                        'maxchar' => 10, //maxx
+                        'maxlength' => 1 //step
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Smooth move effect of lens.'),
                         'name' => 'AMAZINGZOOM_smoothLensMove',
                         'label' => $this->l('smoothLensMove'),
+                        'size' => 1, //min
+                        'maxchar' => 10, //maxx
+                        'maxlength' => 1 //step
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Smooth move effect of scale.'),
                         'name' => Config::AMAZINGZOOM_smoothScale,
                         'label' => $this->l('smoothScale'),
+                        'size' => 1, //min
+                        'maxchar' => 10, //maxx
+                        'maxlength' => 1 //step
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('You can setup default scale value of zoom on opening, from -1 to 1. Where -1 means -100%, and 1 means 100% of lens scale.'),
                         'name' => Config::AMAZINGZOOM_defaultScale,
                         'label' => $this->l('defaultScale'),
+                        'size' => -1, //min
+                        'maxchar' => 1, //maxx
+                        'maxlength' => 0.1 //step
                     ),
                     array(
                         'type' => 'switch',
@@ -318,11 +333,14 @@ class Amazingzoom extends Module
                         'desc' => $this->l('Tint color. Color must be provided in format like "#color". We are not recommend you to use named css colors.'),
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Tint opacity from 0 to 1.'),
                         'name' => Config::AMAZINGZOOM_tintOpacity,
                         'label' => $this->l('tintOpacity'),
+                        'size' => -1, //min
+                        'maxchar' => 1, //maxx
+                        'maxlength' => 0.1 //step
                     ),
                     array(
                         'type' => 'color',
@@ -331,21 +349,24 @@ class Amazingzoom extends Module
                         'desc' => $this->l('Lens color. Color must be provided in format like "#color". We are not recommend you to use named css colors.'),
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Lens opacity from 0 to 1.'),
                         'name' => Config::AMAZINGZOOM_lensOpacity,
                         'label' => $this->l('lensOpacity'),
+                        'size' => -1, //min
+                        'maxchar' => 1, //maxx
+                        'maxlength' => 0.1 //step
                     ),
                     array(
-                        'type' => 'radio',
+                        'type' => 'radio-icon',
                         'name' => Config::AMAZINGZOOM_lensShape,
                         'class' => 'inline-radio',
                         'label' => $this->l('lensShape'),
                         'desc' => $this->l('Lens shape "box" or "circle".'),
                         'values' => array(
-                            array('id' => 'box', 'value' => 'box', 'label' => $this->l('Box')),
-                            array('id' => 'circle', 'value' => 'circle', 'label' => $this->l('Circle')),
+                            array('id' => 'icon-box', 'value' => 'box', 'label' => $this->l('Box')),
+                            array('id' => 'icon-circles', 'value' => 'circle', 'label' => $this->l('Circle')),
                         ),
                     ),
                     array(
@@ -593,7 +614,7 @@ class Amazingzoom extends Module
             if (method_exists($this->context->controller, 'addJquery')) {
                 $this->context->controller->addJquery();
 
-                $this->context->controller->addJS($this->_path . 'views/js/range-slider.min.js');
+                $this->context->controller->addJS($this->_path . 'views/js/range-slider.js');
                 $this->context->controller->addCSS($this->_path . 'views/css/range-slider.css');
                 $this->context->controller->addJS($this->_path . 'views/js/back.js');
                 $this->context->controller->addCSS($this->_path . 'views/css/back.css');

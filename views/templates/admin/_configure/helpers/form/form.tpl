@@ -13,13 +13,16 @@
 
     {if $input.type == 'slider'}
         {assign var='value_text' value=$fields_value[$input.name]}
+      <span class="slider-min">{if isset($input.size)} {$input.size|intval}{/if}</span>
       <input class="range-slider" type="range"
              value="{if isset($input.string_format) && $input.string_format}{$value_text|string_format:$input.string_format|escape:'html':'UTF-8'}{else}{$value_text|escape:'html':'UTF-8'}{/if}"
               {if isset($input.size)} min="{$input.size|intval}"{/if}
               {if isset($input.maxchar) && $input.maxchar} max="{$input.maxchar|intval}"{/if}
-              {if isset($input.maxlength) && $input.maxlength} step="{$input.maxlength|intval}"{/if}
-             data-buffer="0"/>
-      <input class="input-range-slider" type="text"
+              {if isset($input.maxlength) && $input.maxlength} step="{$input.maxlength}"{/if}
+             data-buffer="{$value_text|escape:'html':'UTF-8'}"/>
+      <span class="slider-max">{if isset($input.maxchar) && $input.maxchar} {$input.maxchar|intval}{/if}</span>
+      <span class="slider-value">value:</span>
+      <input class="value-range-slider" type="text"
              name="{$input.name}"
              id="{if isset($input.id)}{$input.id}{else}{$input.name}{/if}"
              value="{if isset($input.string_format) && $input.string_format}{$value_text|string_format:$input.string_format|escape:'html':'UTF-8'}{else}{$value_text|escape:'html':'UTF-8'}{/if}"
@@ -30,6 +33,25 @@
               {if isset($input.required) && $input.required } required="required" {/if}
               {if isset($input.placeholder) && $input.placeholder } placeholder="{$input.placeholder}"{/if}
       />
+    {elseif $input.type == 'radio-icon'}
+        {foreach name=value from=$input.values item=value}
+          <div class="radio
+              {if $smarty.foreach.value.first} radio-first {/if}
+              {if $smarty.foreach.value.last} radio-last {/if}
+              {if isset($input.class)}{$input.class}{/if} {$value.id} {if $fields_value[$input.name] == $value.value}active{/if}">
+              {strip}
+                <span class="icon" ></span>
+                <label style="padding-left: 5px;">
+                  <input  style="display: none;" type="radio" name="{$input.name}" id=""
+                         value="{$value.value|escape:'html':'UTF-8'}"{if $fields_value[$input.name] == $value.value} checked="checked"{/if}{if (isset($input.disabled) && $input.disabled) or (isset($value.disabled) && $value.disabled)} disabled="disabled"{/if}/>
+                    {$value.label}
+                </label>
+              {/strip}
+          </div>
+        {/foreach}
+      <div style="clear: both;"></div>
+        {if isset($value.p) && $value.p}<p class="help-block">{$value.p}</p>{/if}
+
     {else}
         {$smarty.block.parent}
     {/if}

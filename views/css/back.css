@@ -27,10 +27,20 @@
 */
 
 .inline-radio {
-  display: inline-block !important;
-  border: 1px solid #c7d6db;
-  border-radius: 3px;
-  padding: 5px;
+  float: left;
+  border-right: 1px solid #c7d6db;
+  border-bottom: 1px solid #c7d6db;
+  border-top: 1px solid #c7d6db;
+  padding: 5px !important;
+  vertical-align: middle;
+  height: 32px;
+}
+
+.inline-radio label {
+  padding-left: 5px;
+  vertical-align: middle;
+  float: right;
+  margin-top: 2px;
 }
 
 .inline-radio:hover {
@@ -38,18 +48,122 @@
   color: #fff;
 }
 
-.range-slider {
-  display: inline-block !important;
-  height: 10px;
-}
-
-.input-range-slider {
+.value-range-slider {
   display: inline-block !important;
   width: 50px !important;
 }
 
 .rangeSlider {
   width: 200px !important;
-  display: inline-block;
-  height: 10px;
+  display: inline-block !important;
+  height: 5px;
+  margin-bottom: 1px;
+  color: #959595;
 }
+
+.slider-min, .slider-max, .slider-value {
+  color: #959595;
+}
+
+.slider-value {
+  margin-left: 10px;
+}
+
+.icon-top  .icon{
+  background: url('../img/top.svg');
+  width: 20px;
+  height: 20px;
+}
+
+.icon-top:hover .icon, .icon-top:focus  .icon, .icon-top.active .icon{
+  background: url('../img/top-hover.svg');
+}
+
+.icon-left  .icon{
+  background: url('../img/left.svg');
+  width: 20px;
+  height: 20px;
+}
+
+.icon-left:hover .icon, .icon-left:focus  .icon, .icon-left.active .icon{
+  background: url('../img/left-hover.svg');
+}
+
+.icon-right  .icon{
+  background: url('../img/right.svg');
+  width: 20px;
+  height: 20px;
+}
+
+.icon-right:hover .icon, .icon-right:focus  .icon, .icon-right.active .icon{
+  background: url('../img/right-hover.svg');
+}
+
+.icon-bottom  .icon{
+  background: url('../img/bottom.svg');
+  width: 20px;
+  height: 20px;
+}
+
+.icon-bottom:hover .icon, .icon-bottom:focus  .icon, .icon-bottom.active .icon{
+  background: url('../img/bottom-hover.svg');
+}
+
+.icon-inside  .icon{
+  background: url('../img/inside.svg');
+  width: 20px;
+  height: 20px;
+}
+
+.icon-inside:hover .icon, .icon-inside:focus  .icon, .icon-inside.active .icon{
+  background: url('../img/inside-hover.svg');
+}
+
+.icon-fullscreens  .icon{
+  background: url('../img/fullscreen.svg');
+  width: 20px;
+  height: 20px;
+}
+
+.icon-fullscreens:hover .icon, .icon-fullscreens:focus  .icon, .icon-fullscreens.active .icon{
+  background: url('../img/fullscreen-hover.svg');
+}
+
+.icon-box  .icon{
+  background: url('../img/box.svg');
+  width: 20px;
+  height: 20px;
+}
+
+.icon-box:hover .icon, .icon-box:focus  .icon, .icon-box.active .icon{
+  background: url('../img/box-hover.svg');
+}
+
+.icon-circles  .icon{
+  background: url('../img/circle.svg');
+  width: 20px;
+  height: 20px;
+}
+
+.icon-circles:hover .icon, .icon-circles:focus  .icon, .icon-circles.active .icon{
+  background: url('../img/circle-hover.svg');
+}
+
+.inline-radio.active {
+  background: #00aff0;
+  color: #fff;
+}
+.radio-first {
+  border-left: 1px solid #c7d6db;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  padding-left: 10px !important;
+}
+
+.radio-last {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding-right: 10px !important;
+}
+
+
