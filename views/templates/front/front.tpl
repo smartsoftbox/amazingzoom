@@ -25,55 +25,45 @@
 <script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/xzoom.js'></script>
 <link href="{$this_path|escape:'htmlall':'UTF-8'}views/css/xzoom.css" rel="stylesheet" type="text/css" />
 
+{foreach $amazingzooms as $az}
+    {include file=$az.js css_selector=$az.css_selector}
+{/foreach}
+
 <script type="text/javascript">
     $(document).ready(function () {
-        //hide layer
-        $('.product-cover').find('.layer').css('display', 'none');
-        // document is loaded and DOM is ready
-        $(".js-qv-product-cover").each(function () {
-            $(this).attr('xoriginal', $(this).attr('src').replace('-large_default', ''));
-            $(this).click(function() {
-                $('.product-cover').find('.layer').click();
-            });
-        });
-
-
-        /* calling script */
-        $(".js-qv-product-cover, .thumbs").xzoom({
-            'position': '{$AMAZINGZOOM_position}',
-            'mposition': '{$AMAZINGZOOM_mposition}',
-            'rootOutput': {$AMAZINGZOOM_rootOutput},
-            'Xoffset': {$AMAZINGZOOM_Xoffset},
-            'Yoffset': {$AMAZINGZOOM_Yoffset},
-            'fadeIn': {$AMAZINGZOOM_fadeIn},
-            'fadeTrans': {$AMAZINGZOOM_fadeTrans},
-            'fadeOut': {$AMAZINGZOOM_fadeOut},
-            'smoothZoomMove': {$AMAZINGZOOM_smoothZoomMove},
-            'smoothLensMove': {$AMAZINGZOOM_smoothLensMove},
-            'smoothScale': {$AMAZINGZOOM_smoothScale},
-            'defaultScale': {$AMAZINGZOOM_defaultScale},
-            'scroll': {$AMAZINGZOOM_scroll},
-            'tint': '{$AMAZINGZOOM_tint}',
-            'tintOpacity': {$AMAZINGZOOM_tintOpacity},
-            'lens': {$AMAZINGZOOM_lens},
-            'lensOpacity': {$AMAZINGZOOM_lensOpacity},
-            'lensShape': '{$AMAZINGZOOM_lensShape}',
-            'lensCollision': {$AMAZINGZOOM_lensCollision},
-            'lensReverse': {$AMAZINGZOOM_lensReverse},
-            'openOnSmall': {$AMAZINGZOOM_openOnSmall},
-            'zoomWidth': '{$AMAZINGZOOM_zoomWidth}',
-            'zoomHeight': '{$AMAZINGZOOM_zoomHeight}',
-            'sourceClass': '{$AMAZINGZOOM_sourceClass}',
-            'loadingClass': '{$AMAZINGZOOM_loadingClass}',
-            'lensClass': '{$AMAZINGZOOM_lensClass}',
-            'zoomClass': '{$AMAZINGZOOM_zoomClass}',
-            'activeClass': '{$AMAZINGZOOM_activeClass}',
-            'hover': {$AMAZINGZOOM_hover},
-            'adaptive': {$AMAZINGZOOM_adaptive},
-            'adaptiveReverse': {$AMAZINGZOOM_adaptiveReverse},
-            'title': {$AMAZINGZOOM_title},
-            'titleClass': '{$AMAZINGZOOM_titleClass}',
-            'bg': {$AMAZINGZOOM_bg}
-        });
+        {foreach $amazingzooms as $az}
+          /* calling script */
+          $('{$az.css_selector}').each(function() {
+              $(this).xzoom({
+                  'position': '{$az.position}',
+                  'mposition': '{$az.mposition}',
+                  'rootOutput': {$az.rootOutput},
+                  'Xoffset': {$az.Xoffset},
+                  'Yoffset': {$az.Yoffset},
+                  'fadeIn': {$az.fadeIn},
+                  'fadeTrans': {$az.fadeTrans},
+                  'fadeOut': {$az.fadeOut},
+                  'smoothZoomMove': {$az.smoothZoomMove},
+                  'smoothLensMove': {$az.smoothLensMove},
+                  'smoothScale': {$az.smoothScale},
+                  'defaultScale': {$az.defaultScale},
+                  'scroll': {$az.scroll},
+                  'tint': '{$az.tint}',
+                  'tintOpacity': {$az.tintOpacity},
+                  'lens': '{$az.lens}',
+                  'lensOpacity': {$az.lensOpacity},
+                  'lensShape': '{$az.lensShape}',
+                  'lensCollision': {$az.lensCollision},
+                  'lensReverse': {$az.lensReverse},
+                  'openOnSmall': {$az.openOnSmall},
+                  'zoomWidth': '{$az.zoomWidth}',
+                  'zoomHeight': '{$az.zoomHeight}',
+                  'adaptive': {$az.adaptive},
+                  'adaptiveReverse': {$az.adaptiveReverse},
+                  'title': {$az.title},
+                  'bg': {$az.bg}
+              });
+          });
+        {/foreach}
     });
 </script>

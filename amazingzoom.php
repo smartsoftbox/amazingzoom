@@ -29,10 +29,14 @@ if (!defined('_PS_VERSION_')) {
 }
 
 require_once 'classes/Data/Config.php';
+require_once 'classes/Data/ModuleDisplay.php';
+require_once 'classes/AmazingZoomUninstall.php';
+require_once 'classes/AmazingZoomInstall.php';
 
 class Amazingzoom extends Module
 {
     protected $config_form = false;
+    private $path;
 
     public function __construct()
     {
@@ -44,7 +48,7 @@ class Amazingzoom extends Module
         $path = dirname(__FILE__);
 
         if (strpos(__FILE__, 'Module.php') !== false) {
-            $path .= '/../modules/'.$this->name;
+            $this->path .= '/../modules/'.$this->name;
         }
         /**
          * Set $this->bootstrap to true if your module is compliant with bootstrap (PrestaShop 1.6)
@@ -59,30 +63,45 @@ class Amazingzoom extends Module
         $this->confirmUninstall = $this->l('Are you sure you want uninstall module ?');
     }
 
-    /**
-     * Don't forget to create update methods if needed:
-     * http://doc.prestashop.com/display/PS16/Enabling+the+Auto-Update
-     */
     public function install()
     {
-        $this->saveDefaultSettings();
         parent::install();
 
-        if (version_compare(_PS_VERSION_, '1.7.0', '>=') === true) {
-            $this->registerHook('displayBeforeBodyClosingTag');
-        } else {
-            $this->registerHook('header');
-        }
+        $install = new AmazingZoomInstall($this);
+        $install->run();
 
-        return $this->registerHook('backOfficeHeader') &&
-            $this->registerHook('displayProductListFunctionalButtons');
+        return true;
     }
 
     public function uninstall()
     {
-        Configuration::deleteByName('AMAZINGZOOM_LIVE_MODE');
+        parent::uninstall();
 
-        return parent::uninstall();
+        $install = new AmazingZoomUninstall($this);
+        $install->run();
+
+        return true;
+    }
+
+    public function hookAjaxCall()
+    {
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: 0');
+
+        $action = Tools::getValue('action');
+        $id_amazingzoom = Tools::getValue('id');
+
+        switch ($action) {
+            case 'getConfigForm':
+                echo $this->renderConfigForm($id_amazingzoom);
+                break;
+            case 'saveConfigForm':
+                echo $this->saveConfigForm($id_amazingzoom);
+                break;
+            case 'loadDefaultSettings':
+                echo json_encode($this->saveDefaultSettings($id_amazingzoom));
+                break;
+        }
     }
 
     /**
@@ -90,25 +109,51 @@ class Amazingzoom extends Module
      */
     public function getContent()
     {
-        /**
-         * If values have been submitted in the form, process.
-         */
-        if (((bool)Tools::isSubmit('submitAmazingzoomModule')) == true ||
-            ((bool)Tools::getValue('loadDefaultSettings')) === true) {
-            $this->postProcess();
+        // process ajax
+        if(Tools::getValue('ajax')) {
+            $this->hookAjaxCall();
         }
+//        /**
+//         * If values have been submitted in the form, process.
+//         */
+//        if (((bool)Tools::isSubmit('submitAmazingzoomModule')) == true ||
+//            ((bool)Tools::getValue('loadDefaultSettings')) === true) {
+//            $this->postProcess();
+//        }
+
+        $this->context->smarty->assign(array(
+            'pages' => AmazingZoomClass::getAll(),
+            'start' => dirname(__FILE__) . '/views/templates/admin/start.tpl'
+        ));
 
         $this->context->smarty->assign('module_dir', $this->_path);
 
-        $output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
+        $output = $this->addJavaScriptVariable();
+        $output .= $this->context->smarty->fetch($this->local_path.'views/templates/admin/index.tpl');
         $output .= $this->hookBackHeader();
-        return $output.$this->renderForm();
+        return $output;
+    }
+
+    public function addJavaScriptVariable()
+    {
+        $this->context->controller->addJqueryPlugin('colorpicker');
+        $this->context->controller->addJqueryUI('ui.tabs');
+
+
+        $this->context->smarty->assign(array(
+            'base' => $this->context->link->getAdminLink('AdminModules', false),
+            'token' => Tools::getAdminTokenLite('AdminModules')
+        ));
+
+        return $this->context->smarty->fetch(
+            dirname(__FILE__) . '/views/templates/admin/variable.tpl'
+        );
     }
 
     /**
      * Create the form that will be displayed in the configuration of your module.
      */
-    protected function renderForm()
+    protected function renderToolbarForm($id_page)
     {
         $helper = new HelperForm();
 
@@ -125,29 +170,139 @@ class Amazingzoom extends Module
         $helper->token = Tools::getAdminTokenLite('AdminModules');
 
         $helper->tpl_vars = array(
-            'fields_value' => $this->getConfigFormValues(), /* Add values for your inputs */
+            'fields_value' => $this->getConfigFormValues($id_page), /* Add values for your inputs */
             'languages' => $this->context->controller->getLanguages(),
             'id_language' => $this->context->language->id,
         );
 
-        return $helper->generateForm(array($this->getConfigForm()));
+        $form = $helper->generateForm(array($this->geToolbarConfigForm($id_page)));
+
+        return $form;
+
     }
 
     /**
      * Create the structure of your form.
      */
-    protected function getConfigForm()
+    protected function geToolbarConfigForm($id_page)
     {
         return array(
             'form' => array(
-                'legend' => array(
-                'title' => $this->l('Settings'),
-                'icon' => 'icon-cogs',
+                'id_from' => 'toolbarForm',
+                'input' => array(
+                    array(
+                        'type' => 'hidden',
+                        'class' => 'id_amazingzoom',
+                        'name' => 'id',
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Enable'),
+                        'name' => 'is_enable_' . $id_page,
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Default Settings'),
+                        'name' => 'use_default_' . $id_page,
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                ),
+//                'submit' => array(
+//                    'title' => $this->l('Save'),
+//                ),
+            ),
+        );
+    }
+
+
+    /**
+     * Create the form that will be displayed in the configuration of your module.
+     */
+    protected function renderConfigForm($id_page)
+    {
+        $helper = new HelperForm();
+
+        $helper->show_toolbar = false;
+        $helper->table = $this->table;
+        $helper->module = $this;
+        $helper->default_form_language = $this->context->language->id;
+        $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG', 0);
+
+        $helper->identifier = $this->identifier;
+        $helper->submit_action = 'submitAmazingzoomModule';
+        $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false)
+            .'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
+        $helper->token = Tools::getAdminTokenLite('AdminModules');
+
+        $helper->tpl_vars = array(
+            'fields_value' => $this->getConfigFormValues($id_page), /* Add values for your inputs */
+            'languages' => $this->context->controller->getLanguages(),
+            'id_language' => $this->context->language->id,
+        );
+
+        $form = '';
+        if($id_page != 1) {
+            $form .= $this->renderToolbarForm($id_page);
+        }
+
+        $form .= $helper->generateForm(array($this->getConfigForm($id_page)));
+
+        return $form;
+
+    }
+
+    /**
+     * Create the structure of your form.
+     */
+    protected function getConfigForm($id_page)
+    {
+        return array(
+            'form' => array(
+                'id_form' => 'configForm_' . $id_page,
+//                'legend' => array(
+//                'title' => $this->l('Settings'),
+//                'icon' => 'icon-cogs',
+//                ),
+                'tabs' => array(
+                    'page1_' . $id_page => 'page1',
+                    'page2_' . $id_page => 'page2',
+                    'page3_' . $id_page => 'page3',
+                    'page4_' . $id_page => 'page4',
                 ),
                 'input' => array(
                     array(
+                        'type' => 'hidden',
+                        'class' => 'id_amazingzoom',
+                        'name' => 'id',
+                    ),
+                    array(
                         'type' => 'radio-icon',
-                        'name' => Config::AMAZINGZOOM_position,
+                        'name' => 'position_' . $id_page,
                         'class' => 'inline-radio',
                         'label' => $this->l('Position of zoom output window'),
                         'desc' => $this->l('Position of zoom output window, one of the next properties is available "top", "left", "right", "bottom", "inside", "lens", "#ID".'),
@@ -159,22 +314,24 @@ class Amazingzoom extends Module
                             array('id' => 'icon-inside', 'value' => 'inside', 'label' => $this->l('Inside')),
                             array('id' => 'icon-circles', 'value' => 'lens', 'label' => $this->l('Lens'))
                         ),
+                        'tab' => 'page1_' . $id_page
                     ),
                     array(
                         'type' => 'radio-icon',
-                        'name' => Config::AMAZINGZOOM_mposition,
+                        'name' => 'mposition_' . $id_page,
                         'class' => 'inline-radio',
                         'label' => $this->l('Position of zoom output window for mobile devices'),
                         'desc' => $this->l('Position of zoom output window in adaptive mode (i.e. for mobile devices) available properties: "inside", "fullscreen"'),
                         'values' => array(
                             array('id' => 'icon-inside', 'value' => 'inside', 'label' => $this->l('Inside')),
-                            array('id' => 'icon-fullscreens', 'value' => 'lens', 'label' => $this->l('Fullscreen'))
+                            array('id' => 'icon-fullscreens', 'value' => 'fullscreen', 'label' => $this->l('Fullscreen'))
                         ),
+                        'tab' => 'page1_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('rootOutput'),
-                        'name' => Config::AMAZINGZOOM_rootOutput,
+                        'name' => 'rootOutput_' . $id_page,
                         'desc' => $this->l('In the HTML structure, this option gives an ability to output xzoom element, to the end of the document body or relative to the parent element of main source image.'),
                         'is_bool' => true,
                         'values' => array(
@@ -189,31 +346,34 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page1_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Zoom output window horizontal offset in pixels from output base position.'),
-                        'name' => Config::AMAZINGZOOM_Xoffset,
+                        'name' => 'Xoffset_' . $id_page,
                         'label' => $this->l('Xoffset'),
                         'size' => 0, //min
                         'maxchar' => 100, //maxx
-                        'maxlength' => 1 //step
+                        'maxlength' => 1, //step,
+                        'tab' => 'page1_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Zoom output window vertical offset in pixels from output base position.'),
-                        'name' => Config::AMAZINGZOOM_Yoffset,
+                        'name' => 'Yoffset_' . $id_page,
                         'label' => $this->l('Yoffset'),
                         'size' => 0, //min
                         'maxchar' => 100, //maxx
-                        'maxlength' => 1 //step
+                        'maxlength' => 1,//step
+                        'tab' => 'page1_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('fadeIn'),
-                        'name' => Config::AMAZINGZOOM_fadeIn,
+                        'name' => 'fadeIn_' . $id_page,
                         'desc' => $this->l('Fade in effect, when zoom is opening.'),
                         'is_bool' => true,
                         'values' => array(
@@ -228,11 +388,12 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('fadeTrans'),
-                        'name' => Config::AMAZINGZOOM_fadeTrans,
+                        'name' => 'fadeTrans_' . $id_page,
                         'desc' => $this->l('Fade transition effect, when switching images by clicking on thumbnails.'),
                         'is_bool' => true,
                         'values' => array(
@@ -247,11 +408,12 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('fadeOut'),
-                        'name' => Config::AMAZINGZOOM_fadeOut,
+                        'name' => 'fadeOut_' . $id_page,
                         'desc' => $this->l('Fade out effect, when zoom is closing.'),
                         'is_bool' => true,
                         'values' => array(
@@ -266,51 +428,56 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Smooth move effect of the big zoomed image in the zoom output window. The higher value will make movement smoother.'),
-                        'name' => Config::AMAZINGZOOM_smoothZoomMove,
+                        'name' => 'smoothZoomMove_' . $id_page,
                         'label' => $this->l('smoothZoomMove'),
                         'size' => 1, //min
                         'maxchar' => 10, //maxx
-                        'maxlength' => 1 //step
+                        'maxlength' => 1, //step
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Smooth move effect of lens.'),
-                        'name' => 'AMAZINGZOOM_smoothLensMove',
+                        'name' => 'smoothLensMove_' . $id_page,
                         'label' => $this->l('smoothLensMove'),
                         'size' => 1, //min
                         'maxchar' => 10, //maxx
-                        'maxlength' => 1 //step
+                        'maxlength' => 1, //step
+                        'tab' => 'page3_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Smooth move effect of scale.'),
-                        'name' => Config::AMAZINGZOOM_smoothScale,
+                        'name' => 'smoothScale_' . $id_page,
                         'label' => $this->l('smoothScale'),
                         'size' => 1, //min
                         'maxchar' => 10, //maxx
-                        'maxlength' => 1 //step
+                        'maxlength' => 1, //step
+                        'tab' => 'page3_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('You can setup default scale value of zoom on opening, from -1 to 1. Where -1 means -100%, and 1 means 100% of lens scale.'),
-                        'name' => Config::AMAZINGZOOM_defaultScale,
+                        'name' => 'defaultScale_' . $id_page,
                         'label' => $this->l('defaultScale'),
                         'size' => -1, //min
                         'maxchar' => 1, //maxx
-                        'maxlength' => 0.1 //step
+                        'maxlength' => 0.1, //step
+                        'tab' => 'page3_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('scroll'),
-                        'name' => Config::AMAZINGZOOM_scroll,
+                        'name' => 'scroll_' . $id_page,
                         'desc' => $this->l('Scale on mouse scroll.'),
                         'is_bool' => true,
                         'values' => array(
@@ -325,42 +492,52 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page3_' . $id_page
                     ),
                     array(
                         'type' => 'color',
                         'label' => $this->l('tint'),
-                        'name' => Config::AMAZINGZOOM_tint,
+                        'lang' => false,
+                        'name' => 'tint_' . $id_page,
+                        'defaults' => '',
+                        'id'   => 'color_0',
+                        'data-hex' => true,
+//                        'class'   => 'mColorPicker',
                         'desc' => $this->l('Tint color. Color must be provided in format like "#color". We are not recommend you to use named css colors.'),
+                        'tab' => 'page3_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Tint opacity from 0 to 1.'),
-                        'name' => Config::AMAZINGZOOM_tintOpacity,
+                        'name' => 'tintOpacity_' . $id_page,
                         'label' => $this->l('tintOpacity'),
                         'size' => -1, //min
                         'maxchar' => 1, //maxx
-                        'maxlength' => 0.1 //step
+                        'maxlength' => 0.1, //step
+                        'tab' => 'page3_' . $id_page
                     ),
                     array(
                         'type' => 'color',
                         'label' => $this->l('lens'),
-                        'name' => 'AMAZINGZOOM_lens',
+                        'name' => 'lens_' . $id_page,
                         'desc' => $this->l('Lens color. Color must be provided in format like "#color". We are not recommend you to use named css colors.'),
+                        'tab' => 'page3_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Lens opacity from 0 to 1.'),
-                        'name' => Config::AMAZINGZOOM_lensOpacity,
+                        'name' => 'lensOpacity_' . $id_page,
                         'label' => $this->l('lensOpacity'),
                         'size' => -1, //min
                         'maxchar' => 1, //maxx
-                        'maxlength' => 0.1 //step
+                        'maxlength' => 0.1, //step
+                        'tab' => 'page3_' . $id_page
                     ),
                     array(
                         'type' => 'radio-icon',
-                        'name' => Config::AMAZINGZOOM_lensShape,
+                        'name' => 'lensShape_' . $id_page,
                         'class' => 'inline-radio',
                         'label' => $this->l('lensShape'),
                         'desc' => $this->l('Lens shape "box" or "circle".'),
@@ -368,11 +545,12 @@ class Amazingzoom extends Module
                             array('id' => 'icon-box', 'value' => 'box', 'label' => $this->l('Box')),
                             array('id' => 'icon-circles', 'value' => 'circle', 'label' => $this->l('Circle')),
                         ),
+                        'tab' => 'page3_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('lensCollision'),
-                        'name' => Config::AMAZINGZOOM_lensCollision,
+                        'name' => 'lensCollision_' . $id_page,
                         'desc' => $this->l('Lens will collide and not go out of main image borders. This option is always false for position "lens".'),
                         'is_bool' => true,
                         'values' => array(
@@ -387,11 +565,12 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page3_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('lensReverse'),
-                        'name' => Config::AMAZINGZOOM_lensReverse,
+                        'name' => 'lensReverse_' . $id_page,
                         'desc' => $this->l('When selected position "inside" and this option is set to true, the lens direction of moving will be reversed.'),
                         'is_bool' => true,
                         'values' => array(
@@ -406,11 +585,12 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page4_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('openOnSmall'),
-                        'name' => Config::AMAZINGZOOM_openOnSmall,
+                        'name' => 'openOnSmall_' . $id_page,
                         'desc' => $this->l('Option to control whether to open or not the zoom on original image, that is smaller than preview.'),
                         'is_bool' => true,
                         'values' => array(
@@ -425,60 +605,28 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page4_' . $id_page
                     ),
                     array(
                         'type' => 'text',
                         'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Custom width of zoom window in pixels.'),
-                        'name' => Config::AMAZINGZOOM_zoomWidth,
+                        'desc' => $this->l('Custom width of zoom window in pixels. For auto write auto.'),
+                        'name' => 'zoomWidth_' . $id_page,
                         'label' => $this->l('zoomWidth'),
+                        'tab' => 'page4_' . $id_page
                     ),
                     array(
                         'type' => 'text',
                         'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Custom height of zoom window in pixels.'),
-                        'name' => Config::AMAZINGZOOM_zoomHeight,
+                        'desc' => $this->l('Custom height of zoom window in pixels. For auto write auto.'),
+                        'name' => 'zoomHeight_' . $id_page,
                         'label' => $this->l('zoomHeight'),
-                    ),
-                    array(
-                        'type' => 'text',
-                        'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Class name for source "div" container..'),
-                        'name' => Config::AMAZINGZOOM_sourceClass,
-                        'label' => $this->l('sourceClass'),
-                    ),
-                    array(
-                        'type' => 'text',
-                        'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Class name for loading "div" container that appear before zoom opens, when image is still loading.'),
-                        'name' => Config::AMAZINGZOOM_loadingClass,
-                        'label' => $this->l('loadingClass'),
-                    ),
-                    array(
-                        'type' => 'text',
-                        'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Class name for lens "div".'),
-                        'name' => Config::AMAZINGZOOM_lensClass,
-                        'label' => $this->l('lensClass'),
-                    ),
-                    array(
-                        'type' => 'text',
-                        'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Class name for zoom window(div).'),
-                        'name' => Config::AMAZINGZOOM_zoomClass,
-                        'label' => $this->l('zoomClass'),
-                    ),
-                    array(
-                        'type' => 'text',
-                        'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Class name that will be added to active thumbnail image.'),
-                        'name' => Config::AMAZINGZOOM_activeClass,
-                        'label' => $this->l('activeClass'),
+                        'tab' => 'page4_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('hover'),
-                        'name' => Config::AMAZINGZOOM_hover,
+                        'name' => 'hover_' . $id_page,
                         'desc' => $this->l('With this option you can make a selection action on thumbnail by hover mouse point on it.'),
                         'is_bool' => true,
                         'values' => array(
@@ -493,11 +641,12 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page4_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('adaptive'),
-                        'name' => Config::AMAZINGZOOM_adaptive,
+                        'name' => 'adaptive_' . $id_page,
                         'desc' => $this->l('Adaptive functionality.'),
                         'is_bool' => true,
                         'values' => array(
@@ -512,11 +661,12 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page4_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('adaptiveReverse'),
-                        'name' => Config::AMAZINGZOOM_adaptiveReverse,
+                        'name' => 'adaptiveReverse_' . $id_page,
                         'desc' => $this->l('Same as lensReverse, but only available when adaptive is true.'),
                         'is_bool' => true,
                         'values' => array(
@@ -531,11 +681,12 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page4_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('title'),
-                        'name' => Config::AMAZINGZOOM_title,
+                        'name' => 'title_' . $id_page,
                         'desc' => $this->l('Output title/caption of the image, in the zoom output window..'),
                         'is_bool' => true,
                         'values' => array(
@@ -550,18 +701,12 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
-                    ),
-                    array(
-                        'type' => 'text',
-                        'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Class name for caption "div" container.'),
-                        'name' => Config::AMAZINGZOOM_titleClass,
-                        'label' => $this->l('titleClass'),
+                        'tab' => 'page4_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
                         'label' => $this->l('bg'),
-                        'name' => Config::AMAZINGZOOM_bg,
+                        'name' => 'bg_' . $id_page,
                         'desc' => $this->l('Zoom image output as background, works only when position is set to "lens".'),
                         'is_bool' => true,
                         'values' => array(
@@ -576,6 +721,7 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
+                        'tab' => 'page4_' . $id_page
                     ),
                 ),
                 'submit' => array(
@@ -583,6 +729,7 @@ class Amazingzoom extends Module
                 ),
                 'buttons' => array(
                     array(
+                        'id' => 'load_default',
                         'title' => $this->l('Load Default'),
                         'href' => AdminController::$currentIndex.'&loadDefaultSettings=1&configure='.
                             $this->name.'&token='.Tools::getAdminTokenLite('AdminModules'),
@@ -593,17 +740,17 @@ class Amazingzoom extends Module
         );
     }
 
-    /**
-     * Save form data.
-     */
-    protected function postProcess()
-    {
-        if (Tools::isSubmit('submitAmazingzoomModule')) {
-            $this->saveSettings();
-        } elseif (Tools::getValue('loadDefaultSettings')) {
-            $this->saveDefaultSettings();
-        }
-    }
+//    /**
+//     * Save form data.
+//     */
+//    protected function postProcess()
+//    {
+//        if (Tools::isSubmit('submitAmazingzoomModule')) {
+//            $this->saveSettings();
+//        } elseif (Tools::getValue('loadDefaultSettings')) {
+//            $this->saveDefaultSettings($id_page);
+//        }
+//    }
 
     /**
     * Add the CSS & JavaScript files you want to be loaded in the BO.
@@ -618,6 +765,9 @@ class Amazingzoom extends Module
                 $this->context->controller->addCSS($this->_path . 'views/css/range-slider.css');
                 $this->context->controller->addJS($this->_path . 'views/js/back.js');
                 $this->context->controller->addCSS($this->_path . 'views/css/back.css');
+
+                $this->context->controller->addJS($this->_path . 'views/js/jquery.cooki-plugin.js');
+
             }
         }
     }
@@ -627,17 +777,36 @@ class Amazingzoom extends Module
      */
     public function hookHeader($params)
     {
-        if ($this->context->controller instanceof ProductController)
-        {
-//            $this->context->controller->addCSS($this->_path.'/views/css/xzoom.css');
-//            $this->context->controller->addJS($this->_path.'views/js/xzoom.js');
+        $active_amazingzooms = AmazingZoomClass::getEnabled();
+        $amazingzoom = array();
 
-//            $this->context->controller->addJS($this->_path.'/views/js/front.js');
-//            $this->context->controller->addCSS($this->_path.'/views/css/front.css');
+        $controller = $this->context->controller;
+        foreach ($active_amazingzooms as $key => $active_amazingzoom) {
+            if ($this->context->controller instanceof $active_amazingzoom['controller']) {
+                if($active_amazingzoom['use_default']) {
+                    $amazingzoom[$key] = $active_amazingzooms[0];
+                    $amazingzoom[$key]['use_default'] =  $active_amazingzoom['use_default'];
+                    $amazingzoom[$key]['is_enable'] =  $active_amazingzoom['is_enable'];
+                    $amazingzoom[$key]['controller'] =  $active_amazingzoom['controller'];
+                    $amazingzoom[$key]['name'] =  $active_amazingzoom['name'];
+                    $amazingzoom[$key]['css_selector_17'] =  $active_amazingzoom['css_selector_17'];
+                    $amazingzoom[$key]['css_selector_16'] =  $active_amazingzoom['css_selector_16'];
+                } else {
+                    $amazingzoom[$key] = $active_amazingzoom;
+                }
 
-            $configuration = $this->getConfigFormValues();
+                $amazingzoom[$key]['css_selector'] = (_PS_VERSION_ >= 1.7 ? $active_amazingzoom['css_selector_17'] :
+                    $active_amazingzoom['css_selector_16']);
+
+                $amazingzoom[$key]['js'] = dirname(__FILE__) .
+                    '/views/templates/front/back/' .
+                    strtolower(str_replace(' ', '_', $active_amazingzoom['name'])) . '.tpl';
+            }
+        }
+
+        if($amazingzoom) {
             $this->smarty->assign('this_path', $this->_path);
-            $this->smarty->assign($configuration);
+            $this->smarty->assign('amazingzooms', $amazingzoom);
 
             return $this->display(__FILE__, 'views/templates/front/front.tpl');
         }
@@ -658,33 +827,64 @@ class Amazingzoom extends Module
         /* Place your code here. */
     }
 
-    private function saveDefaultSettings()
+    private function saveDefaultSettings($id_amaizingzoom)
     {
         $settings = Config::getDefaultConfig();
+        $amazingZoomClass = new AmazingZoomClass($id_amaizingzoom);
+        $amazingZoomClass->getDefaultValues();
+        $amazingZoomClass->save();
 
-        foreach ($settings as $option => $default_value) {
-            Configuration::updateValue($option, $default_value);
-        }
+        return array(
+            'form' => $this->renderConfigForm($id_amaizingzoom),
+            'message' => $this->displayConfirmation(
+                $this->l('Settings load successfully.')
+            )
+        );
     }
 
-    protected function saveSettings()
+    public function getConfigFormValues($id_page)
     {
-        $settings = Config::getDefaultConfig();
+        $amazingZoomClass = new AmazingZoomClass($id_page);
+        $fields_values = (array) $amazingZoomClass;
 
-        foreach (array_keys($settings) as $option) {
-            Configuration::updateValue($option, Tools::getValue($option));
+        foreach ($fields_values as $key => $fields_value) {
+            if($key !== 'id') {
+                $fields_values[$key . '_' . $id_page] = $fields_value;
+                unset($fields_values[$key]);
+            }
         }
+
+        return $fields_values;
     }
 
-    public function getConfigFormValues()
+    private function saveConfigForm($id_amazingzoom)
     {
-        $settings = Config::getDefaultConfig();
-        $form_values = array();
-        foreach (array_keys($settings) as $option) {
-            $value = Configuration::get($option);
-            $form_values[$option] = ($value ? $value : 0);
+        $this->postValidation();
+
+        if(!empty($this->_errors)) {
+            $errors = '';
+            foreach ($this->_errors as $error) {
+                $errors = '<div class="module_error alert alert-danger" >' . $error . '</div>';
+            }
+            return $errors;
+            exit();
         }
 
-        return $form_values;
+
+        $amazingZoomClass = new AmazingZoomClass($id_amazingzoom);
+        $amazingZoomClass->copyFromPost($id_amazingzoom);
+        $amazingZoomClass->save();
+
+        return $this->displayConfirmation(
+            $this->l('Settings saved successfully.')
+        );
+    }
+
+
+    private function postValidation()
+    {
+//        if (!Tools::getValue('CHEQUE_NAME')) {
+//            $this->_errors[] = $this->l('The "Payee" field is required.');
+//        }
     }
 }

@@ -23,26 +23,11 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{*<div class="panel">*}
-{*	<h3><i class="icon icon-credit-card"></i> {l s='Amazing Zoom Product Image' mod='amazingzoom'}</h3>*}
-{*	<p>*}
-{*		<strong>{l s='Here is my new generic module!' mod='amazingzoom'}</strong><br />*}
-{*		{l s='Thanks to PrestaShop, now I have a great module.' mod='amazingzoom'}<br />*}
-{*		{l s='I can configure it using the following configuration form.' mod='amazingzoom'}*}
-{*	</p>*}
-{*	<br />*}
-{*	<p>*}
-{*		{l s='This module will boost your sales!' mod='amazingzoom'}*}
-{*	</p>*}
-{*</div>*}
-
-<div class="panel">
-	<h3><i class="icon icon-tags"></i> {l s='Documentation' mod='amazingzoom'}</h3>
-	<p>
-		&raquo; {l s='You can get a PDF documentation to configure this module' mod='amazingzoom'} :
-		<ul>
-			<li><a href="#" target="_blank">{l s='English' mod='amazingzoom'}</a></li>
-			<li><a href="#" target="_blank">{l s='French' mod='amazingzoom'}</a></li>
-		</ul>
-	</p>
-</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // document is loaded and DOM is ready
+        $("{$css_selector|escape:'htmlall':'UTF-8'}").each(function () {
+            $(this).attr("xoriginal", $(this).attr("src"));
+        });
+    });
+</script>
