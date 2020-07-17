@@ -18,7 +18,7 @@ class ProductPage implements IModuleDisplay
     private $id_page = 2;
 
     private $css_selector_17 = '.js-qv-product-cover, .thumbs';
-    private $css_selector_16 = '';
+    private $css_selector_16 = '#bigpic';
     private $amazingZoomClass;
 
     public function saveDefaultValues()

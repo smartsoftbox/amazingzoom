@@ -177,25 +177,25 @@
   margin-bottom: 0 !important;
 }
 
-#entities i {
+#amazingzooms i {
   color: #eee;
 }
 
-#entities .icon-circle-blank {
+#amazingzooms .icon-circle-blank {
   float: right;
   margin-left: 5px;
 }
 
-#entities .icon-gear {
+#amazingzooms .icon-gear {
   float: right;
   margin-left: 5px;
 }
 
-#entities .icon-circle-blank.active {
+#amazingzooms .icon-circle-blank.active {
   color: #ff0062 !important;
 }
 
-#entities .icon-gear.active {
+#amazingzooms .icon-gear.active {
   color: #feb60a !important;
 }
 
@@ -252,7 +252,7 @@ div#ajax-loader div {
   }
 }
 
-a.entity.list-group-item.active {
+a.amazingzoom-tab.list-group-item.active {
   background-color: #00aff0 !important;
   border-color: #00aff0 !important;
 }

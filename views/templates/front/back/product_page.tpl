@@ -25,14 +25,19 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        //hide layer
-        $(".product-cover").find(".layer").css("display", "none");
         // document is loaded and DOM is ready
-        $(".js-qv-product-cover").each(function () {
+        $("{$css_selector|escape:'htmlall':'UTF-8'}").on('load', function () {
             $(this).attr("xoriginal", $(this).attr("src").replace("-large_default", ""));
-            $(this).click(function() {
-                $(".product-cover").find(".layer").click();
-            });
         });
-    });
+
+        {if $is_17}
+          //hide layer
+          $(".product-cover").find(".layer").css("display", "none");
+              // document is loaded and DOM is ready
+              $("{$css_selector|escape:'htmlall':'UTF-8'}").click(function() {
+                  $(".product-cover").find(".layer").click();
+              });
+          });
+        {/if}
+    })
 </script>

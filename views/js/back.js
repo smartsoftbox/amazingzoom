@@ -34,7 +34,7 @@ $(document).ready(function () {
   });
 
   //index tabs
-  $('#entities a.entity ').on('click', function () {
+  $('#amazingzooms a.amazingzoom-tab ').on('click', function () {
     var id = $(this).attr('id');
 
     if ($('div[alt="model-' + id + '"]').is(':empty')) {
@@ -73,7 +73,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: 'POST',
-      url: ajax_url + '&ajax=1&&action=saveConfigForm',
+      url: ajax_url + '&action=saveConfigForm',
       data: form.serialize(),
       cache: false,
       success: function (data) {
@@ -89,26 +89,26 @@ $(document).ready(function () {
   });
 
   $(document.body).on('click', 'input[id^=is_enable], input[id^=is_enable]', function (e, data) {
-    var url =  ajax_url + '&ajax=1&action=saveConfigForm';
+    var url =  ajax_url + '&action=saveConfigForm';
     var form = $(this).closest('form');
     var id = form.find('#id').val();
     $.post( url, form.serialize(), function( data ) {
       $('.module_errors').fadeOut().remove();
       $('.module_confirmation').parent().fadeOut().remove();
       $("#amazingZoom").before(data);
-      $('.entity[id="' + id + '"]').find('i.icon-circle-blank').toggleClass('active');
+      $('a.amazingzoom-tab[id="' + id + '"]').find('i.icon-circle-blank').toggleClass('active');
     });
   });
 
   $(document.body).on('click', 'input[id^=use_default], input[id^=use_default]', function (e, data) {
-    var url =  ajax_url + '&ajax=1&action=saveConfigForm';
+    var url =  ajax_url + '&action=saveConfigForm';
     var form = $(this).closest('form');
     var id = form.find('#id').val();
     $.post( url, form.serialize(), function( data ) {
       $('.module_errors').fadeOut().remove();
       $('.module_confirmation').parent().fadeOut().remove();
       $("#amazingZoom").before(data);
-      $('.entity[id="' + id + '"]').find('i.icon-gear').toggleClass('active');
+      $('a.amazingzoom-tab[id="' + id + '"]').find('i.icon-gear').toggleClass('active');
     });
   });
 
@@ -151,7 +151,7 @@ $(document).ready(function () {
     });
   });
 
-  $('#entities .list-group-item').click(function () {
+  $('#amazingzooms .list-group-item').click(function () {
     var id = $(this).attr('id');
     $('.list-group-item').removeClass('active');
     $(this).addClass('active');
@@ -165,15 +165,7 @@ $(document).ready(function () {
     return false;
   });
 
-  // if ($.cookie('current_tab_id')) {
-  //   var current_tab_id = 'a#' + $.cookie('current_tab_id');
-  //   $('div.list-group a.list-group-item').removeClass('active');
-  //   $(current_tab_id).click();
-  // } else {
-  //   $('div.list-group a:first').click();
-  // }
-
-  $('#right-column').css('min-height', $('#entities').height());
+  $('#right-column').css('min-height', $('#amazingzooms').height());
 
   if ($.cookie('current_tab_id')) {
     var current_tab_id = 'a#' + $.cookie('current_tab_id');
@@ -185,19 +177,18 @@ $(document).ready(function () {
 });
 
 function showLoader() {
-  $('#right-column div.tab-content').hide();
-  $('#ajax-loader').css('display', 'flex');
+  $( '#right-column div.tab-content' ).hide();
+  $( '#ajax-loader' ).css( 'display', 'flex' );
 }
 
 function hideLoader() {
-  $('#ajax-loader').hide();
-  $('#right-column div.tab-content').fadeIn();
+  $( '#ajax-loader' ).hide();
+  $( '#right-column div.tab-content' ).fadeIn();
 }
 
 function displaySwitchInline() {
-  //toolbar switch display inlines
-  $('input[name^="is_enable"]').closest('.form-group').css({'width': '50%', 'display': 'inline-block'});
-  $('input[name^="use_default"]').closest('.form-group').css({'width': '50%', 'display': 'inline-block'});
+  $( 'input[name^="is_enable"]' ).closest( '.form-group' ).css({'width': '50%', 'display': 'inline-block'});
+  $( 'input[name^="use_default"]' ).closest( '.form-group' ).css({'width': '50%', 'display': 'inline-block'});
 }
 
 function convertRangeToSlider() {
@@ -221,24 +212,24 @@ function convertRangeToSlider() {
 function createTabs(id) {
   if (typeof helper_tabs != 'undefined' && typeof unique_field_id != 'undefined') {
     $.each(helper_tabs, function (index) {
-      var index_form_id = index;
+      var form = 'module_form';
       if(parseInt(id) !== 1) {
-        index_form_id = index + '_1';
+        form = 'module_form_1';
       }
-      $(unique_field_id + ' #fieldset_' + index_form_id + ' .form-wrapper').prepend('<div class="tab-content panel" />');
-      $(unique_field_id + ' #fieldset_' + index_form_id + ' .form-wrapper').prepend('<ul class="nav nav-tabs" />');
+      $(unique_field_id + ' #' + form + ' .form-wrapper').prepend('<div class="tab-content panel" />');
+      $(unique_field_id + ' #' + form + ' .form-wrapper').prepend('<ul class="nav nav-tabs" />');
       $.each(helper_tabs[index], function (key, value) {
         // Move every form-group into the correct .tab-content > .tab-pane
-        $(unique_field_id + ' #fieldset_' + index_form_id + ' .tab-content').append('<div id="' + key + '" class="tab-pane" />');
-        var elements = $(unique_field_id + ' #fieldset_' + index_form_id).find("[data-tab-id='" + key + "']");
+        $(unique_field_id + ' #' + form + ' .tab-content').append('<div id="' + key + '" class="tab-pane" />');
+        var elements = $(unique_field_id + ' #' + form).find("[data-tab-id='" + key + "']");
         $(elements).appendTo('#' + key);
         // Add the item to the .nav-tabs
         if (elements.length != 0)
-          $(unique_field_id + ' #fieldset_' + index_form_id + ' .nav-tabs').append('<li><a href="#' + key + '" data-toggle="tab">' + value + '</a></li>');
+          $(unique_field_id + ' #' + form + ' .nav-tabs').append('<li><a href="#' + key + '" data-toggle="tab">' + value + '</a></li>');
       });
       // Activate the first tab
-      $(unique_field_id + ' #fieldset_' + index_form_id + ' .tab-content div').first().addClass('active');
-      $(unique_field_id + ' #fieldset_' + index_form_id + ' .nav-tabs li').first().addClass('active');
+      $(unique_field_id + ' #' + form + ' .tab-content div').first().addClass('active');
+      $(unique_field_id + ' #' + form + ' .nav-tabs li').first().addClass('active');
     });
   }
 }

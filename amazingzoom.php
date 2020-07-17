@@ -805,8 +805,11 @@ class Amazingzoom extends Module
         }
 
         if($amazingzoom) {
-            $this->smarty->assign('this_path', $this->_path);
-            $this->smarty->assign('amazingzooms', $amazingzoom);
+            $this->smarty->assign(array(
+                'this_path' => $this->_path,
+                'amazingzooms' => $amazingzoom,
+                'is_17' => (_PS_VERSION_ >= 1.7 ? true : false)
+            ));
 
             return $this->display(__FILE__, 'views/templates/front/front.tpl');
         }

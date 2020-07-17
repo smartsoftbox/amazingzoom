@@ -9,9 +9,9 @@
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-2">
-        <div class="list-group" id="entities">
+        <div class="list-group" id="amazingzooms">
             {foreach from=$pages item=page name=page}
-              <a href="#" id="{$page.id_amazingzoom|intval}" class="entity list-group-item">
+              <a href="#" id="{$page.id_amazingzoom|intval}" class="amazingzoom-tab list-group-item">
 
                 <span class="{if $page.id_amazingzoom == 1}bold{/if}">{$page.name|escape:'htmlall':'UTF-8'}</span>
                   {if $page.id_amazingzoom != 1}
