@@ -14,10 +14,10 @@
               <a href="#" id="{$page.id_amazingzoom|intval}" class="amazingzoom-tab list-group-item">
 
                 <span class="{if $page.id_amazingzoom == 1}bold{/if}">{$page.name|escape:'htmlall':'UTF-8'}</span>
-                  {if $page.id_amazingzoom != 1}
+                  {if $page.name != 'Default Settings'}
                     <i class="icon-gear {if !$page.use_default}active{/if}"></i>
                   {/if}
-                  {if $page.id_amazingzoom != 1}
+                  {if $page.name != 'Default Settings'}
                     <i class="icon-circle-blank {if $page.is_enable}active{/if}"></i>
                   {/if}
 

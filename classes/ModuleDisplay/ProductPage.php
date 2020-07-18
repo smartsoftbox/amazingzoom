@@ -23,8 +23,7 @@ class ProductPage implements IModuleDisplay
 
     public function saveDefaultValues()
     {
-        $this->amazingZoomClass = new AmazingZoomClass($this->id_page);
-
+        $this->amazingZoomClass = new AmazingZoomClass();
         $this->amazingZoomClass->use_default = false;
         $this->amazingZoomClass->is_enable = true;
         $this->amazingZoomClass->position = 'right';

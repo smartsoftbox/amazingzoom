@@ -32,6 +32,7 @@ require_once 'classes/Data/Config.php';
 require_once 'classes/Data/ModuleDisplay.php';
 require_once 'classes/AmazingZoomUninstall.php';
 require_once 'classes/AmazingZoomInstall.php';
+require_once 'classes/Model/AmazingZoomClass.php';
 
 class Amazingzoom extends Module
 {
@@ -266,7 +267,7 @@ class Amazingzoom extends Module
         );
 
         $form = '';
-        if($id_page != 1) {
+        if($id_page !== $this->getDefaultId()) {
             $form .= $this->renderToolbarForm($id_page);
         }
 
@@ -889,5 +890,10 @@ class Amazingzoom extends Module
 //        if (!Tools::getValue('CHEQUE_NAME')) {
 //            $this->_errors[] = $this->l('The "Payee" field is required.');
 //        }
+    }
+
+    private function getDefaultId()
+    {
+        return AmazingZoomClass::getDefaultSettingsId();
     }
 }

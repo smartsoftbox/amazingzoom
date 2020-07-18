@@ -63,11 +63,27 @@ class AmazingZoomClass extends ObjectModel
         }
     }
 
+    public static function getDefaultSettingsId()
+    {
+        return Db::getInstance()->getValue(
+            'SELECT `id_amazingzoom` FROM `' . _DB_PREFIX_ . 'amazingzoom` WHERE name = "Default Settings"'
+        );
+    }
+
     public static function getAll()
     {
-        return Db::getInstance()->ExecuteS(
+        $amazingzooms =  Db::getInstance()->ExecuteS(
             'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom`'
         );
+
+        foreach ($amazingzooms as $key => $amazingzoom) {
+            if($amazingzoom['name'] === "Default Settings") {
+                unset($amazingzooms[$key]);
+                array_unshift($amazingzooms , $amazingzoom);
+            }
+        }
+
+        return $amazingzooms;
     }
 
     public static function getEnabled()

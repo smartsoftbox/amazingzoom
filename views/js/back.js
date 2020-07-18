@@ -213,7 +213,7 @@ function createTabs(id) {
   if (typeof helper_tabs != 'undefined' && typeof unique_field_id != 'undefined') {
     $.each(helper_tabs, function (index) {
       var form = 'module_form';
-      if(parseInt(id) !== 1) {
+      if(parseInt(id) !== 5) {
         form = 'module_form_1';
       }
       $(unique_field_id + ' #' + form + ' .form-wrapper').prepend('<div class="tab-content panel" />');

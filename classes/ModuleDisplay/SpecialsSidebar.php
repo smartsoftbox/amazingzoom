@@ -22,10 +22,9 @@ class SpecialsSidebar implements IModuleDisplay
 
     public function saveDefaultValues()
     {
-        $this->amazingZoomClass = new AmazingZoomClass($this->id_page);
-
-        $this->amazingZoomClass->use_default = true;
-        $this->amazingZoomClass->is_enable = false;
+        $this->amazingZoomClass = new AmazingZoomClass();
+        $this->amazingZoomClass->use_default = false;
+        $this->amazingZoomClass->is_enable = true;
         $this->amazingZoomClass->position = 'right';
         $this->amazingZoomClass->mposition  = 'inside';
         $this->amazingZoomClass->rootOutput  = true;

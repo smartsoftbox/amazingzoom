@@ -7,6 +7,7 @@
   -moz-transition: none;
   -o-transition: none;
   transition: none;
+  z-index: 9999;
 }
 /* --------------- */
 
