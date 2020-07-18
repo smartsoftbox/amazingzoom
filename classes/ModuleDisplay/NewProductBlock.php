@@ -13,11 +13,11 @@ require_once 'IModuleDisplay.php';
 class NewProductBlock implements IModuleDisplay
 {
     private $name = 'New Product Block';
-    private $controller = 'CategoryController';
+    private $controller = 'IndexController';
     private $id_page = 7;
 
     private $css_selector_17 = '.js-qv-product-cover, .thumbs';
-    private $css_selector_16 = '';
+    private $css_selector_16 = '#blocknewproducts .product_img_link img';
     private $amazingZoomClass;
 
     public function saveDefaultValues()

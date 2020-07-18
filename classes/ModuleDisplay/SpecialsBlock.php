@@ -13,11 +13,11 @@ require_once 'IModuleDisplay.php';
 class SpecialsBlock implements IModuleDisplay
 {
     private $name = 'Specials Block';
-    private $controller = 'PricesDropController';
+    private $controller = 'IndexController';
     private $id_page = 13;
 
     private $css_selector_17 = 'article img';
-    private $css_selector_16 = '';
+    private $css_selector_16 = '#blockspecials .product_img_link img';
     private $amazingZoomClass;
 
     public function saveDefaultValues()

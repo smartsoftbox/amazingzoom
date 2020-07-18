@@ -25,19 +25,25 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        {if $is_17}
+          //hide layer
+          $(".product-cover").find(".layer").css("display", "none");
+          // document is loaded and DOM is ready
+          $("{$css_selector|escape:'htmlall':'UTF-8'}").click(function () {
+              $(".product-cover").find(".layer").click();
+          });
+        {/if}
+
+        $("{$css_selector|escape:'htmlall':'UTF-8'}").each(function () {
+            $(this).attr("xoriginal", $(this).attr("src").replace("-large_default", ""));
+        });
         // document is loaded and DOM is ready
         $("{$css_selector|escape:'htmlall':'UTF-8'}").on('load', function () {
             $(this).attr("xoriginal", $(this).attr("src").replace("-large_default", ""));
         });
 
-        {if $is_17}
-          //hide layer
-          $(".product-cover").find(".layer").css("display", "none");
-              // document is loaded and DOM is ready
-              $("{$css_selector|escape:'htmlall':'UTF-8'}").click(function() {
-                  $(".product-cover").find(".layer").click();
-              });
-          });
-        {/if}
-    })
+        $(document.body).on('mouseenter', '.xzoom-source', function() {
+            $('.product-flags').css('display', 'none');
+        });
+    });
 </script>

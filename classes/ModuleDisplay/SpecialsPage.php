@@ -13,10 +13,10 @@ require_once 'IModuleDisplay.php';
 class SpecialsPage implements IModuleDisplay
 {
     private $name = 'Specials Page';
-    private $controller = 'CategoryController';
+    private $controller = 'PricesDropController';
     private $id_page = 11;
 
-    private $css_selector_17 = '.js-qv-product-cover, .thumbs';
+    private $css_selector_17 = 'article img';
     private $css_selector_16 = '';
     private $amazingZoomClass;
 

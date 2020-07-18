@@ -34,7 +34,7 @@
         {foreach $amazingzooms as $az}
           /* calling script */
           $('{$az.css_selector}').each(function() {
-              $(this).xzoom({
+              var xzoom = $(this).xzoom({
                   'position': '{$az.position}',
                   'mposition': '{$az.mposition}',
                   'rootOutput': {$az.rootOutput},

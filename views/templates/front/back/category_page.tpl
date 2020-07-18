@@ -27,7 +27,7 @@
     $(document).ready(function () {
         // document is loaded and DOM is ready
         $("{$css_selector|escape:'htmlall':'UTF-8'}").each(function () {
-            $(this).attr("xoriginal", $(this).attr("src"));
+            $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", ""));
         });
     });
 </script>
