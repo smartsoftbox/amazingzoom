@@ -12,7 +12,7 @@ require_once 'IModuleDisplay.php';
 
 class BestsellersBlock implements IModuleDisplay
 {
-    private $name = ' Bestsellers Block';
+    private $name = 'Bestsellers Block';
     private $controller = 'IndexController';
     private $id_page = 10;
 
@@ -25,7 +25,7 @@ class BestsellersBlock implements IModuleDisplay
         $this->amazingZoomClass = new AmazingZoomClass();
         $this->amazingZoomClass->use_default = false;
         $this->amazingZoomClass->is_enable = true;
-        $this->amazingZoomClass->position = 'right';
+        $this->amazingZoomClass->position = 'inside';
         $this->amazingZoomClass->mposition  = 'inside';
         $this->amazingZoomClass->rootOutput  = true;
         $this->amazingZoomClass->Xoffset  = 0;

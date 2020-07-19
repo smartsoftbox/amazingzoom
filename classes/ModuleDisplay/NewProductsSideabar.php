@@ -10,14 +10,14 @@
 
 require_once 'IModuleDisplay.php';
 
-class NewProductsSideabr implements IModuleDisplay
+class NewProductsSideabar implements IModuleDisplay
 {
     private $name = 'New Products Sideabr';
     private $controller = 'CategoryController';
     private $id_page = 6;
 
     private $css_selector_17 = '.js-qv-product-cover, .thumbs';
-    private $css_selector_16 = '';
+    private $css_selector_16 = '#new-sellers .products-block-image img';
     private $amazingZoomClass;
 
     public function saveDefaultValues()

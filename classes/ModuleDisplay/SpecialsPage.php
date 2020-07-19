@@ -25,7 +25,7 @@ class SpecialsPage implements IModuleDisplay
         $this->amazingZoomClass = new AmazingZoomClass();
         $this->amazingZoomClass->use_default = false;
         $this->amazingZoomClass->is_enable = true;
-        $this->amazingZoomClass->position = 'right';
+        $this->amazingZoomClass->position = 'inside';
         $this->amazingZoomClass->mposition  = 'inside';
         $this->amazingZoomClass->rootOutput  = true;
         $this->amazingZoomClass->Xoffset  = 0;

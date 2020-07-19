@@ -17,7 +17,7 @@ class SearchPage implements IModuleDisplay
     private $id_page = 16;
 
     private $css_selector_17 = 'article img';
-    private $css_selector_16 = '';
+    private $css_selector_16 = '#product_list .product_img_link img';
     private $amazingZoomClass;
 
     public function saveDefaultValues()

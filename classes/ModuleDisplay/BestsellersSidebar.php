@@ -17,7 +17,7 @@ class BestsellersSidebar implements IModuleDisplay
     private $id_page = 9;
 
     private $css_selector_17 = '.js-qv-product-cover, .thumbs';
-    private $css_selector_16 = '';
+    private $css_selector_16 = '#best-sellers .products-block-image img';
     private $amazingZoomClass;
 
     public function saveDefaultValues()

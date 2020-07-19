@@ -17,7 +17,7 @@ class BestsellersPage implements IModuleDisplay
     private $id_page = 8;
 
     private $css_selector_17 = '.js-qv-product-cover, .thumbs';
-    private $css_selector_16 = '';
+    private $css_selector_16 = '#product_list .product_img_link img';
     private $amazingZoomClass;
 
     public function saveDefaultValues()
