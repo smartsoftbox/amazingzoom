@@ -282,6 +282,11 @@ class Amazingzoom extends Module
      */
     protected function getConfigForm($id_page)
     {
+        $css_selector = (_PS_VERSION_ >= 1.7 ? 'css_selector_17' : 'css_selector_16');
+
+        $images = ImageType::getImagesTypes('products');
+        $images[] = array("name" => "upload");
+
         return array(
             'form' => array(
                 'id_form' => 'configForm_' . $id_page,
@@ -290,10 +295,10 @@ class Amazingzoom extends Module
 //                'icon' => 'icon-cogs',
 //                ),
                 'tabs' => array(
-                    'page1_' . $id_page => 'page1',
-                    'page2_' . $id_page => 'page2',
-                    'page3_' . $id_page => 'page3',
-                    'page4_' . $id_page => 'page4',
+                    'page1_' . $id_page => 'Position',
+                    'page2_' . $id_page => 'Effect',
+                    'page3_' . $id_page => 'Style',
+                    'page4_' . $id_page => 'Advanced',
                 ),
                 'input' => array(
                     array(
@@ -369,6 +374,18 @@ class Amazingzoom extends Module
                         'size' => 0, //min
                         'maxchar' => 100, //maxx
                         'maxlength' => 1,//step
+                        'tab' => 'page1_' . $id_page
+                    ),
+                    array(
+                        'type' => 'select',
+                        'label' => $this->l('Image type'),
+                        'name' => 'image_type_' . $id_page,
+                        'options' => array(
+                            'query' => $images,
+                            'id' => 'name',
+                            'name' => 'name'
+                        ),
+                        'desc' =>$this->l('Zoom image type.'),
                         'tab' => 'page1_' . $id_page
                     ),
                     array(
@@ -724,6 +741,14 @@ class Amazingzoom extends Module
                         ),
                         'tab' => 'page4_' . $id_page
                     ),
+                    array(
+                        'type' => 'text',
+                        'class' => 'fixed-width-xxl',
+                        'desc' => $this->l('This image selector will be used to render zoom.'),
+                        'name' => $css_selector . '_' . $id_page,
+                        'label' => $this->l('Selector image'),
+                        'tab' => 'page4_' . $id_page
+                    )
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
@@ -795,6 +820,9 @@ class Amazingzoom extends Module
                 } else {
                     $amazingzoom[$key] = $active_amazingzoom;
                 }
+
+                $amazingzoom[$key]['image_type'] = ($active_amazingzoom['image_type'] === 'upload' ? '' :
+                    $active_amazingzoom['image_type']);
 
                 $amazingzoom[$key]['css_selector'] = (_PS_VERSION_ >= 1.7 ? $active_amazingzoom['css_selector_17'] :
                     $active_amazingzoom['css_selector_16']);

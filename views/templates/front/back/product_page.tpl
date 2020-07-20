@@ -34,7 +34,7 @@
           });
         {/if}
 
-        $("{$css_selector|escape:'htmlall':'UTF-8'}").each(function () {
+        $("{$css_selector|escape:'htmlall':'UTF-8'}").on('load', function () {
             $(this).attr("xoriginal", $(this).attr("src").replace("-large_default", ""));
         });
     });

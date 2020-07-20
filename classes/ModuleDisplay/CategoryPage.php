@@ -17,7 +17,7 @@ class CategoryPage implements IModuleDisplay
     private $id_page = 3;
 
     private $css_selector_17 = 'article img';
-    private $css_selector_16 = '.product_img_link img';
+    private $css_selector_16 = '#product_list .product_img_link img';
     private $amazingZoomClass;
 
     public function saveDefaultValues()
@@ -58,6 +58,7 @@ class CategoryPage implements IModuleDisplay
         $this->amazingZoomClass->name = $this->name;
         $this->amazingZoomClass->css_selector_17 = $this->css_selector_17;
         $this->amazingZoomClass->css_selector_16 = $this->css_selector_16;
+        $this->amazingZoomClass->image_type = 'upload';
 
         $this->amazingZoomClass->save();
     }

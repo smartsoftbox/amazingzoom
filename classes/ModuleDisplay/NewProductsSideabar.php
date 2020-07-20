@@ -58,6 +58,7 @@ class NewProductsSideabar implements IModuleDisplay
         $this->amazingZoomClass->name = $this->name;
         $this->amazingZoomClass->css_selector_17 = $this->css_selector_17;
         $this->amazingZoomClass->css_selector_16 = $this->css_selector_16;
+        $this->amazingZoomClass->image_type = 'upload';
 
         $this->amazingZoomClass->save();
     }

@@ -24,13 +24,17 @@
 *}
 <script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/xzoom.js'></script>
 <link href="{$this_path|escape:'htmlall':'UTF-8'}views/css/xzoom.css" rel="stylesheet" type="text/css" />
+<script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/hammer.min.js'></script>
 
 {foreach $amazingzooms as $az}
-    {include file=$az.js css_selector=$az.css_selector}
+    {include file=$az.js css_selector=$az.css_selector image_type=$az.image_type is_17=$is_17}
 {/foreach}
 
 <script type="text/javascript">
     $(document).ready(function () {
+        //HammerJS v2.0.8
+        var isTouchSupported = 'ontouchstart' in window;
+
         {foreach $amazingzooms as $az}
           /* calling script */
           $('{$az.css_selector}').each(function() {
@@ -63,7 +67,51 @@
                   'title': {$az.title},
                   'bg': {$az.bg}
               });
+
+
+
+              if (isTouchSupported) {
+                  xzoom.eventunbind();
+                  var mc1 = new Hammer($(this)[0]);
+
+                  mc1.on("tap", function(event) {
+                      event.pageX = event.srcEvent.pageX;
+                      event.pageY = event.srcEvent.pageY;
+
+                      xzoom.eventclick = function(element) {
+                          element.css('touch-action', 'pan-x');
+                      };
+
+                      xzoom.eventmove = function(element) {
+                          var mc2 = new Hammer(element[0]);
+
+                          mc2.get('pan').set({
+                              direction: Hammer.DIRECTION_ALL,
+                          });
+
+                          mc2.on('pan', function(event) {
+                              event.pageX = event.srcEvent.pageX;
+                              event.pageY = event.srcEvent.pageY;
+                              xzoom.movezoom(event);
+                              // event.srcEvent.preventDefault();
+                          });
+                      };
+
+                      xzoom.eventleave = function(element) {
+                          var mc3 = new Hammer(element[0]);
+                          mc3.on('tap', function(event) {
+                              xzoom.closezoom();
+                          });
+                      };
+                      xzoom.openzoom(event);
+                  });
+              } else {
+                  $(this).bind('click', function () {
+                      xzoom.closezoom();
+                  });
+              }
           });
         {/foreach}
+
     });
 </script>
