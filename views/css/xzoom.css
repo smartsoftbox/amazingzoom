@@ -105,3 +105,15 @@
   font-weight: bold;
   padding: 10px;
 }
+
+#product_list .product_img_link img {
+  width: 268px !important;
+  height: 268px !important;
+}
+#product_list .product-image-container {
+  padding: 0 !important;
+}
+
+#product_list .product-image-container:hover .new-box {
+  display: none !important;
+}

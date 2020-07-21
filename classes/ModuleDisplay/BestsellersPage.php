@@ -13,7 +13,7 @@ require_once 'IModuleDisplay.php';
 class BestsellersPage implements IModuleDisplay
 {
     private $name = 'Bestsellers Page';
-    private $controller = 'BestSalesController';
+    private $controller = array('BestSales');
     private $id_page = 8;
 
     private $css_selector_17 = '.js-qv-product-cover, .thumbs';
@@ -54,7 +54,7 @@ class BestsellersPage implements IModuleDisplay
         $this->amazingZoomClass->title  = false;
         $this->amazingZoomClass->bg  = false;
 
-        $this->amazingZoomClass->controller = $this->controller;
+        $this->amazingZoomClass->controller = implode(',', $this->controller);
         $this->amazingZoomClass->name = $this->name;
         $this->amazingZoomClass->css_selector_17 = $this->css_selector_17;
         $this->amazingZoomClass->css_selector_16 = $this->css_selector_16;

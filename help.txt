@@ -1,0 +1,12 @@
+#two column layout
+best-sales
+manufacturers
+new-products
+prices-drop
+sitemap
+search
+
+
+
+
+

@@ -103,6 +103,8 @@ class Amazingzoom extends Module
                 echo json_encode($this->saveDefaultSettings($id_amazingzoom));
                 break;
         }
+
+        $this->clearCache();
     }
 
     /**
@@ -299,6 +301,7 @@ class Amazingzoom extends Module
                     'page2_' . $id_page => 'Effect',
                     'page3_' . $id_page => 'Style',
                     'page4_' . $id_page => 'Advanced',
+                    'page5_' . $id_page => 'Controllers',
                 ),
                 'input' => array(
                     array(
@@ -748,7 +751,23 @@ class Amazingzoom extends Module
                         'name' => $css_selector . '_' . $id_page,
                         'label' => $this->l('Selector image'),
                         'tab' => 'page4_' . $id_page
-                    )
+                    ),
+                    array(
+                        'type' => 'duallist',
+                        'label' => $this->l('Controllers'),
+                        'name' => 'controller_' . $id_page,
+                        'id' => 'controller',
+                        'class' => '',
+                        'multiple' => true,
+                        'options' => array(
+                            'options' => array(
+                                'query' => $this->getMetaPages(),
+                                'id' => 'page',
+                                'name' => 'page',
+                            ),
+                        ),
+                        'tab' => 'page5_' . $id_page
+                    ),
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
@@ -791,7 +810,9 @@ class Amazingzoom extends Module
                 $this->context->controller->addCSS($this->_path . 'views/css/range-slider.css');
                 $this->context->controller->addJS($this->_path . 'views/js/back.js');
                 $this->context->controller->addCSS($this->_path . 'views/css/back.css');
+                $this->context->controller->addCSS($this->_path . 'views/css/duallist.css');
 
+                $this->context->controller->addJS($this->_path . 'views/js/duallist.js');
                 $this->context->controller->addJS($this->_path . 'views/js/jquery.cooki-plugin.js');
 
             }
@@ -822,7 +843,7 @@ class Amazingzoom extends Module
                 }
 
                 $amazingzoom[$key]['image_type'] = ($active_amazingzoom['image_type'] === 'upload' ? '' :
-                    $active_amazingzoom['image_type']);
+                    '-' . $active_amazingzoom['image_type']);
 
                 $amazingzoom[$key]['css_selector'] = (_PS_VERSION_ >= 1.7 ? $active_amazingzoom['css_selector_17'] :
                     $active_amazingzoom['css_selector_16']);
@@ -886,6 +907,9 @@ class Amazingzoom extends Module
             }
         }
 
+        $fields_values['controller' . '_' . $id_page] =
+            explode(',', $fields_values['controller' . '_' . $id_page]);
+
         return $fields_values;
     }
 
@@ -923,5 +947,10 @@ class Amazingzoom extends Module
     private function getDefaultId()
     {
         return AmazingZoomClass::getDefaultSettingsId();
+    }
+
+    private function getMetaPages()
+    {
+        return DB::getInstance()->executeS('SELECT * FROM `' . _DB_PREFIX_ . 'meta`');
     }
 }

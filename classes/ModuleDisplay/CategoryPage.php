@@ -13,7 +13,7 @@ require_once 'IModuleDisplay.php';
 class CategoryPage implements IModuleDisplay
 {
     private $name = 'Category Page';
-    private $controller = 'CategoryController';
+    private $controller = array('Category');
     private $id_page = 3;
 
     private $css_selector_17 = 'article img';
@@ -54,7 +54,7 @@ class CategoryPage implements IModuleDisplay
         $this->amazingZoomClass->title  = false;
         $this->amazingZoomClass->bg  = false;
 
-        $this->amazingZoomClass->controller = $this->controller;
+        $this->amazingZoomClass->controller = implode(',', $this->controller);
         $this->amazingZoomClass->name = $this->name;
         $this->amazingZoomClass->css_selector_17 = $this->css_selector_17;
         $this->amazingZoomClass->css_selector_16 = $this->css_selector_16;

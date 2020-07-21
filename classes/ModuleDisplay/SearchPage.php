@@ -13,7 +13,7 @@ require_once 'IModuleDisplay.php';
 class SearchPage implements IModuleDisplay
 {
     private $name = 'Search Page';
-    private $controller = 'Search Controller';
+    private $controller = array('Search');
     private $id_page = 16;
 
     private $css_selector_17 = 'article img';
@@ -54,7 +54,7 @@ class SearchPage implements IModuleDisplay
         $this->amazingZoomClass->title  = false;
         $this->amazingZoomClass->bg  = false;
 
-        $this->amazingZoomClass->controller = $this->controller;
+        $this->amazingZoomClass->controller = implode(',', $this->controller);
         $this->amazingZoomClass->name = $this->name;
         $this->amazingZoomClass->css_selector_17 = $this->css_selector_17;
         $this->amazingZoomClass->css_selector_16 = $this->css_selector_16;

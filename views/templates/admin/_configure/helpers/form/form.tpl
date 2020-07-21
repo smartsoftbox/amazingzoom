@@ -40,9 +40,9 @@
               {if $smarty.foreach.value.last} radio-last {/if}
               {if isset($input.class)}{$input.class}{/if} {$value.id} {if $fields_value[$input.name] == $value.value}active{/if}">
               {strip}
-                <span class="icon" ></span>
+                <span class="icon"></span>
                 <label style="padding-left: 5px;">
-                  <input  style="display: none;" type="radio" name="{$input.name}" id=""
+                  <input style="display: none;" type="radio" name="{$input.name}" id=""
                          value="{$value.value|escape:'html':'UTF-8'}"{if $fields_value[$input.name] == $value.value} checked="checked"{/if}{if (isset($input.disabled) && $input.disabled) or (isset($value.disabled) && $value.disabled)} disabled="disabled"{/if}/>
                     {$value.label}
                 </label>
@@ -51,7 +51,81 @@
         {/foreach}
       <div style="clear: both;"></div>
         {if isset($value.p) && $value.p}<p class="help-block">{$value.p}</p>{/if}
-
+    {elseif $input.type == 'duallist'}
+      <div class="dual-list list-left col-md-5" style="padding-left: 0px;">
+        <div class="well text-right">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="input-group">
+                <span class="input-group-addon glyphicon-search">
+                    <i class="icon-search"></i>
+                </span>
+                <input type="text" name="SearchDualList" class="form-control" placeholder="search"/>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="btn-group">
+                <a class="btn btn-default button selector" title="select all">
+                  all
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <ul class="list-group" style="height: 400px; overflow: auto">
+                {foreach $input.options.options.query as $option}
+                    {if !$option|in_array:$fields_value[$input.name]}
+                      <li id="option-{$option[$input.options.options.id]|escape:'htmlall':'UTF-8'}"
+                          class="list-group-item"
+                          rel="{$optiongroup[$input.options.optiongroup.label]|escape:'htmlall':'UTF-8'}">
+                        <span>{$option[$input.options.options.name]|escape:'htmlall':'UTF-8'}</span>
+                      </li>
+                    {/if}
+                {/foreach}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="list-arrows col-md-1 text-center">
+        <a href="#" class="btn btn-default btn-sm button move-left"><<</a>
+        <a href="#" class="btn btn-default btn-sm button move-right">>></a>
+      </div>
+      <div class="dual-list list-right col-md-5">
+        <div class="well">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="input-group">
+                <span class="input-group-addon glyphicon-search">
+                    <i class="icon-search"></i>
+                </span>
+                <input type="text" name="SearchDualList" class="form-control" placeholder="search"/>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="btn-group">
+                <a class="btn btn-default button selector" id="select_all" title="select all">
+                  all
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <ul class="list-group" style="height: 400px; overflow: auto">
+                {foreach $input.options.options.query as $option}
+                    {if $option.page|in_array:$fields_value[$input.name]}
+                      <li id="option-{$option[$input.options.options.id]|escape:'htmlall':'UTF-8'}"
+                          class="list-group-item"
+                          rel="{$optiongroup[$input.options.optiongroup.label]|escape:'htmlall':'UTF-8'}">
+                        <span>{$option[$input.options.options.name]|escape:'htmlall':'UTF-8'}</span>
+                      </li>
+                    {/if}
+                {/foreach}
+            </ul>
+            <input type="hidden" name="{$input.name|escape:'htmlall':'UTF-8'}" id="{$input.id|escape:'htmlall':'UTF-8'}"
+                   value=""/>
+          </div>
+        </div>
+      </div>
     {else}
         {$smarty.block.parent}
     {/if}
