@@ -55,6 +55,8 @@ $(document).ready(function () {
           createTabs(id);
           displaySwitchInline();
           convertRangeToSlider();
+          createEditor('js_' + id, 'js');
+          createEditor('css_' + id, 'css');
           hideLoader();
         }
       });
@@ -68,6 +70,7 @@ $(document).ready(function () {
     button.html(function(i,t){
       return t.replace('Save', 'Please wait ...')
     });
+
 
     var form = $(this).closest('form');
 
@@ -136,7 +139,6 @@ $(document).ready(function () {
         displaySwitchInline();
         convertRangeToSlider();
         hideLoader();
-
         $('.module_errors').remove();
         $('.module_confirmation').parent().remove();
         $("#amazingZoom").before(data.message);
@@ -174,7 +176,27 @@ $(document).ready(function () {
   } else {
     $('div.list-group a:first').click();
   }
+
+
 });
+
+function createEditor(name, mode) {
+  var textarea = $("textarea[name='" + name + "'");
+  var editDiv = $('<div id="' + name + '">').insertBefore(textarea);
+  textarea.css('display', 'none');
+
+  var editor = ace.edit(editDiv[0], {
+    mode: "ace/mode/" + mode,
+    selectionStyle: "text"
+  });
+  editor.getSession().setValue(textarea.val());
+  editor.setTheme("ace/theme/tomorrow");
+
+  // copy back to textarea on form submit...
+  editor.getSession().on('change', function() {
+    textarea.val(editor.getSession().getValue());
+  });
+}
 
 function showLoader() {
   $( '#right-column div.tab-content' ).hide();

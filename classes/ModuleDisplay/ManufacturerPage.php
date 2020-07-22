@@ -61,6 +61,31 @@ class ManufacturerPage implements IModuleDisplay
         $this->amazingZoomClass->css_selector_16 = $this->css_selector_16;
         $this->amazingZoomClass->image_type = 'upload';
 
+        $this->amazingZoomClass->css_17 = $this->getCSS17();
+        $this->amazingZoomClass->css_16 = $this->getCSS16();
+        $this->amazingZoomClass->js_17 = $this->getJS17();
+        $this->amazingZoomClass->js_16 = $this->getJS16();
+
         $this->amazingZoomClass->save();
+    }
+
+    public function getJS17()
+    {
+        return '';
+    }
+
+    public function getJS16()
+    {
+        return '';
+    }
+
+    public function getCSS17()
+    {
+        return '';
+    }
+
+    public function getCSS16()
+    {
+        return '';
     }
 }

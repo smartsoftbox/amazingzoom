@@ -302,6 +302,7 @@ class Amazingzoom extends Module
                     'page3_' . $id_page => 'Style',
                     'page4_' . $id_page => 'Advanced',
                     'page5_' . $id_page => 'Controllers',
+                    'page6_' . $id_page => 'Befo',
                 ),
                 'input' => array(
                     array(
@@ -768,6 +769,33 @@ class Amazingzoom extends Module
                         ),
                         'tab' => 'page5_' . $id_page
                     ),
+//                    array(
+//                        'type' => 'html',
+//                        'label' => $this->l('JavaScript Code'),
+//                        'name' => 'js_' . $id_page,
+//                        'html_content' => '<div id="editor-js-' . $id_page . '">' . $js . '</div>',
+//                        'tab' => 'page6_' . $id_page
+//                    ),
+//                    array(
+//                        'type' => 'html',
+//                        'label' => $this->l('Css Code'),
+//                        'name' => 'css_' . $id_page,
+//                        'html_content' => '<div id="editor-css-' . $id_page . '">' . $css . '</div>',
+//                        'tab' => 'page6_' . $id_page
+//                    ),
+
+                    array(
+                        'type' => 'textarea',
+                        'label' => $this->l('JavaScript Code'),
+                        'name' => 'js_' . $id_page,
+                        'tab' => 'page6_' . $id_page
+                    ),
+                    array(
+                        'type' => 'textarea',
+                        'label' => $this->l('Css Code'),
+                        'name' => 'css_' . $id_page,
+                        'tab' => 'page6_' . $id_page
+                    ),
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
@@ -815,6 +843,10 @@ class Amazingzoom extends Module
                 $this->context->controller->addJS($this->_path . 'views/js/duallist.js');
                 $this->context->controller->addJS($this->_path . 'views/js/jquery.cooki-plugin.js');
 
+                $this->context->controller->addJS($this->_path . 'views/js/ace.js');
+                $this->context->controller->addJS($this->_path . 'views/js/theme-tomorrow.js');
+                $this->context->controller->addJS($this->_path . 'views/js/mode-css.js');
+                $this->context->controller->addJS($this->_path . 'views/js/mode-javascript.js');
             }
         }
     }
@@ -909,6 +941,9 @@ class Amazingzoom extends Module
 
         $fields_values['controller' . '_' . $id_page] =
             explode(',', $fields_values['controller' . '_' . $id_page]);
+
+        $fields_values['js' . '_' . $id_page] = (_PS_VERSION_ >= 1.7 ? $amazingZoom->js_17 : $amazingZoom->js_16);
+        $fields_values['css' . '_' . $id_page] = (_PS_VERSION_ >= 1.7 ? $amazingZoom->css_17 : $amazingZoom->css_16);
 
         return $fields_values;
     }
