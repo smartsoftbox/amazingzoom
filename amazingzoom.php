@@ -285,7 +285,7 @@ class Amazingzoom extends Module
     protected function getConfigForm($id_page)
     {
         $css_selector = (_PS_VERSION_ >= 1.7 ? 'css_selector_17' : 'css_selector_16');
-
+        $version = (_PS_VERSION_ >= 1.7 ? '17' : '16');
         $images = ImageType::getImagesTypes('products');
         $images[] = array("name" => "upload");
 
@@ -769,31 +769,18 @@ class Amazingzoom extends Module
                         ),
                         'tab' => 'page5_' . $id_page
                     ),
-//                    array(
-//                        'type' => 'html',
-//                        'label' => $this->l('JavaScript Code'),
-//                        'name' => 'js_' . $id_page,
-//                        'html_content' => '<div id="editor-js-' . $id_page . '">' . $js . '</div>',
-//                        'tab' => 'page6_' . $id_page
-//                    ),
-//                    array(
-//                        'type' => 'html',
-//                        'label' => $this->l('Css Code'),
-//                        'name' => 'css_' . $id_page,
-//                        'html_content' => '<div id="editor-css-' . $id_page . '">' . $css . '</div>',
-//                        'tab' => 'page6_' . $id_page
-//                    ),
-
                     array(
                         'type' => 'textarea',
                         'label' => $this->l('JavaScript Code'),
-                        'name' => 'js_' . $id_page,
+                        'name' => 'js_' . $version . '_' . $id_page,
+                        'id' => 'js_' . $id_page,
                         'tab' => 'page6_' . $id_page
                     ),
                     array(
                         'type' => 'textarea',
                         'label' => $this->l('Css Code'),
-                        'name' => 'css_' . $id_page,
+                        'name' => 'css_' . $version . '_' . $id_page,
+                        'id' => 'css_' . $id_page,
                         'tab' => 'page6_' . $id_page
                     ),
                 ),

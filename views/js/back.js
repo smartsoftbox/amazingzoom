@@ -55,7 +55,7 @@ $(document).ready(function () {
           createTabs(id);
           displaySwitchInline();
           convertRangeToSlider();
-          createEditor('js_' + id, 'js');
+          createEditor('js_' + id, 'javascript');
           createEditor('css_' + id, 'css');
           hideLoader();
         }
@@ -181,8 +181,8 @@ $(document).ready(function () {
 });
 
 function createEditor(name, mode) {
-  var textarea = $("textarea[name='" + name + "'");
-  var editDiv = $('<div id="' + name + '">').insertBefore(textarea);
+  var textarea = $("textarea#" + name);
+  var editDiv = $('<div id="div-' + name + '">').insertBefore(textarea);
   textarea.css('display', 'none');
 
   var editor = ace.edit(editDiv[0], {

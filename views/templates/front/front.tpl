@@ -26,11 +26,23 @@
 <link href="{$this_path|escape:'htmlall':'UTF-8'}views/css/xzoom.css" rel="stylesheet" type="text/css" />
 <script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/hammer.min.js'></script>
 
-{foreach $amazingzooms as $az}
+<style>
+  {foreach $amazingzooms as $az}
     {include file=$az.js css_selector=$az.css_selector image_type=$az.image_type is_17=$is_17}
-{/foreach}
+  {/foreach}
+</style>
+
 
 <script type="text/javascript">
+
+    {foreach $amazingzooms as $az}
+      // document is loaded and DOM is ready
+      $("{$az.css_selector|escape:'htmlall':'UTF-8'}").each(function () {
+          $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type}")
+              .replace("-large_default", "{$az.image_type}"));
+      });
+    {/foreach}
+
     $(document).ready(function () {
         //HammerJS v2.0.8
         var isTouchSupported = 'ontouchstart' in window;
