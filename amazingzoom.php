@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 require_once 'classes/Data/Config.php';
-require_once 'classes/Data/ModuleDisplay.php';
+//require_once 'classes/Data/ModuleDisplay.php';
 require_once 'classes/AmazingZoomUninstall.php';
 require_once 'classes/AmazingZoomInstall.php';
 require_once 'classes/Model/AmazingZoomClass.php';
@@ -284,8 +284,6 @@ class Amazingzoom extends Module
      */
     protected function getConfigForm($id_page)
     {
-        $css_selector = (_PS_VERSION_ >= 1.7 ? 'css_selector_17' : 'css_selector_16');
-        $version = (_PS_VERSION_ >= 1.7 ? '17' : '16');
         $images = ImageType::getImagesTypes('products');
         $images[] = array("name" => "upload");
 
@@ -749,7 +747,7 @@ class Amazingzoom extends Module
                         'type' => 'text',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('This image selector will be used to render zoom.'),
-                        'name' => $css_selector . '_' . $id_page,
+                        'name' => 'css_selector_' . $id_page,
                         'label' => $this->l('Selector image'),
                         'tab' => 'page4_' . $id_page
                     ),
@@ -772,17 +770,17 @@ class Amazingzoom extends Module
                     array(
                         'type' => 'textarea',
                         'label' => $this->l('JavaScript Code'),
-                        'name' => 'js_' . $version . '_' . $id_page,
+                        'name' => 'js_' . $id_page,
                         'id' => 'js_' . $id_page,
                         'tab' => 'page6_' . $id_page
                     ),
                     array(
                         'type' => 'textarea',
                         'label' => $this->l('Css Code'),
-                        'name' => 'css_' . $version . '_' . $id_page,
+                        'name' => 'css_' . $id_page,
                         'id' => 'css_' . $id_page,
                         'tab' => 'page6_' . $id_page
-                    ),
+                    )
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
@@ -848,28 +846,34 @@ class Amazingzoom extends Module
 
         $controller = $this->context->controller;
         foreach ($active_amazingzooms as $key => $active_amazingzoom) {
-            if ($this->context->controller instanceof $active_amazingzoom['controller']) {
+            $controller = implode('', array_map(
+                'ucfirst',
+                explode('-', $active_amazingzoom['controller'])
+            ));
+            $controller .= 'Controller';
+            if ($this->context->controller instanceof $controller) {
                 if($active_amazingzoom['use_default']) {
                     $amazingzoom[$key] = $active_amazingzooms[0];
                     $amazingzoom[$key]['use_default'] =  $active_amazingzoom['use_default'];
                     $amazingzoom[$key]['is_enable'] =  $active_amazingzoom['is_enable'];
                     $amazingzoom[$key]['controller'] =  $active_amazingzoom['controller'];
                     $amazingzoom[$key]['name'] =  $active_amazingzoom['name'];
-                    $amazingzoom[$key]['css_selector_17'] =  $active_amazingzoom['css_selector_17'];
-                    $amazingzoom[$key]['css_selector_16'] =  $active_amazingzoom['css_selector_16'];
+                    $amazingzoom[$key]['css_selector'] =  $active_amazingzoom['css_selector'];
+                    $amazingzoom[$key]['js'] =  $active_amazingzoom['js'];
+                    $amazingzoom[$key]['css'] =  $active_amazingzoom['css'];
                 } else {
                     $amazingzoom[$key] = $active_amazingzoom;
                 }
 
                 $amazingzoom[$key]['image_type'] = ($active_amazingzoom['image_type'] === 'upload' ? '' :
                     '-' . $active_amazingzoom['image_type']);
-
-                $amazingzoom[$key]['css_selector'] = (_PS_VERSION_ >= 1.7 ? $active_amazingzoom['css_selector_17'] :
-                    $active_amazingzoom['css_selector_16']);
-
-                $amazingzoom[$key]['js'] = dirname(__FILE__) .
-                    '/views/templates/front/back/' .
-                    strtolower(str_replace(' ', '_', $active_amazingzoom['name'])) . '.tpl';
+//
+//                $amazingzoom[$key]['css_selector'] = (_PS_VERSION_ >= 1.7 ? $active_amazingzoom['css_selector_17'] :
+//                    $active_amazingzoom['css_selector_16']);
+//
+//                $amazingzoom[$key]['js'] = dirname(__FILE__) .
+//                    '/views/templates/front/back/' .
+//                    strtolower(str_replace(' ', '_', $active_amazingzoom['name'])) . '.tpl';
             }
         }
 
@@ -928,9 +932,6 @@ class Amazingzoom extends Module
 
         $fields_values['controller' . '_' . $id_page] =
             explode(',', $fields_values['controller' . '_' . $id_page]);
-
-        $fields_values['js' . '_' . $id_page] = (_PS_VERSION_ >= 1.7 ? $amazingZoom->js_17 : $amazingZoom->js_16);
-        $fields_values['css' . '_' . $id_page] = (_PS_VERSION_ >= 1.7 ? $amazingZoom->css_17 : $amazingZoom->css_16);
 
         return $fields_values;
     }

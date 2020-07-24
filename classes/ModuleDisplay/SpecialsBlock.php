@@ -8,17 +8,22 @@
  *  International Registered Trademark & Property of Smart Soft
  */
 
-require_once 'IModuleDisplay.php';
+require_once 'ModuleDisplay.php';
 
-class SpecialsBlock implements IModuleDisplay
+class SpecialsBlock extends ModuleDisplay
 {
-    private $name = 'Specials Block';
-    private $controller = array('Index');
-    private $id_page = 13;
+    public function __construct()
+    {
+        $this->name = 'Specials Block';
+        $this->controller = array(
+            'index',
+        );
+        $this->id_page = 13;
 
-    private $css_selector_17 = 'article img';
-    private $css_selector_16 = '#blockspecials .product_img_link img';
-    private $amazingZoomClass;
+        $this->css_selector_17 = 'article img';
+        $this->css_selector_16 = '#blockspecials .product_img_link img';
+        $this->amazingZoomClass = new AmazingZoomClass();
+    }
 
     public function saveDefaultValues()
     {
@@ -57,14 +62,11 @@ class SpecialsBlock implements IModuleDisplay
 
         $this->amazingZoomClass->controller = implode(',', $this->controller);
         $this->amazingZoomClass->name = $this->name;
-        $this->amazingZoomClass->css_selector_17 = $this->css_selector_17;
-        $this->amazingZoomClass->css_selector_16 = $this->css_selector_16;
+        $this->amazingZoomClass->css_selector = $this->getCssSelector();
         $this->amazingZoomClass->image_type = 'upload';
 
-        $this->amazingZoomClass->css_17 = $this->getCSS17();
-        $this->amazingZoomClass->css_16 = $this->getCSS16();
-        $this->amazingZoomClass->js_17 = $this->getJS17();
-        $this->amazingZoomClass->js_16 = $this->getJS16();
+        $this->amazingZoomClass->css = $this->getCSS();
+        $this->amazingZoomClass->js = $this->getJS();
 
         $this->amazingZoomClass->save();
     }

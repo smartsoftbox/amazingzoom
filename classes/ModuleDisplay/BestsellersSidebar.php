@@ -8,25 +8,27 @@
  *  International Registered Trademark & Property of Smart Soft
  */
 
-require_once 'IModuleDisplay.php';
+require_once 'ModuleDisplay.php';
 
-class BestsellersSidebar implements IModuleDisplay
+class BestsellersSidebar extends ModuleDisplay
 {
-    private $name = 'Bestsellers Sidebar';
-    private $controller = array(
-        'BestSales',
-        'Manufacturers',
-        'NewProducts',
-        'PricesDrop',
-        'Sitemap',
-        'Search',
-    );
+    public function __construct()
+    {
+        $this->name = 'Bestsellers Sidebar';
+        $this->controller = array(
+            'best-sales',
+            'manufacturer',
+            'new-products',
+            'prices-drop',
+            'sitemap',
+            'search',
+        );
+        $this->id_page = 9;
 
-    private $id_page = 9;
-
-    private $css_selector_17 = '.js-qv-product-cover, .thumbs';
-    private $css_selector_16 = '#best-sellers .products-block-image img';
-    private $amazingZoomClass;
+        $this->css_selector_17 = '.js-qv-product-cover, .thumbs';
+        $this->css_selector_16 = '#best-sellers .product_img_link img';
+        $this->amazingZoomClass = new AmazingZoomClass();
+    }
 
     public function saveDefaultValues()
     {
@@ -64,14 +66,11 @@ class BestsellersSidebar implements IModuleDisplay
 
         $this->amazingZoomClass->controller = implode(',', $this->controller);
         $this->amazingZoomClass->name = $this->name;
-        $this->amazingZoomClass->css_selector_17 = $this->css_selector_17;
-        $this->amazingZoomClass->css_selector_16 = $this->css_selector_16;
+        $this->amazingZoomClass->css_selector = $this->getCssSelector();
         $this->amazingZoomClass->image_type = 'upload';
 
-        $this->amazingZoomClass->css_17 = $this->getCSS17();
-        $this->amazingZoomClass->css_16 = $this->getCSS16();
-        $this->amazingZoomClass->js_17 = $this->getJS17();
-        $this->amazingZoomClass->js_16 = $this->getJS16();
+        $this->amazingZoomClass->css = $this->getCSS();
+        $this->amazingZoomClass->js = $this->getJS();
 
         $this->amazingZoomClass->save();
     }

@@ -8,17 +8,22 @@
  *  International Registered Trademark & Property of Smart Soft
  */
 
-require_once 'IModuleDisplay.php';
+require_once 'ModuleDisplay.php';
 
-class SearchPage implements IModuleDisplay
+class SearchPage extends ModuleDisplay
 {
-    private $name = 'Search Page';
-    private $controller = array('Search');
-    private $id_page = 16;
+    public function __construct()
+    {
+        $this->name = 'Search Page';
+        $this->controller = array(
+            'search',
+        );
+        $this->id_page = 16;
 
-    private $css_selector_17 = 'article img';
-    private $css_selector_16 = '#product_list .product_img_link img';
-    private $amazingZoomClass;
+        $this->css_selector_17 = 'article img';
+        $this->css_selector_16 = '#product_list .product_img_link img';
+        $this->amazingZoomClass = new AmazingZoomClass();
+    }
 
     public function saveDefaultValues()
     {
@@ -56,14 +61,11 @@ class SearchPage implements IModuleDisplay
 
         $this->amazingZoomClass->controller = implode(',', $this->controller);
         $this->amazingZoomClass->name = $this->name;
-        $this->amazingZoomClass->css_selector_17 = $this->css_selector_17;
-        $this->amazingZoomClass->css_selector_16 = $this->css_selector_16;
+        $this->amazingZoomClass->css_selector = $this->getCssSelector();
         $this->amazingZoomClass->image_type = 'upload';
 
-        $this->amazingZoomClass->css_17 = $this->getCSS17();
-        $this->amazingZoomClass->css_16 = $this->getCSS16();
-        $this->amazingZoomClass->js_17 = $this->getJS17();
-        $this->amazingZoomClass->js_16 = $this->getJS16();
+        $this->amazingZoomClass->css = $this->getCSS();
+        $this->amazingZoomClass->js = $this->getJS();
 
         $this->amazingZoomClass->save();
     }
@@ -75,7 +77,14 @@ class SearchPage implements IModuleDisplay
 
     public function getJS16()
     {
-        return '';
+        return "<script>        
+            $('{css_selector}').each(function () {
+                $(this).closest('.product-image-container').css('padding', '0px');
+                $(this).attr('width', '268px');
+                $(this).attr('height', '268px');
+                $(this).css('width', '268px');
+            });
+            </script>";
     }
 
     public function getCSS17()

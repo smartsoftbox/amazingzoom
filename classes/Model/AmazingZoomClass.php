@@ -44,14 +44,11 @@ class AmazingZoomClass extends ObjectModel
 
     public $controller;
     public $name;
-    public $css_selector_17;
-    public $css_selector_16;
+    public $css_selector;
     public $image_type;
 
-    public $css_17;
-    public $css_16;
-    public $js_17;
-    public $js_16;
+    public $css;
+    public $js;
 
     public static $definition = array(
         'table' => 'amazingzoom',
@@ -137,14 +134,11 @@ class AmazingZoomClass extends ObjectModel
 
         $fields['controller'] = $this->controller;
         $fields['name'] = $this->name;
-        $fields['css_selector_17'] = $this->css_selector_17;
-        $fields['css_selector_16'] = $this->css_selector_16;
+        $fields['css_selector'] = $this->css_selector;
         $fields['image_type'] = $this->image_type;
 
-        $fields['css_17'] = $this->css_17;
-        $fields['css_16'] = $this->css_16;
-        $fields['js_17'] = $this->js_17;
-        $fields['js_16'] = $this->js_16;
+        $fields['css'] = $this->css;
+        $fields['js'] = $this->js;
 
 
         return $fields;

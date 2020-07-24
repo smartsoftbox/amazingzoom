@@ -8,7 +8,6 @@
  *  International Registered Trademark & Property of Smart Soft
  */
 
-require_once 'Data/ModuleDisplay.php';
 require_once 'Model/AmazingZoomClass.php';
 
 class AmazingZoomInstall
@@ -75,14 +74,11 @@ class AmazingZoomInstall
              
              `controller` varchar(255) NOT NULL,
              `name` varchar(255) NOT NULL,
-             `css_selector_17` varchar(255) NOT NULL,
-             `css_selector_16` varchar(255) NOT NULL,
+             `css_selector` varchar(255) NOT NULL,
              `image_type` varchar(255) NOT NULL,
             
-             `css_17` TEXT NOT NULL DEFAULT "", 
-             `css_16` TEXT NOT NULL DEFAULT "", 
-             `js_17` TEXT NOT NULL DEFAULT "", 
-             `js_16` TEXT NOT NULL DEFAULT "", 
+             `css` TEXT NOT NULL DEFAULT "", 
+             `js` TEXT NOT NULL DEFAULT "", 
  
 			PRIMARY KEY  (`id_amazingzoom`)
 			) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
@@ -94,7 +90,7 @@ class AmazingZoomInstall
     {
         foreach (glob(dirname(__FILE__) . '/ModuleDisplay/*.php') as $file)
         {
-            if( strpos( $file, 'IModuleDisplay' ) !== true) {
+            if( strpos( $file, 'ModuleDisplay.php' ) === false) {
                 require_once $file;
 
                 // get the file name of the current file without the extension
