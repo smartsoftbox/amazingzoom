@@ -26,7 +26,7 @@ class SpecialsSidebar extends ModuleDisplay
         $this->id_page = 12;
 
         $this->css_selector_17 = '.js-qv-product-cover, .thumbs';
-        $this->css_selector_16 = '#special-sellers .products-block-image img';
+        $this->css_selector_16 = '#special_block_right .products-block-image img';
         $this->amazingZoomClass = new AmazingZoomClass();
     }
 

@@ -176,8 +176,6 @@ $(document).ready(function () {
   } else {
     $('div.list-group a:first').click();
   }
-
-
 });
 
 function createEditor(name, mode) {

@@ -26,7 +26,7 @@ class ViewedSidebar extends ModuleDisplay
         $this->id_page = 14;
 
         $this->css_selector_17 = '.js-qv-product-cover, .thumbs';
-        $this->css_selector_16 = '';
+        $this->css_selector_16 = '#viewed-products_block_left .products-block-image img';
         $this->amazingZoomClass = new AmazingZoomClass();
     }
 

@@ -772,14 +772,16 @@ class Amazingzoom extends Module
                         'label' => $this->l('JavaScript Code'),
                         'name' => 'js_' . $id_page,
                         'id' => 'js_' . $id_page,
-                        'tab' => 'page6_' . $id_page
+                        'class' => '',
+                        'tab' => 'page6_' . $id_page,
                     ),
                     array(
                         'type' => 'textarea',
                         'label' => $this->l('Css Code'),
                         'name' => 'css_' . $id_page,
                         'id' => 'css_' . $id_page,
-                        'tab' => 'page6_' . $id_page
+                        'class' => '',
+                        'tab' => 'page6_' . $id_page,
                     )
                 ),
                 'submit' => array(
@@ -844,7 +846,7 @@ class Amazingzoom extends Module
         $active_amazingzooms = AmazingZoomClass::getEnabled();
         $amazingzoom = array();
 
-        $controller = $this->context->controller;
+//        $controller = $this->context->controller;
         foreach ($active_amazingzooms as $key => $active_amazingzoom) {
             $controller = implode('', array_map(
                 'ucfirst',

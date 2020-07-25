@@ -36,7 +36,7 @@ abstract class ModuleDisplay
         $js = trim($js);
         $js = str_replace('{css_selector}', $this->getCssSelector(), $js);
 
-        return $js;
+        return pSQL($js);
     }
 
     protected function getCSS()
@@ -47,6 +47,6 @@ abstract class ModuleDisplay
         $css = trim($css);
         $css = str_replace('{css_selector}', $this->getCssSelector(), $css);
 
-        return $css;
+        return pSQL($css);
     }
 }

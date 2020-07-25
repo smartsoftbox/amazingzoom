@@ -26,7 +26,7 @@ class NewProductsSideabar extends ModuleDisplay
         $this->id_page = 6;
 
         $this->css_selector_17 = '.js-qv-product-cover, .thumbs';
-        $this->css_selector_16 = '#new-sellers .product_img_link img';
+        $this->css_selector_16 = '#new-products_block_right .products-block-image img';
         $this->amazingZoomClass = new AmazingZoomClass();
     }
 

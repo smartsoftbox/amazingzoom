@@ -131,3 +131,6 @@
     {/if}
 
 {/block}
+
+{block name="autoload_tinyMCE"}
+{/block}

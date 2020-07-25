@@ -26,7 +26,7 @@ class BestsellersSidebar extends ModuleDisplay
         $this->id_page = 9;
 
         $this->css_selector_17 = '.js-qv-product-cover, .thumbs';
-        $this->css_selector_16 = '#best-sellers .product_img_link img';
+        $this->css_selector_16 = '#best-sellers_block_right .product_img_link img';
         $this->amazingZoomClass = new AmazingZoomClass();
     }
 
