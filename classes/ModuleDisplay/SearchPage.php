@@ -78,12 +78,12 @@ class SearchPage extends ModuleDisplay
     public function getJS16()
     {
         return "<script>        
-            $('{css_selector}').each(function () {
-                $(this).closest('.product-image-container').css('padding', '0px');
-                $(this).attr('width', '268px');
-                $(this).attr('height', '268px');
-                $(this).css('width', '268px');
-            });
+$('{css_selector}').each(function () {
+    $(this).closest('.product-image-container').css('padding', '0px');
+    $(this).attr('width', '268px');
+    $(this).attr('height', '268px');
+    $(this).css('width', '268px');
+});
             </script>";
     }
 

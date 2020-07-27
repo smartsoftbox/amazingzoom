@@ -19,7 +19,7 @@ class BestsellersPage extends ModuleDisplay
         $this->id_page = 8;
 
         $this->css_selector_17 = '.js-qv-product-cover, .thumbs';
-        $this->css_selector_16 = '#blockbestsellers .product_img_link img';
+        $this->css_selector_16 = '#product_list .product_img_link img';
         $this->amazingZoomClass = new AmazingZoomClass();
     }
 

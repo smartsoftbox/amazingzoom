@@ -28,27 +28,25 @@
 
 <style>
   {foreach $amazingzooms as $az}
-    {$az.css nofilter}
+  {$az.css nofilter}
   {/foreach}
 </style>
 
 
 <script type="text/javascript">
 
-    {foreach $amazingzooms as $az}
-      {$az.js nofilter}
-      // document is loaded and DOM is ready
-      $("{$az.css_selector|escape:'htmlall':'UTF-8'}").each(function () {
-          $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type}")
-              .replace("-large_default", "{$az.image_type}"));
-      });
-    {/foreach}
-
     $(document).ready(function () {
         //HammerJS v2.0.8
         var isTouchSupported = 'ontouchstart' in window;
 
         {foreach $amazingzooms as $az}
+
+        {$az.js nofilter}
+        // document is loaded and DOM is ready
+        $("{$az.css_selector|escape:'htmlall':'UTF-8'}").each(function () {
+            $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type}")
+                .replace("-large_default", "{$az.image_type}").replace("-small_default", "{$az.image_type}"));
+        });
         /* calling script */
         $('{$az.css_selector}').each(function () {
             var xzoom = $(this).xzoom({

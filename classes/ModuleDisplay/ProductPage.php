@@ -74,10 +74,10 @@ class ProductPage extends ModuleDisplay
     public function getJS17()
     {
         return '<script>
-          $(".product-cover").find(".layer").css("display", "none");
-          $("{css_selector}").click(function () {
-              $(".product-cover").find(".layer").click();
-          });
+  $(".product-cover").find(".layer").css("display", "none");
+  $("{css_selector}").click(function () {
+      $(".product-cover").find(".layer").click();
+  });
         </script>';
     }
 

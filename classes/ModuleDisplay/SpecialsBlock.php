@@ -78,7 +78,12 @@ class SpecialsBlock extends ModuleDisplay
 
     public function getJS16()
     {
-        return '';
+        return "<script>        
+$('{css_selector}').each(function () {
+    $(this).closest('.product-image-container').css('padding', '0px');
+    $(this).attr('width', '268px').attr('height', '268px').css('width', '268px');
+});
+            </script>";
     }
 
     public function getCSS17()
