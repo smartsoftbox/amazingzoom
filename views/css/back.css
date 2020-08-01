@@ -181,17 +181,23 @@
   color: #eee;
 }
 
-#amazingzooms .icon-circle-blank {
+#amazingzooms .icon-circle {
   float: right;
   margin-left: 5px;
+  font-size: 5px;
 }
 
 #amazingzooms .icon-gear {
   float: right;
-  margin-left: 5px;
+  margin-left: 2px;
+  font-size: 5px;
 }
 
-#amazingzooms .icon-circle-blank.active {
+#xzoom.icon-circle.active {
+  color: #ff0062 !important;
+}
+
+#swipe.icon-circle.active {
   color: #ff0062 !important;
 }
 
@@ -261,4 +267,3 @@ a.amazingzoom-tab.list-group-item.active {
   height: 200px !important;
   margin-bottom: 20px;
 }
-

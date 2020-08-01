@@ -42,9 +42,27 @@ class AmazingZoomClass extends ObjectModel
     public $title;
     public $bg;
 
+    //photoswipe
+    public $swipe_is_enable;
+    public $swipe_showHideOpacity;
+    public $swipe_showAnimationDuration;
+    public $swipe_hideAnimationDuration;
+    public $swipe_bgOpacity;
+    public $swipe_spacing;
+    public $swipe_allowPanToNext;
+    public $swipe_maxSpreadZoom;
+    public $swipe_loop;
+    public $swipe_pinchToClose;
+    public $swipe_closeOnScroll;
+    public $swipe_closeOnVerticalDrag;
+    public $swipe_arrowKeys;
+    public $swipe_history;
+    public $swipe_modal;
+
     public $controller;
     public $name;
     public $css_selector;
+    public $thumb_selector;
     public $image_type;
 
     public $css;
@@ -132,9 +150,27 @@ class AmazingZoomClass extends ObjectModel
         $fields['title'] = $this->title;
         $fields['bg'] = $this->bg;
 
+        //photoswipe
+        $fields['swipe_is_enable'] = $this->swipe_is_enable;
+        $fields['swipe_showHideOpacity'] = $this->swipe_showHideOpacity;
+        $fields['swipe_showAnimationDuration'] = $this->swipe_showAnimationDuration;
+        $fields['swipe_hideAnimationDuration'] = $this->swipe_hideAnimationDuration;
+        $fields['swipe_bgOpacity'] = $this->swipe_bgOpacity;
+        $fields['swipe_spacing'] = $this->swipe_spacing;
+        $fields['swipe_allowPanToNext'] = $this->swipe_allowPanToNext;
+        $fields['swipe_maxSpreadZoom'] = $this->swipe_maxSpreadZoom;
+        $fields['swipe_loop'] = $this->swipe_loop;
+        $fields['swipe_pinchToClose'] = $this->swipe_pinchToClose;
+        $fields['swipe_closeOnScroll'] = $this->swipe_closeOnScroll;
+        $fields['swipe_closeOnVerticalDrag'] = $this->swipe_closeOnVerticalDrag;
+        $fields['swipe_arrowKeys'] = $this->swipe_arrowKeys;
+        $fields['swipe_history'] = $this->swipe_history;
+        $fields['swipe_modal'] = $this->swipe_modal;
+
         $fields['controller'] = $this->controller;
         $fields['name'] = $this->name;
         $fields['css_selector'] = $this->css_selector;
+        $fields['thumb_selector'] = $this->thumb_selector;
         $fields['image_type'] = $this->image_type;
 
         $fields['css'] = $this->css;

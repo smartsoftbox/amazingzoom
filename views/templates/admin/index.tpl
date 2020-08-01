@@ -18,9 +18,11 @@
                     <i class="icon-gear {if !$page.use_default}active{/if}"></i>
                   {/if}
                   {if $page.name != 'Default Settings'}
-                    <i class="icon-circle-blank {if $page.is_enable}active{/if}"></i>
+                    <i id="xzoom" class="icon-circle {if $page.swipe_is_enable}active{/if}"></i>
                   {/if}
-
+                  {if $page.name != 'Default Settings'}
+                    <i id="swipe" class="icon-circle {if $page.is_enable}active{/if}"></i>
+                  {/if}
               </a>
             {/foreach}
           <a href="#" id="welcome" class="list-group-item"><b>Documentation</b></a>

@@ -91,19 +91,33 @@ $(document).ready(function () {
     });
   });
 
-  $(document.body).on('click', 'input[id^=is_enable], input[id^=is_enable]', function (e, data) {
+  $(document.body).on('click', 'input[id^=is_enable]', function (e, data) {
     var url =  ajax_url + '&action=saveConfigForm';
     var form = $(this).closest('form');
     var id = form.find('#id').val();
+
     $.post( url, form.serialize(), function( data ) {
       $('.module_errors').fadeOut().remove();
       $('.module_confirmation').parent().fadeOut().remove();
       $("#amazingZoom").before(data);
-      $('a.amazingzoom-tab[id="' + id + '"]').find('i.icon-circle-blank').toggleClass('active');
+      $('a.amazingzoom-tab[id="' + id + '"]').find('i#xzoom.icon-circle').toggleClass('active');
     });
   });
 
-  $(document.body).on('click', 'input[id^=use_default], input[id^=use_default]', function (e, data) {
+  $(document.body).on('click', 'input[id^=swipe_is_enable]', function (e, data) {
+    var url =  ajax_url + '&action=saveConfigForm';
+    var form = $(this).closest('form');
+    var id = form.find('#id').val();
+
+    $.post( url, form.serialize(), function( data ) {
+      $('.module_errors').fadeOut().remove();
+      $('.module_confirmation').parent().fadeOut().remove();
+      $("#amazingZoom").before(data);
+      $('a.amazingzoom-tab[id="' + id + '"]').find('i#swipe.icon-circle').toggleClass('active');
+    });
+  });
+
+  $(document.body).on('click', 'input[id^=use_default]', function (e, data) {
     var url =  ajax_url + '&action=saveConfigForm';
     var form = $(this).closest('form');
     var id = form.find('#id').val();
@@ -207,8 +221,9 @@ function hideLoader() {
 }
 
 function displaySwitchInline() {
-  $( 'input[name^="is_enable"]' ).closest( '.form-group' ).css({'width': '50%', 'display': 'inline-block'});
-  $( 'input[name^="use_default"]' ).closest( '.form-group' ).css({'width': '50%', 'display': 'inline-block'});
+  $( 'input[name^="is_enable"]' ).closest( '.form-group' ).css({'width': '30%', 'display': 'inline-block'});
+  $( 'input[name^="swipe_is_enable"]' ).closest( '.form-group' ).css({'width': '30%', 'display': 'inline-block'});
+  $( 'input[name^="use_default"]' ).closest( '.form-group' ).css({'width': '30%', 'display': 'inline-block'});
 }
 
 function convertRangeToSlider() {

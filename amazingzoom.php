@@ -46,7 +46,7 @@ class Amazingzoom extends Module
         $this->version = '1.0.0';
         $this->author = 'Smart Soft';
         $this->need_instance = 0;
-        $path = dirname(__FILE__);
+        $this->path = dirname(__FILE__);
 
         if (strpos(__FILE__, 'Module.php') !== false) {
             $this->path .= '/../modules/'.$this->name;
@@ -200,8 +200,26 @@ class Amazingzoom extends Module
                     ),
                     array(
                         'type' => 'switch',
-                        'label' => $this->l('Enable'),
+                        'label' => $this->l('Zoom'),
                         'name' => 'is_enable_' . $id_page,
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('PhotoSwipe'),
+                        'name' => 'swipe_is_enable_' . $id_page,
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -299,8 +317,9 @@ class Amazingzoom extends Module
                     'page2_' . $id_page => 'Effect',
                     'page3_' . $id_page => 'Style',
                     'page4_' . $id_page => 'Advanced',
-                    'page5_' . $id_page => 'Controllers',
-                    'page6_' . $id_page => 'Befo',
+                    'page5_' . $id_page => 'Photo swipe',
+                    'page6_' . $id_page => 'Display Controllers',
+                    'page7_' . $id_page => 'Styles',
                 ),
                 'input' => array(
                     array(
@@ -748,9 +767,240 @@ class Amazingzoom extends Module
                         'class' => '',
                         'desc' => $this->l('Css path to your image.'),
                         'name' => 'css_selector_' . $id_page,
-                        'label' => $this->l('Selector image'),
+                        'label' => $this->l('Selector image / trigger'),
                         'tab' => 'page4_' . $id_page
                     ),
+
+                    array(
+                        'type' => 'text',
+                        'class' => '',
+                        'desc' => $this->l('Css path to your thumbnails.'),
+                        'name' => 'thumb_selector_' . $id_page,
+                        'label' => $this->l('Selector thumbnails'),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('show/hide opacity'),
+                        'name' => 'swipe_showHideOpacity_' . $id_page,
+                        'desc' => $this->l('If set to false: background opacity and image scale will be animated (image opacity is always 1)'),
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'text',
+                        'class' => 'fixed-width-xxl',
+                        'desc' => $this->l('Initial zoom-in transition duration in milliseconds. Set to 0 to disable.'),
+                        'name' => 'swipe_showAnimationDuration_' . $id_page,
+                        'label' => $this->l('Show animation duration'),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'text',
+                        'class' => 'fixed-width-xxl',
+                        'desc' => $this->l('Initial zoom-out transition duration in milliseconds. Set to 0 to disable.'),
+                        'name' => 'swipe_hideAnimationDuration_' . $id_page,
+                        'label' => $this->l('Hide animation duration'),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'text',
+                        'class' => 'fixed-width-xxl',
+                        'desc' => $this->l('Should be a number from 0 to 1, e.g. 0.7.'),
+                        'name' => 'swipe_bgOpacity_' . $id_page,
+                        'label' => $this->l('Background opacity'),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'text',
+                        'class' => 'fixed-width-xxl',
+                        'desc' => $this->l('Spacing ratio between slides. For example, 0.12 will render as a 12% of sliding viewport width (rounded).'),
+                        'name' => 'swipe_spacing_' . $id_page,
+                        'label' => $this->l('Spacing'),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Allow pan to next'),
+                        'name' => 'swipe_allowPanToNext_' . $id_page,
+                        'desc' => $this->l('Allow swipe navigation to next/prev item when current item is zoomed.'),
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'text',
+                        'class' => 'fixed-width-xxl',
+                        'desc' => $this->l('Maximum zoom level when performing spread (zoom) gesture. 2 means that image can be zoomed 2x from original size. Try to avoid huge values.'),
+                        'name' => 'swipe_maxSpreadZoom_' . $id_page,
+                        'label' => $this->l('Max spread zoom'),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Loop'),
+                        'name' => 'swipe_loop_' . $id_page,
+                        'desc' => $this->l('Loop slides when using swipe gesture. If set to true you will be able to swipe from last to first image.'),
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Pinch too close'),
+                        'name' => 'swipe_pinchToClose_' . $id_page,
+                        'desc' => $this->l('Pinch to close gallery gesture. The gallery`s background will gradually fade out as the user zooms out.'),
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Close on scroll'),
+                        'name' => 'swipe_closeOnScroll_' . $id_page,
+                        'desc' => $this->l('Close gallery on page scroll. Option works just for devices without hardware touch support.'),
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Close on vertical drag'),
+                        'name' => 'swipe_closeOnVerticalDrag_' . $id_page,
+                        'desc' => $this->l('Close gallery when dragging vertically and when image is not zoomed. Always false when mouse is used.'),
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Arrow keys'),
+                        'name' => 'swipe_showHideOpacity_' . $id_page,
+                        'desc' => $this->l('Keyboard left or right arrow key navigation.'),
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('History'),
+                        'name' => 'swipe_history_' . $id_page,
+                        'desc' => $this->l('If set to false disables history module (back button to close gallery, unique URL for each slide).'),
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                        'tab' => 'page5_' . $id_page
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Modal'),
+                        'name' => 'swipe_modal_' . $id_page,
+                        'desc' => $this->l('Controls whether PhotoSwipe should expand to take up the entire viewport. If false, the PhotoSwipe element will take the size of the positioned parent of the template.'),
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                        'tab' => 'page5_' . $id_page
+                    ),
+
+
                     array(
                         'type' => 'duallist',
                         'label' => $this->l('Controllers'),
@@ -765,7 +1015,7 @@ class Amazingzoom extends Module
                                 'name' => 'page',
                             ),
                         ),
-                        'tab' => 'page5_' . $id_page
+                        'tab' => 'page6_' . $id_page
                     ),
                     array(
                         'type' => 'textarea',
@@ -773,7 +1023,7 @@ class Amazingzoom extends Module
                         'name' => 'js_' . $id_page,
                         'id' => 'js_' . $id_page,
                         'class' => '',
-                        'tab' => 'page6_' . $id_page,
+                        'tab' => 'page7_' . $id_page,
                     ),
                     array(
                         'type' => 'textarea',
@@ -781,7 +1031,7 @@ class Amazingzoom extends Module
                         'name' => 'css_' . $id_page,
                         'id' => 'css_' . $id_page,
                         'class' => '',
-                        'tab' => 'page6_' . $id_page,
+                        'tab' => 'page7_' . $id_page,
                     )
                 ),
                 'submit' => array(
@@ -847,7 +1097,7 @@ class Amazingzoom extends Module
         $templateFile = 'front.tpl';
         $key = 'amazingzoom|' . $controller;
 
-        if (!$this->isCached($templateFile, $this->getCacheId($key))) {
+//        if (!$this->isCached($templateFile, $this->getCacheId($key))) {
 
             $active_amazingzooms = AmazingZoomClass::getEnabled();
             $amazingzoom = array();
@@ -891,16 +1141,19 @@ class Amazingzoom extends Module
             if ($amazingzoom) {
                 $this->smarty->assign(array(
                     'this_path' => $this->_path,
+                    'path' => $this->path,
                     'amazingzooms' => $amazingzoom,
                     'is_17' => (_PS_VERSION_ >= 1.7 ? true : false)
                 ));
-            }
-        }
 
-        return $this->display(
-            __FILE__, 'views/templates/front/front.tpl',
-            $this->getCacheId($key)
-        );
+                return $this->display(
+                    __FILE__, 'views/templates/front/front.tpl'
+//            ,$this->getCacheId($key)
+                );
+            }
+//        }
+
+
     }
 
     public function hookDisplayBeforeBodyClosingTag($params)
@@ -953,7 +1206,7 @@ class Amazingzoom extends Module
 
     private function saveConfigForm($id_amazingzoom)
     {
-        $this->postValidation();
+        $this->postValidation($id_amazingzoom);
 
         if(!empty($this->_errors)) {
             $errors = '';
@@ -975,11 +1228,11 @@ class Amazingzoom extends Module
     }
 
 
-    private function postValidation()
+    private function postValidation($id_amazingzoom)
     {
-//        if (!Tools::getValue('CHEQUE_NAME')) {
-//            $this->_errors[] = $this->l('The "Payee" field is required.');
-//        }
+        if (!$this->isUniqueCssElement($css_selector = Tools::getValue('css_selector_' . $id_amazingzoom))) {
+            $this->_errors[] = $this->l('You already use "' . $css_selector . '" as image selector.');
+        }
     }
 
     private function getDefaultId()
@@ -990,5 +1243,14 @@ class Amazingzoom extends Module
     private function getMetaPages()
     {
         return DB::getInstance()->executeS('SELECT * FROM `' . _DB_PREFIX_ . 'meta`');
+    }
+
+    private function isUniqueCssElement($css_selector)
+    {
+        $result = DB::getInstance()->executeS(
+            'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom` WHERE css_selector = "' . $css_selector . '"'
+        );
+
+        return ($result ? false : true);
     }
 }
