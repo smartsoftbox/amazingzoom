@@ -20,15 +20,10 @@ abstract class ModuleDisplay
     protected $is_enable;
     protected $position;
     protected $mposition;
-    protected $rootOutput;
     protected $Xoffset;
     protected $Yoffset;
     protected $fadeIn;
-    protected $fadeTrans;
     protected $fadeOut;
-    protected $smoothZoomMove;
-    protected $smoothLensMove;
-    protected $smoothScale;
     protected $defaultScale;
     protected $scroll;
     protected $tint;
@@ -37,13 +32,6 @@ abstract class ModuleDisplay
     protected $lensOpacity;
     protected $lensShape;
     protected $lensCollision;
-    protected $lensReverse;
-    protected $openOnSmall;
-    protected $zoomWidth;
-    protected $zoomHeight;
-    protected $hover;
-    protected $adaptive;
-    protected $adaptiveReverse;
     protected $title;
     protected $bg;
 
@@ -61,7 +49,6 @@ abstract class ModuleDisplay
     protected $swipe_closeOnScroll;
     protected $swipe_closeOnVerticalDrag;
     protected $swipe_arrowKeys;
-    protected $swipe_history;
     protected $swipe_modal;
     protected $thumb_selector;
     protected $image_type;
@@ -71,7 +58,6 @@ abstract class ModuleDisplay
         $js = str_replace('<script>', '', $this->js);
         $js = str_replace('</script>', '', $js);
         $js = trim($js);
-        $js = str_replace('{css_selector}', $this->css_selector, $js);
 
         return pSQL($js);
     }
@@ -81,7 +67,6 @@ abstract class ModuleDisplay
         $css = str_replace('<style>', '', $this->css);
         $css = str_replace('</style>', '', $css);
         $css = trim($css);
-        $css = str_replace('{css_selector}',  $this->css_selector, $css);
 
         return pSQL($css);
     }
@@ -101,15 +86,10 @@ abstract class ModuleDisplay
         $amazingZoomClass->is_enable = $this->is_enable;
         $amazingZoomClass->position = $this->position;
         $amazingZoomClass->mposition = $this->mposition;
-        $amazingZoomClass->rootOutput = $this->rootOutput;
         $amazingZoomClass->Xoffset = $this->Xoffset;
         $amazingZoomClass->Yoffset = $this->Yoffset;
         $amazingZoomClass->fadeIn = $this->fadeIn;
-        $amazingZoomClass->fadeTrans = $this->fadeTrans;
         $amazingZoomClass->fadeOut = $this->fadeOut;
-        $amazingZoomClass->smoothZoomMove = $this->smoothZoomMove;
-        $amazingZoomClass->smoothLensMove = $this->smoothLensMove;
-        $amazingZoomClass->smoothScale = $this->smoothScale;
         $amazingZoomClass->defaultScale = $this->defaultScale;
         $amazingZoomClass->scroll = $this->scroll;
         $amazingZoomClass->tint = $this->tint;
@@ -118,13 +98,6 @@ abstract class ModuleDisplay
         $amazingZoomClass->lensOpacity = $this->lensOpacity;
         $amazingZoomClass->lensShape = $this->lensShape;
         $amazingZoomClass->lensCollision = $this->lensCollision;
-        $amazingZoomClass->lensReverse = $this->lensReverse;
-        $amazingZoomClass->openOnSmall = $this->openOnSmall;
-        $amazingZoomClass->zoomWidth = $this->zoomWidth;
-        $amazingZoomClass->zoomHeight = $this->zoomHeight;
-        $amazingZoomClass->hover = $this->hover;
-        $amazingZoomClass->adaptive = $this->adaptive;
-        $amazingZoomClass->adaptiveReverse = $this->adaptiveReverse;
         $amazingZoomClass->title = $this->title;
         $amazingZoomClass->bg = $this->bg;
 
@@ -141,7 +114,6 @@ abstract class ModuleDisplay
         $amazingZoomClass->swipe_closeOnScroll = $this->swipe_closeOnScroll;
         $amazingZoomClass->swipe_closeOnVerticalDrag = $this->swipe_closeOnVerticalDrag;
         $amazingZoomClass->swipe_arrowKeys = $this->swipe_arrowKeys;
-        $amazingZoomClass->swipe_history = $this->swipe_history;
         $amazingZoomClass->swipe_modal = $this->swipe_modal;
 
         $amazingZoomClass->save();

@@ -22,24 +22,20 @@ class SpecialsSidebar extends ModuleDisplay
         'prices-drop',
         'sitemap',
         'search',
+        'category',
     );
     public $id_page = 12;
     public $css_selector = '#special_block_right .products-block-image img';
     public $js = '';
     public $css = '';
     public $use_default = false;
-    public $is_enable = true;
-    public $position = 'right';
+    public $is_enable = false;
+    public $position = 'inside';
     public $mposition = 'inside';
-    public $rootOutput = true;
     public $Xoffset = 0;
     public $Yoffset = 0;
     public $fadeIn = true;
-    public $fadeTrans = true;
     public $fadeOut = false;
-    public $smoothZoomMove = 3;
-    public $smoothLensMove = 1;
-    public $smoothScale = 6;
     public $defaultScale = 0;
     public $scroll = true;
     public $tint = false;
@@ -48,13 +44,6 @@ class SpecialsSidebar extends ModuleDisplay
     public $lensOpacity = 0.5;
     public $lensShape = 'box';
     public $lensCollision = true;
-    public $lensReverse = false;
-    public $openOnSmall = true;
-    public $zoomWidth = 'auto';
-    public $zoomHeight = 'auto';
-    public $hover = false;
-    public $adaptive = true;
-    public $adaptiveReverse = false;
     public $title = false;
     public $bg = false;
 
@@ -72,7 +61,6 @@ class SpecialsSidebar extends ModuleDisplay
     public $swipe_closeOnScroll = true;
     public $swipe_closeOnVerticalDrag = true;
     public $swipe_arrowKeys = true;
-    public $swipe_history = true;
     public $swipe_modal = true;
     public $thumb_selector = '';
     public $image_type = 'upload';

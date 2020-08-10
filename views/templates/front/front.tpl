@@ -23,181 +23,191 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 {* XZOOM *}
-<script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/xzoom.js'></script>
-<link href="{$this_path|escape:'htmlall':'UTF-8'}views/css/xzoom.css" rel="stylesheet" type="text/css"/>
-<script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/hammer.min.js'></script>
-<link href="{$this_path|escape:'htmlall':'UTF-8'}views/css/xzoom.css" rel="stylesheet" type="text/css"/>
-{* PHOTOSWAPE *}
-<script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/photoswipe.js'></script>
-<link href="{$this_path|escape:'htmlall':'UTF-8'}views/css/photoswipe.css" rel="stylesheet" type="text/css"/>
-{* PHOTOSWAPE SKIN *}
-<script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/photoswipe-ui-default.min.js'></script>
-<link href="{$this_path|escape:'htmlall':'UTF-8'}views/css/default-skin.css" rel="stylesheet" type="text/css"/a>
 
+{if $is_zoom_enable}
+  <script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/xzoom.js'></script>
+  <link href="{$this_path|escape:'htmlall':'UTF-8'}views/css/xzoom.css" rel="stylesheet" type="text/css"/>
+  <script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/hammer.min.js'></script>
+  <link href="{$this_path|escape:'htmlall':'UTF-8'}views/css/xzoom.css" rel="stylesheet" type="text/css"/>
+{/if}
 
-<style>
-  {foreach $amazingzooms as $az}
+{if $is_swipe_enable}
+  {* PHOTOSWAPE *}
+  <script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/photoswipe.js'></script>
+  <link href="{$this_path|escape:'htmlall':'UTF-8'}views/css/photoswipe.css" rel="stylesheet" type="text/css"/>
+  {* PHOTOSWAPE SKIN *}
+  <script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/photoswipe-ui-default.min.js'></script>
+  <link href="{$this_path|escape:'htmlall':'UTF-8'}views/css/default-skin.css" rel="stylesheet" type="text/css"/a>
+{/if}
+
+{if $amazingzooms}
+  <style>
+    {foreach $amazingzooms as $az}
+    {if $az.is_enable || $az.swipe_is_enable}
     {$az.css nofilter}
-  {/foreach}
-</style>
+    {/if}
+    {/foreach}
+  </style>
+  <script type="text/javascript">
 
+      $(document).ready(function () {
+          //HammerJS v2.0.8
+          var isTouchSupported = 'ontouchstart' in window;
 
-<script type="text/javascript">
+          {foreach $amazingzooms as $az}
+            {if $az.is_enable || $az.swipe_is_enable}
+              {$az.js nofilter}
+              // document is loaded and DOM is ready
+              $("{$az.css_selector|escape:'htmlall':'UTF-8'}").each(function () {
+                  $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type}")
+                      .replace("-large_default", "{$az.image_type}").replace("-small_default", "{$az.image_type}"));
+              });
 
-    $(document).ready(function () {
-        //HammerJS v2.0.8
-        var isTouchSupported = 'ontouchstart' in window;
-
-        {foreach $amazingzooms as $az}
-
-        {$az.js nofilter}
-        // document is loaded and DOM is ready
-        $("{$az.css_selector|escape:'htmlall':'UTF-8'}").each(function () {
-            $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type}")
-                .replace("-large_default", "{$az.image_type}").replace("-small_default", "{$az.image_type}"));
-        });
-
-        {if $az.thumb_selector}
-            // document is loaded and DOM is ready
-            $("{$az.thumb_selector|escape:'htmlall':'UTF-8'}").each(function () {
-                $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type}")
-                    .replace("-large_default", "{$az.image_type}").replace("-small_default", "{$az.image_type}"));
-            });
-        {/if}
-        /* calling script */
-        $('{$az.css_selector}').each(function () {
-            var xzoom = $(this).xzoom({
-                'position': '{$az.position}',
-                'mposition': '{$az.mposition}',
-                'rootOutput': {$az.rootOutput},
-                'Xoffset': {$az.Xoffset},
-                'Yoffset': {$az.Yoffset},
-                'fadeIn': {$az.fadeIn},
-                'fadeTrans': {$az.fadeTrans},
-                'fadeOut': {$az.fadeOut},
-                'smoothZoomMove': {$az.smoothZoomMove},
-                'smoothLensMove': {$az.smoothLensMove},
-                'smoothScale': {$az.smoothScale},
-                'defaultScale': {$az.defaultScale},
-                'scroll': {$az.scroll},
-                'tint': '{$az.tint}',
-                'tintOpacity': {$az.tintOpacity},
-                'lens': '{$az.lens}',
-                'lensOpacity': {$az.lensOpacity},
-                'lensShape': '{$az.lensShape}',
-                'lensCollision': {$az.lensCollision},
-                'lensReverse': {$az.lensReverse},
-                'openOnSmall': {$az.openOnSmall},
-                'zoomWidth': '{$az.zoomWidth}',
-                'zoomHeight': '{$az.zoomHeight}',
-                'adaptive': {$az.adaptive},
-                'adaptiveReverse': {$az.adaptiveReverse},
-                'title': {$az.title},
-                'bg': {$az.bg}
-            });
-
-
-            if (isTouchSupported) {
-                xzoom.eventunbind();
-                var mc1 = new Hammer($(this)[0]);
-
-                mc1.on("tap", function (event) {
-                    event.pageX = event.srcEvent.pageX;
-                    event.pageY = event.srcEvent.pageY;
-
-                    xzoom.eventclick = function (element) {
-                        element.css('touch-action', 'pan-x');
-                    };
-
-                    xzoom.eventmove = function (element) {
-                        var mc2 = new Hammer(element[0]);
-
-                        mc2.get('pan').set({
-                            direction: Hammer.DIRECTION_ALL,
-                        });
-
-                        mc2.on('pan', function (event) {
-                            event.pageX = event.srcEvent.pageX;
-                            event.pageY = event.srcEvent.pageY;
-                            xzoom.movezoom(event);
-                            // event.srcEvent.preventDefault();
-                        });
-                    };
-
-                    xzoom.eventleave = function (element) {
-                        var mc3 = new Hammer(element[0]);
-                        mc3.on('tap', function (event) {
-                            xzoom.closezoom();
-                        });
-                    };
-                    xzoom.openzoom(event);
+              {if $az.thumb_selector}
+                // document is loaded and DOM is ready
+                $("{$az.thumb_selector|escape:'htmlall':'UTF-8'}").each(function () {
+                    $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type}")
+                        .replace("-large_default", "{$az.image_type}").replace("-small_default", "{$az.image_type}")
+                        .replace("-cart_default", "{$az.image_type}"));
                 });
-
-            }
-
-        });
-
-        //Example: Integration with "Magnific Popup" plugin
-        $("{$az.css_selector|escape:'htmlall':'UTF-8'}").bind('click', function(event) {
-            event.preventDefault();
-            var xzoom = $(this).data('xzoom');
-            xzoom.closezoom();
-
-            var trigger = $(this);
-            var $pswp = $('.pswp')[0];
-            var gallery;
-
-            {if $az.thumb_selector}
-                gallery = $("{$az.thumb_selector|escape:'htmlall':'UTF-8'}");
-            {else}
-                gallery = $(this);
+              {/if}
             {/if}
+          {if $az.is_enable}
+          /* calling script */
+          $('{$az.css_selector}').each(function () {
+              var xzoom = $(this).xzoom({
+                  'position': '{$az.position}',
+                  'mposition': '{$az.mposition}',
+                  'Xoffset': {$az.Xoffset},
+                  'Yoffset': {$az.Yoffset},
+                  'fadeIn': {$az.fadeIn},
+                  'fadeOut': {$az.fadeOut},
+                  'defaultScale': {$az.defaultScale},
+                  'scroll': {$az.scroll},
+                  'tint': '{$az.tint}',
+                  'tintOpacity': {$az.tintOpacity},
+                  'lens': '{$az.lens}',
+                  'lensOpacity': {$az.lensOpacity},
+                  'lensShape': '{$az.lensShape}',
+                  'lensCollision': {$az.lensCollision},
+                  'title': {$az.title},
+                  'bg': {$az.bg}
+              });
 
-            // console.log(gallery);
-            var $index = 0, images = [];
-            gallery.each(function (index,value) {
-                var image = {
-                    src : $(this).attr('xoriginal'),
-                    w : 1000,
-                    h : 1000
-                };
-                var src = trigger.attr('xoriginal');
-                if(image.src === src) {
-                    $index = index;
-                }
 
-                images.push(image);
-            });
-            console.log(images);
-            // var src = $(this).attr('src').replace("-large_default", "-home_default");
-            // console.log(src);
-            // var $index = images.indexOf(src);
-            var options = {
-                index: $index,
-                showHideOpacity: {$az.swipe_showHideOpacity},
-                showAnimationDuration: {$az.swipe_showAnimationDuration},
-                hideAnimationDuration: {$az.swipe_hideAnimationDuration},
-                bgOpacity: {$az.swipe_bgOpacity},
-                spacing: {$az.swipe_spacing},
-                allowPanToNext: {$az.swipe_allowPanToNext},
-                maxSpreadZoom: {$az.swipe_maxSpreadZoom},
-                loop: {$az.swipe_loop},
-                pinchToClose: {$az.swipe_pinchToClose},
-                closeOnScroll: {$az.swipe_closeOnScroll},
-                closeOnVerticalDrag: {$az.swipe_closeOnVerticalDrag},
-                arrowKeys: {$az.swipe_arrowKeys},
-                history: {$az.swipe_history},
-                modal: {$az.swipe_modal},
-            };
+              if (isTouchSupported) {
+                  xzoom.eventunbind();
+                  var mc1 = new Hammer($(this)[0]);
 
-            var lightBox = new PhotoSwipe($pswp, PhotoSwipeUI_Default, images, options);
-            lightBox.init();
-        });
+                  mc1.on("tap", function (event) {
+                      event.pageX = event.srcEvent.pageX;
+                      event.pageY = event.srcEvent.pageY;
 
-        {/foreach}
-    });
-</script>
+                      xzoom.eventclick = function (element) {
+                          element.css('touch-action', 'pan-x');
+                      };
 
-{*photoswipe*}
-{include file="{$path|escape:'htmlall':'UTF-8'}/views/templates/front/swipe-html.tpl"}
+                      xzoom.eventmove = function (element) {
+                          var mc2 = new Hammer(element[0]);
+
+                          mc2.get('pan').set({
+                              direction: Hammer.DIRECTION_ALL,
+                          });
+
+                          mc2.on('pan', function (event) {
+                              event.pageX = event.srcEvent.pageX;
+                              event.pageY = event.srcEvent.pageY;
+                              xzoom.movezoom(event);
+                              // event.srcEvent.preventDefault();
+                          });
+                      };
+
+                      xzoom.eventleave = function (element) {
+                          var mc3 = new Hammer(element[0]);
+                          mc3.on('tap', function (event) {
+                              xzoom.closezoom();
+                          });
+                      };
+                      xzoom.openzoom(event);
+                  });
+
+              }
+
+          });
+          {/if}
+          {if $az.swipe_is_enable}
+          //Example: Integration with "Magnific Popup" plugin
+          $("{$az.css_selector|escape:'htmlall':'UTF-8'}").bind('click', function (event) {
+              event.preventDefault();
+
+              {if $az.is_enable}
+                var xzoom = $(this).data('xzoom');
+                xzoom.closezoom();
+              {/if}
+
+              var trigger = $(this);
+              var $pswp = $('.pswp')[0];
+              var gallery;
+
+              {if $az.thumb_selector}
+                gallery = $('{$az.thumb_selector nofilter}');
+              {else}
+                gallery = $(this);
+              {/if}
+
+              // console.log(gallery);
+              var $index = 0, images = [];
+              gallery.each(function (index, value) {
+                  var image = {
+                      src: $(this).attr('xoriginal'),
+                      w: 800,
+                      h: 800
+                  };
+                  var src = trigger.attr('xoriginal');
+                  if (image.src === src) {
+                      $index = index;
+                  }
+
+                  images.push(image);
+              });
+              console.log(images);
+              // var src = $(this).attr('src').replace("-large_default", "-home_default");
+              // console.log(src);
+              // var $index = images.indexOf(src);
+              var options = {
+                  index: $index,
+                  showHideOpacity: {$az.swipe_showHideOpacity},
+                  showAnimationDuration: {$az.swipe_showAnimationDuration},
+                  hideAnimationDuration: {$az.swipe_hideAnimationDuration},
+                  bgOpacity: {$az.swipe_bgOpacity},
+                  spacing: {$az.swipe_spacing},
+                  allowPanToNext: {$az.swipe_allowPanToNext},
+                  history: false,
+                  maxSpreadZoom: {$az.swipe_maxSpreadZoom},
+                  loop: {$az.swipe_loop},
+                  pinchToClose: {$az.swipe_pinchToClose},
+                  closeOnScroll: {$az.swipe_closeOnScroll},
+                  closeOnVerticalDrag: {$az.swipe_closeOnVerticalDrag},
+                  arrowKeys: {$az.swipe_arrowKeys},
+                  modal: {$az.swipe_modal},
+                  enableMouseWheel: false ,
+                  enableKeyboard: false,
+                  clickToCloseNonZoomable: false
+              };
+
+              var lightBox = new PhotoSwipe($pswp, PhotoSwipeUI_Default, images, options);
+              lightBox.init();
+          });
+          {/if}
+
+          {/foreach}
+      });
+  </script>
+
+    {if $is_swipe_enable}
+      {*photoswipe*}
+      <script type='text/javascript' src='{$this_path|escape:'htmlall':'UTF-8'}views/js/swipe-html.js'></script>
+    {/if}
+{/if}
+
 

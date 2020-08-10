@@ -15,15 +15,10 @@ class AmazingZoomClass extends ObjectModel
     public $is_enable;
     public $position;
     public $mposition ;
-    public $rootOutput;
     public $Xoffset;
     public $Yoffset;
     public $fadeIn;
-    public $fadeTrans;
     public $fadeOut;
-    public $smoothZoomMove;
-    public $smoothLensMove;
-    public $smoothScale;
     public $defaultScale;
     public $scroll;
     public $tint;
@@ -32,13 +27,6 @@ class AmazingZoomClass extends ObjectModel
     public $lensOpacity;
     public $lensShape;
     public $lensCollision;
-    public $lensReverse;
-    public $openOnSmall;
-    public $zoomWidth;
-    public $zoomHeight;
-    public $hover;
-    public $adaptive;
-    public $adaptiveReverse;
     public $title;
     public $bg;
 
@@ -56,7 +44,6 @@ class AmazingZoomClass extends ObjectModel
     public $swipe_closeOnScroll;
     public $swipe_closeOnVerticalDrag;
     public $swipe_arrowKeys;
-    public $swipe_history;
     public $swipe_modal;
 
     public $controller;
@@ -91,6 +78,13 @@ class AmazingZoomClass extends ObjectModel
         );
     }
 
+    public static function getDefaultSettings()
+    {
+        return Db::getInstance()->executeS(
+            'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom` WHERE name = "Default Settings"'
+        );
+    }
+
     public static function getAll()
     {
         $amazingzooms =  Db::getInstance()->ExecuteS(
@@ -110,7 +104,8 @@ class AmazingZoomClass extends ObjectModel
     public static function getEnabled()
     {
         return Db::getInstance()->ExecuteS(
-            'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom` WHERE is_enable = 1'
+            'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom` WHERE 
+            name != "Default Settings" AND is_enable = 1 OR name != "Default Settings" AND swipe_is_enable = 1 '
         );
     }
 
@@ -123,15 +118,10 @@ class AmazingZoomClass extends ObjectModel
         $fields['is_enable'] = (bool)$this->is_enable;
         $fields['position'] = $this->position;
         $fields['mposition'] = $this->mposition;
-        $fields['rootOutput'] = $this->rootOutput;
         $fields['Xoffset'] = $this->Xoffset;
         $fields['Yoffset'] = $this->Yoffset;
         $fields['fadeIn'] = $this->fadeIn;
-        $fields['fadeTrans'] = $this->fadeTrans;
         $fields['fadeOut'] = $this->fadeOut;
-        $fields['smoothZoomMove'] = $this->smoothZoomMove;
-        $fields['smoothLensMove'] = $this->smoothLensMove;
-        $fields['smoothScale'] = $this->smoothScale;
         $fields['defaultScale'] = $this->defaultScale;
         $fields['scroll'] = $this->scroll;
         $fields['tint'] = $this->tint;
@@ -140,13 +130,6 @@ class AmazingZoomClass extends ObjectModel
         $fields['lensOpacity'] = $this->lensOpacity;
         $fields['lensShape'] = $this->lensShape;
         $fields['lensCollision'] = $this->lensCollision;
-        $fields['lensReverse'] = $this->lensReverse;
-        $fields['openOnSmall'] = $this->openOnSmall;
-        $fields['zoomWidth'] = $this->zoomWidth;
-        $fields['zoomHeight'] = $this->zoomHeight;
-        $fields['hover'] = $this->hover;
-        $fields['adaptive'] = $this->adaptive;
-        $fields['adaptiveReverse'] = $this->adaptiveReverse;
         $fields['title'] = $this->title;
         $fields['bg'] = $this->bg;
 
@@ -164,7 +147,6 @@ class AmazingZoomClass extends ObjectModel
         $fields['swipe_closeOnScroll'] = $this->swipe_closeOnScroll;
         $fields['swipe_closeOnVerticalDrag'] = $this->swipe_closeOnVerticalDrag;
         $fields['swipe_arrowKeys'] = $this->swipe_arrowKeys;
-        $fields['swipe_history'] = $this->swipe_history;
         $fields['swipe_modal'] = $this->swipe_modal;
 
         $fields['controller'] = $this->controller;
@@ -186,15 +168,10 @@ class AmazingZoomClass extends ObjectModel
         $this->is_enable = false;
         $this->position = 'right';
         $this->mposition  = 'inside';
-        $this->rootOutput  = true;
         $this->Xoffset  = 0;
         $this->Yoffset  = 0;
         $this->fadeIn  = true;
-        $this->fadeTrans  = true;
         $this->fadeOut  = false;
-        $this->smoothZoomMove  = 3;
-        $this->smoothLensMove  = 1;
-        $this->smoothScale  = 6;
         $this->defaultScale  = 0;
         $this->scroll  = true;
         $this->tint  = false;
@@ -203,13 +180,6 @@ class AmazingZoomClass extends ObjectModel
         $this->lensOpacity  = 0.5;
         $this->lensShape  = 'box';
         $this->lensCollision  = true;
-        $this->lensReverse  = false;
-        $this->openOnSmall  = true;
-        $this->zoomWidth  = 'auto';
-        $this->zoomHeight  = 'auto';
-        $this->hover  = false;
-        $this->adaptive  = true;
-        $this->adaptiveReverse  = false;
         $this->title  = false;
         $this->bg  = false;
     }

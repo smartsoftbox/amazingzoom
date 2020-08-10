@@ -35,7 +35,7 @@
       />
     {elseif $input.type == 'radio-icon'}
         {foreach name=value from=$input.values item=value}
-          <div class="radio
+          <div style="margin-bottom:8px;" class="radio
               {if $smarty.foreach.value.first} radio-first {/if}
               {if $smarty.foreach.value.last} radio-last {/if}
               {if isset($input.class)}{$input.class}{/if} {$value.id} {if $fields_value[$input.name] == $value.value}active{/if}">
@@ -122,7 +122,7 @@
                 {/foreach}
             </ul>
             <input type="hidden" name="{$input.name|escape:'htmlall':'UTF-8'}" id="{$input.id|escape:'htmlall':'UTF-8'}"
-                   value=""/>
+                   value="{', '|implode:$fields_value[$input.name]}"/>
           </div>
         </div>
       </div>

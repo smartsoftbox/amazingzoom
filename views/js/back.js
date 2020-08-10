@@ -34,6 +34,49 @@ $(document).ready(function () {
   });
 
   //index tabs
+  $(document.body).on('click', '#copy_model', function (e) {
+    e.preventDefault();
+    $('#dsDialog').modal('show');
+    $('#dsDialog .amazingzoom-tab.list-group-item.active').removeClass('active');
+  });
+
+  //index tabs
+  $(document.body).on('click', '#dsDialog .list-group a', function (e) {
+    e.preventDefault();
+    var id = $(this).attr('id').replace('copy-', '');
+    var id_to = $('.amazingzoom-tab.list-group-item.active').attr('id');
+    var url = ajax_url + '&action=copyFrom';
+
+    $.ajax({
+      type: 'POST',
+      url: url,
+      dataType: 'json',
+      cache: false,
+      data: {id: id, id_to: id_to},
+      success: function (data) {
+        $('#dsDialog').modal('hide');
+        $('div[alt="model-' + id + '"]').html(data.form);
+        // setupAllTabs();
+        $('input[type="color"]').mColorPicker();
+        unique_field_id = 'div[alt="' + id + '"]';
+        createTabs();
+        displaySwitchInline();
+        convertRangeToSlider();
+        hideLoader();
+        $('.module_errors').remove();
+        $('.module_confirmation').parent().remove();
+        $("#amazingZoom").before(data.message);
+        setTimeout(function () {
+          $('.alert').fadeOut(500, function () {
+            $(this).remove();
+          });
+          ;
+        }, 5000);
+      }
+    });
+  });
+
+  //index tabs
   $('#amazingzooms a.amazingzoom-tab ').on('click', function () {
     var id = $(this).attr('id');
 
@@ -67,7 +110,7 @@ $(document).ready(function () {
   $(document.body).on('click', 'button[name="submitAmazingzoomModule"]', function (e) {
     e.preventDefault();
     var button = $(this);
-    button.html(function(i,t){
+    button.html(function (i, t) {
       return t.replace('Save', 'Please wait ...')
     });
 
@@ -84,60 +127,38 @@ $(document).ready(function () {
         $('.module_confirmation').parent().remove();
         $("#amazingZoom").before(data);
 
-        button.html(function(i,t){
+        button.html(function (i, t) {
           return t.replace('Please wait ...', 'Save')
         });
       }
     });
   });
 
-  $(document.body).on('click', 'input[id^=is_enable]', function (e, data) {
-    var url =  ajax_url + '&action=saveConfigForm';
+  $(document.body).on('click', 'input[id^=swipe_is_enable], input[id^=is_enable], input[id^=use_default]', function (e, data) {
+    var url = ajax_url + '&action=saveConfigForm';
     var form = $(this).closest('form');
     var id = form.find('#id').val();
+    var id_input = $(this).attr('id').replace("_on", "").replace("_off", "");
+    var index = id_input.lastIndexOf("_");
+    var id_button = $(this).attr('id').substring(0, index);
 
-    $.post( url, form.serialize(), function( data ) {
+    $.post(url, form.serialize(), function (data) {
       $('.module_errors').fadeOut().remove();
       $('.module_confirmation').parent().fadeOut().remove();
       $("#amazingZoom").before(data);
-      $('a.amazingzoom-tab[id="' + id + '"]').find('i#xzoom.icon-circle').toggleClass('active');
-    });
-  });
-
-  $(document.body).on('click', 'input[id^=swipe_is_enable]', function (e, data) {
-    var url =  ajax_url + '&action=saveConfigForm';
-    var form = $(this).closest('form');
-    var id = form.find('#id').val();
-
-    $.post( url, form.serialize(), function( data ) {
-      $('.module_errors').fadeOut().remove();
-      $('.module_confirmation').parent().fadeOut().remove();
-      $("#amazingZoom").before(data);
-      $('a.amazingzoom-tab[id="' + id + '"]').find('i#swipe.icon-circle').toggleClass('active');
-    });
-  });
-
-  $(document.body).on('click', 'input[id^=use_default]', function (e, data) {
-    var url =  ajax_url + '&action=saveConfigForm';
-    var form = $(this).closest('form');
-    var id = form.find('#id').val();
-    $.post( url, form.serialize(), function( data ) {
-      $('.module_errors').fadeOut().remove();
-      $('.module_confirmation').parent().fadeOut().remove();
-      $("#amazingZoom").before(data);
-      $('a.amazingzoom-tab[id="' + id + '"]').find('i.icon-gear').toggleClass('active');
+      $('a.amazingzoom-tab[id="' + id + '"]').find('i.' + id_button).toggleClass('active');
     });
   });
 
   $(document.body).on('click', '#load_default', function (e, data) {
     e.preventDefault();
     var button = $(this);
-    button.html(function(i,t){
+    button.html(function (i, t) {
       return t.replace('Save', 'Please wait ...')
     });
 
     var id = $(this).closest('form').find('input[name="id"]').val();
-    var url =  ajax_url + '&ajax=1&id=' + id + '&action=loadDefaultSettings';
+    var url = ajax_url + '&ajax=1&id=' + id + '&action=loadDefaultSettings';
 
     $.ajax({
       type: 'POST',
@@ -156,11 +177,14 @@ $(document).ready(function () {
         $('.module_errors').remove();
         $('.module_confirmation').parent().remove();
         $("#amazingZoom").before(data.message);
-        setTimeout(function(){
-          $('.alert').fadeOut(500, function() { $(this).remove(); });;
+        setTimeout(function () {
+          $('.alert').fadeOut(500, function () {
+            $(this).remove();
+          });
+          ;
         }, 5000);
 
-        button.html(function(i,t){
+        button.html(function (i, t) {
           return t.replace('Please wait ...', 'Save')
         });
       }
@@ -205,25 +229,25 @@ function createEditor(name, mode) {
   editor.setTheme("ace/theme/tomorrow");
 
   // copy back to textarea on form submit...
-  editor.getSession().on('change', function() {
+  editor.getSession().on('change', function () {
     textarea.val(editor.getSession().getValue());
   });
 }
 
 function showLoader() {
-  $( '#right-column div.tab-content' ).hide();
-  $( '#ajax-loader' ).css( 'display', 'flex' );
+  $('#right-column div.tab-content').hide();
+  $('#ajax-loader').css('display', 'flex');
 }
 
 function hideLoader() {
-  $( '#ajax-loader' ).hide();
-  $( '#right-column div.tab-content' ).fadeIn();
+  $('#ajax-loader').hide();
+  $('#right-column div.tab-content').fadeIn();
 }
 
 function displaySwitchInline() {
-  $( 'input[name^="is_enable"]' ).closest( '.form-group' ).css({'width': '30%', 'display': 'inline-block'});
-  $( 'input[name^="swipe_is_enable"]' ).closest( '.form-group' ).css({'width': '30%', 'display': 'inline-block'});
-  $( 'input[name^="use_default"]' ).closest( '.form-group' ).css({'width': '30%', 'display': 'inline-block'});
+  $('input[name^="is_enable"]').closest('.form-group').css({'width': '30%', 'display': 'inline-block'});
+  $('input[name^="swipe_is_enable"]').closest('.form-group').css({'width': '30%', 'display': 'inline-block'});
+  $('input[name^="use_default"]').closest('.form-group').css({'width': '30%', 'display': 'inline-block'});
 }
 
 function convertRangeToSlider() {
@@ -248,7 +272,7 @@ function createTabs(id) {
   if (typeof helper_tabs != 'undefined' && typeof unique_field_id != 'undefined') {
     $.each(helper_tabs, function (index) {
       var form = 'module_form';
-      if(parseInt(id) !== 5) {
+      if (!$('.amazingzoom-tab.list-group-item:first').hasClass('active')) {
         form = 'module_form_1';
       }
       $(unique_field_id + ' #' + form + ' .form-wrapper').prepend('<div class="tab-content panel" />');

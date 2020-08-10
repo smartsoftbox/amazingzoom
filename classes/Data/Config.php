@@ -12,15 +12,10 @@ abstract class Config
 {
     const AMAZINGZOOM_position = 'AMAZINGZOOM_position';
     const AMAZINGZOOM_mposition  = 'AMAZINGZOOM_mposition';
-    const AMAZINGZOOM_rootOutput = 'AMAZINGZOOM_rootOutput';
     const AMAZINGZOOM_Xoffset = 'AMAZINGZOOM_Xoffset';
     const AMAZINGZOOM_Yoffset = 'AMAZINGZOOM_Yoffset';
     const AMAZINGZOOM_fadeIn = 'AMAZINGZOOM_fadeIn';
-    const AMAZINGZOOM_fadeTrans = 'AMAZINGZOOM_fadeTrans';
     const AMAZINGZOOM_fadeOut = 'AMAZINGZOOM_fadeOut';
-    const AMAZINGZOOM_smoothZoomMove = 'AMAZINGZOOM_smoothZoomMove';
-    const AMAZINGZOOM_smoothLensMove = 'AMAZINGZOOM_smoothLensMove';
-    const AMAZINGZOOM_smoothScale = 'AMAZINGZOOM_smoothScale';
     const AMAZINGZOOM_defaultScale = 'AMAZINGZOOM_defaultScale';
     const AMAZINGZOOM_scroll = 'AMAZINGZOOM_scroll';
     const AMAZINGZOOM_tint = 'AMAZINGZOOM_tint';
@@ -29,13 +24,6 @@ abstract class Config
     const AMAZINGZOOM_lensOpacity = 'AMAZINGZOOM_lensOpacity';
     const AMAZINGZOOM_lensShape = 'AMAZINGZOOM_lensShape';
     const AMAZINGZOOM_lensCollision = 'AMAZINGZOOM_lensCollision';
-    const AMAZINGZOOM_lensReverse = 'AMAZINGZOOM_lensReverse';
-    const AMAZINGZOOM_openOnSmall = 'AMAZINGZOOM_openOnSmall';
-    const AMAZINGZOOM_zoomWidth = 'AMAZINGZOOM_zoomWidth';
-    const AMAZINGZOOM_zoomHeight = 'AMAZINGZOOM_zoomHeight';
-    const AMAZINGZOOM_hover = 'AMAZINGZOOM_hover';
-    const AMAZINGZOOM_adaptive = 'AMAZINGZOOM_adaptive';
-    const AMAZINGZOOM_adaptiveReverse = 'AMAZINGZOOM_adaptiveReverse';
     const AMAZINGZOOM_title = 'AMAZINGZOOM_title';
     const AMAZINGZOOM_bg = 'AMAZINGZOOM_bg';
 
@@ -44,15 +32,10 @@ abstract class Config
         return array (
             self::AMAZINGZOOM_position => 'right',
             self::AMAZINGZOOM_mposition  => 'inside',
-            self::AMAZINGZOOM_rootOutput  => true,
             self::AMAZINGZOOM_Xoffset  => 0,
             self::AMAZINGZOOM_Yoffset  => 0,
             self::AMAZINGZOOM_fadeIn  => true,
-            self::AMAZINGZOOM_fadeTrans  => true,
             self::AMAZINGZOOM_fadeOut  => false,
-            self::AMAZINGZOOM_smoothZoomMove  => 3,
-            self::AMAZINGZOOM_smoothLensMove  => 1,
-            self::AMAZINGZOOM_smoothScale  => 6,
             self::AMAZINGZOOM_defaultScale  => 0,
             self::AMAZINGZOOM_scroll  => true,
             self::AMAZINGZOOM_tint  => false,
@@ -61,13 +44,6 @@ abstract class Config
             self::AMAZINGZOOM_lensOpacity  => 0.5,
             self::AMAZINGZOOM_lensShape  => 'box',
             self::AMAZINGZOOM_lensCollision  => true,
-            self::AMAZINGZOOM_lensReverse  => false,
-            self::AMAZINGZOOM_openOnSmall  => true,
-            self::AMAZINGZOOM_zoomWidth  => 'auto',
-            self::AMAZINGZOOM_zoomHeight  => 'auto',
-            self::AMAZINGZOOM_hover  => false,
-            self::AMAZINGZOOM_adaptive  => true,
-            self::AMAZINGZOOM_adaptiveReverse  => false,
             self::AMAZINGZOOM_title  => false,
             self::AMAZINGZOOM_bg  => false
         );

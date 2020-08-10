@@ -102,6 +102,9 @@ class Amazingzoom extends Module
             case 'loadDefaultSettings':
                 echo json_encode($this->saveDefaultSettings($id_amazingzoom));
                 break;
+            case 'copyFrom':
+                echo json_encode($this->copyFrom(Tools::getValue('id'), Tools::getValue('id_to')));
+                break;
         }
 
         $this->clearCache();
@@ -236,7 +239,7 @@ class Amazingzoom extends Module
                     ),
                     array(
                         'type' => 'switch',
-                        'label' => $this->l('Default Settings'),
+                        'label' => $this->l('Default'),
                         'name' => 'use_default_' . $id_page,
                         'is_bool' => true,
                         'values' => array(
@@ -287,7 +290,7 @@ class Amazingzoom extends Module
         );
 
         $form = '';
-        if($id_page !== $this->getDefaultId()) {
+        if((int)$id_page !== (int)$this->getDefaultId()) {
             $form .= $this->renderToolbarForm($id_page);
         }
 
@@ -305,7 +308,7 @@ class Amazingzoom extends Module
         $images = ImageType::getImagesTypes('products');
         $images[] = array("name" => "upload");
 
-        return array(
+        $form = array(
             'form' => array(
                 'id_form' => 'configForm_' . $id_page,
 //                'legend' => array(
@@ -313,13 +316,10 @@ class Amazingzoom extends Module
 //                'icon' => 'icon-cogs',
 //                ),
                 'tabs' => array(
-                    'page1_' . $id_page => 'Position',
-                    'page2_' . $id_page => 'Effect',
-                    'page3_' . $id_page => 'Style',
-                    'page4_' . $id_page => 'Advanced',
+                    'page1_' . $id_page => 'Zoom 1',
+                    'page2_' . $id_page => 'Zoom 2',
                     'page5_' . $id_page => 'Photo swipe',
-                    'page6_' . $id_page => 'Display Controllers',
-                    'page7_' . $id_page => 'Styles',
+                    'page7_' . $id_page => 'Additional Code',
                 ),
                 'input' => array(
                     array(
@@ -332,7 +332,6 @@ class Amazingzoom extends Module
                         'name' => 'position_' . $id_page,
                         'class' => 'inline-radio',
                         'label' => $this->l('Position of zoom output window'),
-                        'desc' => $this->l('Position of zoom output window, one of the next properties is available "top", "left", "right", "bottom", "inside", "lens", "#ID".'),
                         'values' => array(
                             array('id' => 'icon-top', 'value' => 'top', 'label' => $this->l('Top')),
                             array('id' => 'icon-right', 'value' => 'right', 'label' => $this->l('Right')),
@@ -347,31 +346,10 @@ class Amazingzoom extends Module
                         'type' => 'radio-icon',
                         'name' => 'mposition_' . $id_page,
                         'class' => 'inline-radio',
-                        'label' => $this->l('Position of zoom output window for mobile devices'),
-                        'desc' => $this->l('Position of zoom output window in adaptive mode (i.e. for mobile devices) available properties: "inside", "fullscreen"'),
+                        'label' => $this->l('Zoom output window for mobile.'),
                         'values' => array(
                             array('id' => 'icon-inside', 'value' => 'inside', 'label' => $this->l('Inside')),
                             array('id' => 'icon-fullscreens', 'value' => 'fullscreen', 'label' => $this->l('Fullscreen'))
-                        ),
-                        'tab' => 'page1_' . $id_page
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('rootOutput'),
-                        'name' => 'rootOutput_' . $id_page,
-                        'desc' => $this->l('In the HTML structure, this option gives an ability to output xzoom element, to the end of the document body or relative to the parent element of main source image.'),
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
                         ),
                         'tab' => 'page1_' . $id_page
                     ),
@@ -399,21 +377,19 @@ class Amazingzoom extends Module
                     ),
                     array(
                         'type' => 'select',
-                        'label' => $this->l('Image type'),
+                        'label' => $this->l('Zoom image type'),
                         'name' => 'image_type_' . $id_page,
                         'options' => array(
                             'query' => $images,
                             'id' => 'name',
                             'name' => 'name'
                         ),
-                        'desc' =>$this->l('Zoom image type.'),
                         'tab' => 'page1_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
-                        'label' => $this->l('fadeIn'),
+                        'label' => $this->l('Fade in on open'),
                         'name' => 'fadeIn_' . $id_page,
-                        'desc' => $this->l('Fade in effect, when zoom is opening.'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -427,33 +403,12 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
-                        'tab' => 'page2_' . $id_page
+                        'tab' => 'page1_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
-                        'label' => $this->l('fadeTrans'),
-                        'name' => 'fadeTrans_' . $id_page,
-                        'desc' => $this->l('Fade transition effect, when switching images by clicking on thumbnails.'),
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                        'tab' => 'page2_' . $id_page
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('fadeOut'),
+                        'label' => $this->l('Fade out on close'),
                         'name' => 'fadeOut_' . $id_page,
-                        'desc' => $this->l('Fade out effect, when zoom is closing.'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -467,40 +422,7 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
-                        'tab' => 'page2_' . $id_page
-                    ),
-                    array(
-                        'type' => 'slider',
-                        'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Smooth move effect of the big zoomed image in the zoom output window. The higher value will make movement smoother.'),
-                        'name' => 'smoothZoomMove_' . $id_page,
-                        'label' => $this->l('smoothZoomMove'),
-                        'size' => 1, //min
-                        'maxchar' => 10, //maxx
-                        'maxlength' => 1, //step
-                        'tab' => 'page2_' . $id_page
-                    ),
-                    array(
-                        'type' => 'slider',
-                        'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Smooth move effect of lens.'),
-                        'name' => 'smoothLensMove_' . $id_page,
-                        'label' => $this->l('smoothLensMove'),
-                        'size' => 1, //min
-                        'maxchar' => 10, //maxx
-                        'maxlength' => 1, //step
-                        'tab' => 'page3_' . $id_page
-                    ),
-                    array(
-                        'type' => 'slider',
-                        'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Smooth move effect of scale.'),
-                        'name' => 'smoothScale_' . $id_page,
-                        'label' => $this->l('smoothScale'),
-                        'size' => 1, //min
-                        'maxchar' => 10, //maxx
-                        'maxlength' => 1, //step
-                        'tab' => 'page3_' . $id_page
+                        'tab' => 'page1_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
@@ -511,7 +433,7 @@ class Amazingzoom extends Module
                         'size' => -1, //min
                         'maxchar' => 1, //maxx
                         'maxlength' => 0.1, //step
-                        'tab' => 'page3_' . $id_page
+                        'tab' => 'page1_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
@@ -531,60 +453,55 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
-                        'tab' => 'page3_' . $id_page
+                        'tab' => 'page1_' . $id_page
                     ),
                     array(
                         'type' => 'color',
-                        'label' => $this->l('tint'),
+                        'label' => $this->l('tint color'),
                         'lang' => false,
                         'name' => 'tint_' . $id_page,
                         'defaults' => '',
                         'id'   => 'color_0',
                         'data-hex' => true,
 //                        'class'   => 'mColorPicker',
-                        'desc' => $this->l('Tint color. Color must be provided in format like "#color". We are not recommend you to use named css colors.'),
-                        'tab' => 'page3_' . $id_page
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Tint opacity from 0 to 1.'),
                         'name' => 'tintOpacity_' . $id_page,
-                        'label' => $this->l('tintOpacity'),
+                        'label' => $this->l('tint opacity'),
                         'size' => -1, //min
                         'maxchar' => 1, //maxx
                         'maxlength' => 0.1, //step
-                        'tab' => 'page3_' . $id_page
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'color',
-                        'label' => $this->l('lens'),
+                        'label' => $this->l('lens color'),
                         'name' => 'lens_' . $id_page,
-                        'desc' => $this->l('Lens color. Color must be provided in format like "#color". We are not recommend you to use named css colors.'),
-                        'tab' => 'page3_' . $id_page
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Lens opacity from 0 to 1.'),
                         'name' => 'lensOpacity_' . $id_page,
-                        'label' => $this->l('lensOpacity'),
+                        'label' => $this->l('lens opacity'),
                         'size' => -1, //min
                         'maxchar' => 1, //maxx
                         'maxlength' => 0.1, //step
-                        'tab' => 'page3_' . $id_page
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'radio-icon',
                         'name' => 'lensShape_' . $id_page,
                         'class' => 'inline-radio',
-                        'label' => $this->l('lensShape'),
-                        'desc' => $this->l('Lens shape "box" or "circle".'),
+                        'label' => $this->l('lens shape'),
                         'values' => array(
                             array('id' => 'icon-box', 'value' => 'box', 'label' => $this->l('Box')),
                             array('id' => 'icon-circles', 'value' => 'circle', 'label' => $this->l('Circle')),
                         ),
-                        'tab' => 'page3_' . $id_page
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
@@ -604,123 +521,7 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
-                        'tab' => 'page3_' . $id_page
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('lensReverse'),
-                        'name' => 'lensReverse_' . $id_page,
-                        'desc' => $this->l('When selected position "inside" and this option is set to true, the lens direction of moving will be reversed.'),
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                        'tab' => 'page4_' . $id_page
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('openOnSmall'),
-                        'name' => 'openOnSmall_' . $id_page,
-                        'desc' => $this->l('Option to control whether to open or not the zoom on original image, that is smaller than preview.'),
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                        'tab' => 'page4_' . $id_page
-                    ),
-                    array(
-                        'type' => 'text',
-                        'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Custom width of zoom window in pixels. For auto write auto.'),
-                        'name' => 'zoomWidth_' . $id_page,
-                        'label' => $this->l('zoomWidth'),
-                        'tab' => 'page4_' . $id_page
-                    ),
-                    array(
-                        'type' => 'text',
-                        'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Custom height of zoom window in pixels. For auto write auto.'),
-                        'name' => 'zoomHeight_' . $id_page,
-                        'label' => $this->l('zoomHeight'),
-                        'tab' => 'page4_' . $id_page
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('hover'),
-                        'name' => 'hover_' . $id_page,
-                        'desc' => $this->l('With this option you can make a selection action on thumbnail by hover mouse point on it.'),
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                        'tab' => 'page4_' . $id_page
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('adaptive'),
-                        'name' => 'adaptive_' . $id_page,
-                        'desc' => $this->l('Adaptive functionality.'),
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                        'tab' => 'page4_' . $id_page
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('adaptiveReverse'),
-                        'name' => 'adaptiveReverse_' . $id_page,
-                        'desc' => $this->l('Same as lensReverse, but only available when adaptive is true.'),
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                        'tab' => 'page4_' . $id_page
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
@@ -740,7 +541,7 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
-                        'tab' => 'page4_' . $id_page
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'switch',
@@ -760,7 +561,7 @@ class Amazingzoom extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
-                        'tab' => 'page4_' . $id_page
+                        'tab' => 'page2_' . $id_page
                     ),
                     array(
                         'type' => 'text',
@@ -768,7 +569,7 @@ class Amazingzoom extends Module
                         'desc' => $this->l('Css path to your image.'),
                         'name' => 'css_selector_' . $id_page,
                         'label' => $this->l('Selector image / trigger'),
-                        'tab' => 'page4_' . $id_page
+                        'tab' => 'page2_' . $id_page
                     ),
 
                     array(
@@ -800,35 +601,47 @@ class Amazingzoom extends Module
                         'tab' => 'page5_' . $id_page
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Initial zoom-in transition duration in milliseconds. Set to 0 to disable.'),
                         'name' => 'swipe_showAnimationDuration_' . $id_page,
                         'label' => $this->l('Show animation duration'),
+                        'size' => 0, //min
+                        'maxchar' => 500, //maxx
+                        'maxlength' => 1, //step,
                         'tab' => 'page5_' . $id_page
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Initial zoom-out transition duration in milliseconds. Set to 0 to disable.'),
                         'name' => 'swipe_hideAnimationDuration_' . $id_page,
                         'label' => $this->l('Hide animation duration'),
+                        'size' => 0, //min
+                        'maxchar' => 500, //maxx
+                        'maxlength' => 1, //step,
                         'tab' => 'page5_' . $id_page
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Should be a number from 0 to 1, e.g. 0.7.'),
                         'name' => 'swipe_bgOpacity_' . $id_page,
                         'label' => $this->l('Background opacity'),
+                        'size' => 0, //min
+                        'maxchar' => 1, //maxx
+                        'maxlength' => 0.1, //step,
                         'tab' => 'page5_' . $id_page
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Spacing ratio between slides. For example, 0.12 will render as a 12% of sliding viewport width (rounded).'),
                         'name' => 'swipe_spacing_' . $id_page,
                         'label' => $this->l('Spacing'),
+                        'size' => 0, //min
+                        'maxchar' => 1, //maxx
+                        'maxlength' => 0.1, //step,
                         'tab' => 'page5_' . $id_page
                     ),
                     array(
@@ -852,11 +665,14 @@ class Amazingzoom extends Module
                         'tab' => 'page5_' . $id_page
                     ),
                     array(
-                        'type' => 'text',
+                        'type' => 'slider',
                         'class' => 'fixed-width-xxl',
                         'desc' => $this->l('Maximum zoom level when performing spread (zoom) gesture. 2 means that image can be zoomed 2x from original size. Try to avoid huge values.'),
                         'name' => 'swipe_maxSpreadZoom_' . $id_page,
                         'label' => $this->l('Max spread zoom'),
+                        'size' => 0, //min
+                        'maxchar' => 5, //maxx
+                        'maxlength' => 1, //step,
                         'tab' => 'page5_' . $id_page
                     ),
                     array(
@@ -961,26 +777,6 @@ class Amazingzoom extends Module
                     ),
                     array(
                         'type' => 'switch',
-                        'label' => $this->l('History'),
-                        'name' => 'swipe_history_' . $id_page,
-                        'desc' => $this->l('If set to false disables history module (back button to close gallery, unique URL for each slide).'),
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                        'tab' => 'page5_' . $id_page
-                    ),
-                    array(
-                        'type' => 'switch',
                         'label' => $this->l('Modal'),
                         'name' => 'swipe_modal_' . $id_page,
                         'desc' => $this->l('Controls whether PhotoSwipe should expand to take up the entire viewport. If false, the PhotoSwipe element will take the size of the positioned parent of the template.'),
@@ -1000,23 +796,6 @@ class Amazingzoom extends Module
                         'tab' => 'page5_' . $id_page
                     ),
 
-
-                    array(
-                        'type' => 'duallist',
-                        'label' => $this->l('Controllers'),
-                        'name' => 'controller_' . $id_page,
-                        'id' => 'controller',
-                        'class' => '',
-                        'multiple' => true,
-                        'options' => array(
-                            'options' => array(
-                                'query' => $this->getMetaPages(),
-                                'id' => 'page',
-                                'name' => 'page',
-                            ),
-                        ),
-                        'tab' => 'page6_' . $id_page
-                    ),
                     array(
                         'type' => 'textarea',
                         'label' => $this->l('JavaScript Code'),
@@ -1040,27 +819,44 @@ class Amazingzoom extends Module
                 'buttons' => array(
                     array(
                         'id' => 'load_default',
-                        'title' => $this->l('Load Default'),
+                        'title' => $this->l('Load Install Default'),
                         'href' => AdminController::$currentIndex.'&loadDefaultSettings=1&configure='.
                             $this->name.'&token='.Tools::getAdminTokenLite('AdminModules'),
                         'icon' => 'process-icon-configure'
+                    ),
+                    array(
+                        'id' => 'copy_model',
+                        'title' => $this->l('Copy From'),
+                        'href' => AdminController::$currentIndex.'&copyModel=1&configure='.
+                            $this->name.'&token='.Tools::getAdminTokenLite('AdminModules'),
+                        'icon' => 'process-icon-duplicate'
                     )
                 )
             ),
         );
-    }
 
-//    /**
-//     * Save form data.
-//     */
-//    protected function postProcess()
-//    {
-//        if (Tools::isSubmit('submitAmazingzoomModule')) {
-//            $this->saveSettings();
-//        } elseif (Tools::getValue('loadDefaultSettings')) {
-//            $this->saveDefaultSettings($id_page);
-//        }
-//    }
+        if((int)$id_page !== $this->getDefaultId()) {
+            $form['form']['tabs']['page6_' . $id_page] = 'Display Page';
+            $form['form']['input'][] = array(
+                'type' => 'duallist',
+                'label' => $this->l('Page'),
+                'name' => 'controller_' . $id_page,
+                'id' => 'controller',
+                'class' => '',
+                'multiple' => true,
+                'options' => array(
+                    'options' => array(
+                        'query' => $this->getMetaPages(),
+                        'id' => 'page',
+                        'name' => 'page',
+                    ),
+                ),
+                'tab' => 'page6_' . $id_page
+            );
+        }
+
+        return $form;
+    }
 
     /**
     * Add the CSS & JavaScript files you want to be loaded in the BO.
@@ -1100,26 +896,21 @@ class Amazingzoom extends Module
 //        if (!$this->isCached($templateFile, $this->getCacheId($key))) {
 
             $active_amazingzooms = AmazingZoomClass::getEnabled();
+            $default_amazingzoom =  AmazingZoomClass::getDefaultSettings();
+
             $amazingzoom = array();
 
-//        $controller = $this->context->controller;
             foreach ($active_amazingzooms as $key => $active_amazingzoom) {
                 $controllers = explode(',', $active_amazingzoom['controller']);
-
-//            $controller = implode('', array_map(
-//                'ucfirst',
-//                explode('-', $active_amazingzoom['controller'])
-//            ));
-
-//            $controller .= 'Controller';
                 if (in_array($controller, $controllers)) {
                     if ($active_amazingzoom['use_default']) {
-                        $amazingzoom[$key] = $active_amazingzooms[0];
+                        $amazingzoom[$key] = $default_amazingzoom[0];
                         $amazingzoom[$key]['use_default'] = $active_amazingzoom['use_default'];
                         $amazingzoom[$key]['is_enable'] = $active_amazingzoom['is_enable'];
                         $amazingzoom[$key]['controller'] = $active_amazingzoom['controller'];
                         $amazingzoom[$key]['name'] = $active_amazingzoom['name'];
                         $amazingzoom[$key]['css_selector'] = $active_amazingzoom['css_selector'];
+
                         $amazingzoom[$key]['js'] = $active_amazingzoom['js'];
                         $amazingzoom[$key]['css'] = $active_amazingzoom['css'];
                     } else {
@@ -1128,13 +919,12 @@ class Amazingzoom extends Module
 
                     $amazingzoom[$key]['image_type'] = ($active_amazingzoom['image_type'] === 'upload' ? '' :
                         '-' . $active_amazingzoom['image_type']);
-//
-//                $amazingzoom[$key]['css_selector'] = (_PS_VERSION_ >= 1.7 ? $active_amazingzoom['css_selector_17'] :
-//                    $active_amazingzoom['css_selector_16']);
-//
-//                $amazingzoom[$key]['js'] = dirname(__FILE__) .
-//                    '/views/templates/front/back/' .
-//                    strtolower(str_replace(' ', '_', $active_amazingzoom['name'])) . '.tpl';
+
+                    $amazingzoom[$key]['js'] =
+                        str_replace('{css_selector}',  $amazingzoom[$key]['css_selector'],  $amazingzoom[$key]['js']);
+                    $amazingzoom[$key]['css'] =
+                        str_replace('{css_selector}',   $amazingzoom[$key]['css_selector'], $amazingzoom[$key]['css']);
+
                 }
             }
 
@@ -1143,6 +933,8 @@ class Amazingzoom extends Module
                     'this_path' => $this->_path,
                     'path' => $this->path,
                     'amazingzooms' => $amazingzoom,
+                    'is_zoom_enable' => $this->isZoomEnable($amazingzoom),
+                    'is_swipe_enable' => $this->isSwipeEnable($amazingzoom),
                     'is_17' => (_PS_VERSION_ >= 1.7 ? true : false)
                 ));
 
@@ -1152,8 +944,6 @@ class Amazingzoom extends Module
                 );
             }
 //        }
-
-
     }
 
     public function hookDisplayBeforeBodyClosingTag($params)
@@ -1173,11 +963,16 @@ class Amazingzoom extends Module
 
     private function saveDefaultSettings($id_amaizingzoom)
     {
-        $settings = Config::getDefaultConfig();
+        $ps_version = (_PS_VERSION_ >= 1.7 ? "17" : "");
         $amazingZoomClass = new AmazingZoomClass($id_amaizingzoom);
-        $amazingZoomClass->getDefaultValues();
-        $amazingZoomClass->save();
+        require_once dirname(__FILE__) . '/classes/ModuleDisplay/' . $ps_version . '/' .
+            str_replace(' ', '', $amazingZoomClass->name) . $ps_version . '.php';
+        $class = basename($file, '.php');
 
+        if (class_exists($class)) {
+            $obj = new $class;
+            $obj->save();
+        }
         return array(
             'form' => $this->renderConfigForm($id_amaizingzoom),
             'message' => $this->displayConfirmation(
@@ -1220,6 +1015,7 @@ class Amazingzoom extends Module
 
         $amazingZoomClass = new AmazingZoomClass($id_amazingzoom);
         $amazingZoomClass->copyFromPost($id_amazingzoom);
+        $amazingZoomClass->js = str_replace("'", '"', $amazingZoomClass->css);
         $amazingZoomClass->save();
 
         return $this->displayConfirmation(
@@ -1230,14 +1026,15 @@ class Amazingzoom extends Module
 
     private function postValidation($id_amazingzoom)
     {
-        if (!$this->isUniqueCssElement($css_selector = Tools::getValue('css_selector_' . $id_amazingzoom))) {
+        if (!$this->isUniqueCssElement($css_selector = Tools::getValue('css_selector_' . $id_amazingzoom),
+            $id_amazingzoom)) {
             $this->_errors[] = $this->l('You already use "' . $css_selector . '" as image selector.');
         }
     }
 
     private function getDefaultId()
     {
-        return AmazingZoomClass::getDefaultSettingsId();
+        return (int)AmazingZoomClass::getDefaultSettingsId();
     }
 
     private function getMetaPages()
@@ -1245,12 +1042,56 @@ class Amazingzoom extends Module
         return DB::getInstance()->executeS('SELECT * FROM `' . _DB_PREFIX_ . 'meta`');
     }
 
-    private function isUniqueCssElement($css_selector)
+    private function isUniqueCssElement($css_selector, $id_amazingzoom)
     {
-        $result = DB::getInstance()->executeS(
-            'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom` WHERE css_selector = "' . $css_selector . '"'
+        $pages = DB::getInstance()->executeS(
+            'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom` WHERE css_selector = "' . $css_selector . '" AND
+            `id_amazingzoom` != ' . $id_amazingzoom
         );
 
-        return ($result ? false : true);
+        return ($pages ? false : true);
+    }
+
+    private function copyFrom($id, $id_to)
+    {
+        $zoom_copy = new AmazingZoomClass($id_to);
+
+        $zoom = new AmazingZoomClass($id);
+        $zoom->id = $id_to;
+        $zoom->name = $zoom_copy->name;
+        $zoom->controller = $zoom_copy->controller;
+        $zoom->css_selector = $zoom_copy->css_selector;
+        $zoom->css = $zoom_copy->css;
+        $zoom->js = $zoom_copy->js;
+        $zoom->save();
+
+        return array(
+            'form' => $this->renderConfigForm($id_to),
+            'message' => $this->displayConfirmation(
+                $this->l('Settings load successfully.')
+            )
+        );
+    }
+
+    private function isZoomEnable($amazingzoom)
+    {
+        foreach ($amazingzoom as $ae) {
+            if($ae['is_enable']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isSwipeEnable($amazingzoom)
+    {
+        foreach ($amazingzoom as $ae) {
+            if($ae['swipe_is_enable']) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

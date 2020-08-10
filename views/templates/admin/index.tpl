@@ -15,13 +15,14 @@
 
                 <span class="{if $page.id_amazingzoom == 1}bold{/if}">{$page.name|escape:'htmlall':'UTF-8'}</span>
                   {if $page.name != 'Default Settings'}
-                    <i class="icon-gear {if !$page.use_default}active{/if}"></i>
+                    <i class="icon-gear use_default {if !$page.use_default}active{/if}"></i>
+                  {/if}
+
+                  {if $page.name != 'Default Settings'}
+                    <i class="icon-circle is_enable {if $page.is_enable}active{/if}"></i>
                   {/if}
                   {if $page.name != 'Default Settings'}
-                    <i id="xzoom" class="icon-circle {if $page.swipe_is_enable}active{/if}"></i>
-                  {/if}
-                  {if $page.name != 'Default Settings'}
-                    <i id="swipe" class="icon-circle {if $page.is_enable}active{/if}"></i>
+                    <i class="icon-circle swipe_is_enable {if $page.swipe_is_enable}active{/if}"></i>
                   {/if}
               </a>
             {/foreach}
@@ -42,6 +43,29 @@
           {/foreach}
         <div alt="welcome" class="tab-content list-group">
             {include file=$start}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="dsDialog" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h4 class="modal-title">Please select settings you want copy</h4>
+      </div>
+
+
+      <div class="modal-body">
+        <div class="list-group"">
+          {foreach from=$pages item=page name=page}
+            <a href="#" id="copy-{$page.id_amazingzoom|intval}" class="amazingzoom-tab list-group-item">
+              <span>{$page.name|escape:'htmlall':'UTF-8'}</span>
+            </a>
+          {/foreach}
         </div>
       </div>
     </div>

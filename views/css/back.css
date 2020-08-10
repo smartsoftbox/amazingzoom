@@ -184,24 +184,24 @@
 #amazingzooms .icon-circle {
   float: right;
   margin-left: 5px;
-  font-size: 5px;
+  font-size: 7px;
 }
 
 #amazingzooms .icon-gear {
   float: right;
   margin-left: 2px;
-  font-size: 5px;
+  font-size: 7px;
 }
 
-#xzoom.icon-circle.active {
-  color: #ff0062 !important;
+.icon-circle.is_enable.active {
+  color: #da00f7 !important;
 }
 
-#swipe.icon-circle.active {
-  color: #ff0062 !important;
+.icon-circle.swipe_is_enable.active {
+  color: #00dbf9 !important;
 }
 
-#amazingzooms .icon-gear.active {
+.icon-gear.active {
   color: #feb60a !important;
 }
 
@@ -261,6 +261,9 @@ div#ajax-loader div {
 a.amazingzoom-tab.list-group-item.active {
   background-color: #00aff0 !important;
   border-color: #00aff0 !important;
+  /*background-color: #da00f7 !important;*/
+  /*border-color: #da00f7 !important;*/
+  /*font-weight: 800;*/
 }
 
 .ace_editor {
