@@ -19,7 +19,7 @@ class CategoryPage17 extends ModuleDisplay
         'category'
     );
     public $id_page = 3;
-    public $css_selector = '.js-qv-product-cover, .thumbs';
+    public $css_selector = '#products article img';
     public $js = '';
     public $css = '';
     public $use_default = false;

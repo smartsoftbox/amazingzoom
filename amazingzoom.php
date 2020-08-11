@@ -106,8 +106,6 @@ class Amazingzoom extends Module
                 echo json_encode($this->copyFrom(Tools::getValue('id'), Tools::getValue('id_to')));
                 break;
         }
-
-        $this->clearCache();
     }
 
     /**
@@ -305,6 +303,7 @@ class Amazingzoom extends Module
      */
     protected function getConfigForm($id_page)
     {
+
         $images = ImageType::getImagesTypes('products');
         $images[] = array("name" => "upload");
 
@@ -846,9 +845,10 @@ class Amazingzoom extends Module
                 'multiple' => true,
                 'options' => array(
                     'options' => array(
-                        'query' => $this->getMetaPages(),
+                        'query' => $this->getPages(),
                         'id' => 'page',
                         'name' => 'page',
+                        'link' => 'link'
                     ),
                 ),
                 'tab' => 'page6_' . $id_page
@@ -890,10 +890,10 @@ class Amazingzoom extends Module
     public function hookHeader($params)
     {
         $controller = $this->context->controller->php_self;
-        $templateFile = 'front.tpl';
-        $key = 'amazingzoom|' . $controller;
+        $templateFile = 'amazingzoom.tpl';
+        $id_cache = 'amazingzoom|' . $controller;
 
-//        if (!$this->isCached($templateFile, $this->getCacheId($key))) {
+        if (!$this->isCached($templateFile, $this->getCacheId($id_cache))) {
 
             $active_amazingzooms = AmazingZoomClass::getEnabled();
             $default_amazingzoom =  AmazingZoomClass::getDefaultSettings();
@@ -938,12 +938,13 @@ class Amazingzoom extends Module
                     'is_17' => (_PS_VERSION_ >= 1.7 ? true : false)
                 ));
 
-                return $this->display(
-                    __FILE__, 'views/templates/front/front.tpl'
-//            ,$this->getCacheId($key)
-                );
             }
-//        }
+        }
+
+        return $this->display(
+            __FILE__, 'views/templates/front/amazingzoom.tpl',
+            $this->getCacheId($id_cache)
+        );
     }
 
     public function hookDisplayBeforeBodyClosingTag($params)
@@ -953,7 +954,7 @@ class Amazingzoom extends Module
 
     public function clearCache()
     {
-        $this->_clearCache('front.tpl');
+        $this->_clearCache('*');
     }
 
     public function hookDisplayProductListFunctionalButtons()
@@ -961,10 +962,10 @@ class Amazingzoom extends Module
         /* Place your code here. */
     }
 
-    private function saveDefaultSettings($id_amaizingzoom)
+    private function saveDefaultSettings($id_amazingzoom)
     {
         $ps_version = (_PS_VERSION_ >= 1.7 ? "17" : "");
-        $amazingZoomClass = new AmazingZoomClass($id_amaizingzoom);
+        $amazingZoomClass = new AmazingZoomClass($id_amazingzoom);
         require_once dirname(__FILE__) . '/classes/ModuleDisplay/' . $ps_version . '/' .
             str_replace(' ', '', $amazingZoomClass->name) . $ps_version . '.php';
         $class = basename($file, '.php');
@@ -972,9 +973,13 @@ class Amazingzoom extends Module
         if (class_exists($class)) {
             $obj = new $class;
             $obj->save();
+
+            $this->clearCache();
         }
+
+
         return array(
-            'form' => $this->renderConfigForm($id_amaizingzoom),
+            'form' => $this->renderConfigForm($id_amazingzoom),
             'message' => $this->displayConfirmation(
                 $this->l('Settings load successfully.')
             )
@@ -1018,6 +1023,8 @@ class Amazingzoom extends Module
         $amazingZoomClass->js = str_replace("'", '"', $amazingZoomClass->css);
         $amazingZoomClass->save();
 
+        $this->clearCache();
+
         return $this->displayConfirmation(
             $this->l('Settings saved successfully.')
         );
@@ -1037,9 +1044,40 @@ class Amazingzoom extends Module
         return (int)AmazingZoomClass::getDefaultSettingsId();
     }
 
-    private function getMetaPages()
+    private function getPages()
     {
-        return DB::getInstance()->executeS('SELECT * FROM `' . _DB_PREFIX_ . 'meta`');
+        $controllers = Dispatcher::getControllers(_PS_FRONT_CONTROLLER_DIR_);
+        $result = array();
+        foreach ($controllers as $key => $controller) {
+            $name = str_replace('Controller', '', $controller);
+            $name = preg_replace('/\B[A-Z]/', '-$0', $name);
+            $name = strtolower($name);
+
+            $result[$key]['page'] = $name;
+            $result[$key]['link'] = $this->context->link->getPageLink($key);
+
+            if($key === 'category') {
+                $category = new Category((int) Configuration::get('PS_HOME_CATEGORY'));
+                $result[$key]['link'] = $category->getLink();
+            }
+
+            if($key === 'product') {
+                $product = new Product($this->getFirstEnabled('product'));
+                $result[$key]['link'] = Context::getContext()->link->getProductLink($product);
+            }
+
+            if($key === 'manufacturer') {
+                $manufacturer = new Manufacturer($this->getFirstEnabled('manufacturer'));
+                $result[$key]['link'] = Context::getContext()->link->getManufacturerLink($manufacturer);
+            }
+
+            if($key === 'supplier') {
+                $supplier = new Supplier($this->getFirstEnabled('supplier'));
+                $result[$key]['link'] = Context::getContext()->link->getManufacturerLink($supplier);
+            }
+        }
+
+        return $result;
     }
 
     private function isUniqueCssElement($css_selector, $id_amazingzoom)
@@ -1064,6 +1102,8 @@ class Amazingzoom extends Module
         $zoom->css = $zoom_copy->css;
         $zoom->js = $zoom_copy->js;
         $zoom->save();
+
+        $this->clearCache();
 
         return array(
             'form' => $this->renderConfigForm($id_to),
@@ -1093,5 +1133,14 @@ class Amazingzoom extends Module
         }
 
         return false;
+    }
+
+    private function getFirstEnabled($entity)
+    {
+        $id = DB::getInstance()->getValue(
+            'SELECT id_' . $entity . ' FROM `' . _DB_PREFIX_ . $entity .'` WHERE active = 1'
+        );
+
+        return $id;
     }
 }

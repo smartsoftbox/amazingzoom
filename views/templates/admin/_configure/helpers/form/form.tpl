@@ -76,9 +76,13 @@
                 {foreach $input.options.options.query as $option}
                     {if !$option|in_array:$fields_value[$input.name]}
                       <li id="option-{$option[$input.options.options.id]|escape:'htmlall':'UTF-8'}"
-                          class="list-group-item"
-                          rel="{$optiongroup[$input.options.optiongroup.label]|escape:'htmlall':'UTF-8'}">
+                          class="list-group-item">
                         <span>{$option[$input.options.options.name]|escape:'htmlall':'UTF-8'}</span>
+                        <span class="float-right">
+                          <a href="{$option[$input.options.options.link]|escape:'htmlall':'UTF-8'}" target="_blank">
+                            <i class="icon-link"></i>
+                          </a>
+                        </span>
                       </li>
                     {/if}
                 {/foreach}
@@ -114,9 +118,13 @@
                 {foreach $input.options.options.query as $option}
                     {if $option.page|in_array:$fields_value[$input.name]}
                       <li id="option-{$option[$input.options.options.id]|escape:'htmlall':'UTF-8'}"
-                          class="list-group-item"
-                          rel="{$optiongroup[$input.options.optiongroup.label]|escape:'htmlall':'UTF-8'}">
+                          class="list-group-item">
                         <span>{$option[$input.options.options.name]|escape:'htmlall':'UTF-8'}</span>
+                        <span class="float-right">
+                          <a href="{$option[$input.options.options.link]|escape:'htmlall':'UTF-8'}" target="_blank">
+                            <i class="icon-link"></i>
+                          </a>
+                        </span>
                       </li>
                     {/if}
                 {/foreach}

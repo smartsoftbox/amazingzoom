@@ -270,3 +270,7 @@ a.amazingzoom-tab.list-group-item.active {
   height: 200px !important;
   margin-bottom: 20px;
 }
+
+.float-right {
+  float: right;
+}
