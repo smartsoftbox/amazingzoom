@@ -59,15 +59,19 @@
               {$az.js nofilter}
               // document is loaded and DOM is ready
               $("{$az.css_selector|escape:'htmlall':'UTF-8'}").each(function () {
-                  $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type|escape:'html':'UTF-8'}")
-                      .replace("-large_default", "{$az.image_type|escape:'html':'UTF-8'}").replace("-small_default", "{$az.image_type|escape:'html':'UTF-8'}"));
+                  $(this).attr("xoriginal", $(this).attr("src")
+                      .replace("-home_default", "{$az.image_type|escape:'html':'UTF-8'}")
+                      .replace("-large_default", "{$az.image_type|escape:'html':'UTF-8'}")
+                      .replace("-small_default", "{$az.image_type|escape:'html':'UTF-8'}"));
               });
 
               {if $az.thumb_selector}
                 // document is loaded and DOM is ready
                 $("{$az.thumb_selector|escape:'htmlall':'UTF-8'}").each(function () {
-                    $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type|escape:'html':'UTF-8'}")
-                        .replace("-large_default", "{$az.image_type}").replace("-small_default", "{$az.image_type|escape:'html':'UTF-8'}")
+                    $(this).attr("xoriginal", $(this).attr("src")
+                        .replace("-home_default", "{$az.image_type|escape:'html':'UTF-8'}")
+                        .replace("-large_default", "{$az.image_type|escape:'html':'UTF-8'}")
+                        .replace("-small_default", "{$az.image_type|escape:'html':'UTF-8'}")
                         .replace("-cart_default", "{$az.image_type|escape:'html':'UTF-8'}"));
                 });
               {/if}

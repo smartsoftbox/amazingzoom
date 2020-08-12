@@ -23,7 +23,7 @@
       <span class="slider-max">{if isset($input.maxchar) && $input.maxchar} {$input.maxchar|intval}{/if}</span>
       <span class="slider-value">value:</span>
       <input class="value-range-slider" type="text"
-             name="{$input.name}"
+             name="{$input.name|escape:'html':'UTF-8'}"
              id="{if isset($input.id)}{$input.id|intval}{else}{$input.name|escape:'html':'UTF-8'}{/if}"
              value="{if isset($input.string_format) && $input.string_format}{$value_text|string_format:$input.string_format|escape:'html':'UTF-8'}{else}{$value_text|escape:'html':'UTF-8'}{/if}"
              class="{if isset($input.class)}{$input.class|escape:'html':'UTF-8'}{/if}{if $input.type == 'tags'} tagify{/if}"
@@ -38,7 +38,7 @@
           <div style="margin-bottom:8px;" class="radio
               {if $smarty.foreach.value.first} radio-first {/if}
               {if $smarty.foreach.value.last} radio-last {/if}
-              {if isset($input.class)}{$input.class}{/if} {$value.id|intval} {if $fields_value[$input.name] == $value.value}active{/if}">
+              {if isset($input.class)}{$input.class|escape:'html':'UTF-8'}{/if} {$value.id|intval} {if $fields_value[$input.name] == $value.value}active{/if}">
               {strip}
                 <span class="icon"></span>
                 <label style="padding-left: 5px;">
@@ -130,7 +130,7 @@
                 {/foreach}
             </ul>
             <input type="hidden" name="{$input.name|escape:'htmlall':'UTF-8'}" id="{$input.id|escape:'htmlall':'UTF-8'}"
-                   value="{', '|implode:$fields_value[$input.name]}"/>
+                   value="{', '|escape:'html':'UTF-8'|implode:$fields_value[$input.name]}"/>
           </div>
         </div>
       </div>
