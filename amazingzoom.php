@@ -938,6 +938,8 @@ class Amazingzoom extends Module
                     'is_17' => (_PS_VERSION_ >= 1.7 ? true : false)
                 ));
 
+            } else {
+                return '';
             }
         }
 

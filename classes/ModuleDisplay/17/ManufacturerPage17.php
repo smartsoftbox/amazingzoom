@@ -16,7 +16,7 @@ class ManufacturerPage17 extends ModuleDisplay
 
     public $name = 'Manufacturer Block';
     public $controller = array(
-        'Manufacturer'
+        'manufacturer'
     );
     public $id_page = 4;
     public $css_selector = 'article img';

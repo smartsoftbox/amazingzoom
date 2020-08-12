@@ -45,33 +45,16 @@ $(document).ready(function () {
     e.preventDefault();
     var id = $(this).attr('id').replace('copy-', '');
     var id_to = $('.amazingzoom-tab.list-group-item.active').attr('id');
-    var url = ajax_url + '&action=copyFrom';
 
     $.ajax({
       type: 'POST',
-      url: url,
+      url: ajax_url + '&action=copyFrom',
       dataType: 'json',
       cache: false,
       data: {id: id, id_to: id_to},
       success: function (data) {
         $('#dsDialog').modal('hide');
-        $('div[alt="model-' + id + '"]').html(data.form);
-        // setupAllTabs();
-        $('input[type="color"]').mColorPicker();
-        unique_field_id = 'div[alt="' + id + '"]';
-        createTabs();
-        displaySwitchInline();
-        convertRangeToSlider();
-        hideLoader();
-        $('.module_errors').remove();
-        $('.module_confirmation').parent().remove();
-        $("#amazingZoom").before(data.message);
-        setTimeout(function () {
-          $('.alert').fadeOut(500, function () {
-            $(this).remove();
-          });
-          ;
-        }, 5000);
+        displayTabContent(id, data.form, data.message);
       }
     });
   });
@@ -91,16 +74,7 @@ $(document).ready(function () {
           id_page: id
         },
         success: function (data) {
-          $('div[alt="model-' + id + '"]').html(data);
-          // setupAllTabs();
-          $('input[type="color"]').mColorPicker();
-          unique_field_id = 'div[alt="' + id + '"]';
-          createTabs(id);
-          displaySwitchInline();
-          convertRangeToSlider();
-          createEditor('js_' + id, 'javascript');
-          createEditor('css_' + id, 'css');
-          hideLoader();
+          displayTabContent(id, data);
         }
       });
     }
@@ -114,7 +88,6 @@ $(document).ready(function () {
       return t.replace('Save', 'Please wait ...')
     });
 
-
     var form = $(this).closest('form');
 
     $.ajax({
@@ -123,9 +96,7 @@ $(document).ready(function () {
       data: form.serialize(),
       cache: false,
       success: function (data) {
-        $('.module_errors').remove();
-        $('.module_confirmation').parent().remove();
-        $("#amazingZoom").before(data);
+        displayMessage(data);
 
         button.html(function (i, t) {
           return t.replace('Please wait ...', 'Save')
@@ -143,19 +114,14 @@ $(document).ready(function () {
     var id_button = $(this).attr('id').substring(0, index);
 
     $.post(url, form.serialize(), function (data) {
-      $('.module_errors').fadeOut().remove();
-      $('.module_confirmation').parent().fadeOut().remove();
-      $("#amazingZoom").before(data);
+      displayMessage(data);
       $('a.amazingzoom-tab[id="' + id + '"]').find('i.' + id_button).toggleClass('active');
     });
   });
 
   $(document.body).on('click', '#load_default', function (e, data) {
     e.preventDefault();
-    var button = $(this);
-    button.html(function (i, t) {
-      return t.replace('Save', 'Please wait ...')
-    });
+    showLoader();
 
     var id = $(this).closest('form').find('input[name="id"]').val();
     var url = ajax_url + '&ajax=1&id=' + id + '&action=loadDefaultSettings';
@@ -166,27 +132,9 @@ $(document).ready(function () {
       dataType: 'json',
       cache: false,
       success: function (data) {
-        $('div[alt="model-' + id + '"]').html(data.form);
-        // setupAllTabs();
-        $('input[type="color"]').mColorPicker();
-        unique_field_id = 'div[alt="' + id + '"]';
-        createTabs();
-        displaySwitchInline();
-        convertRangeToSlider();
+        displayTabContent(id, data.form, data.message);
+        ;
         hideLoader();
-        $('.module_errors').remove();
-        $('.module_confirmation').parent().remove();
-        $("#amazingZoom").before(data.message);
-        setTimeout(function () {
-          $('.alert').fadeOut(500, function () {
-            $(this).remove();
-          });
-          ;
-        }, 5000);
-
-        button.html(function (i, t) {
-          return t.replace('Please wait ...', 'Save')
-        });
       }
     });
   });
@@ -250,15 +198,14 @@ function displaySwitchInline() {
   $('input[name^="use_default"]').closest('.form-group').css({'width': '30%', 'display': 'inline-block'});
 }
 
-function convertRangeToSlider() {
-  // Initialize a new plugin instance for one element or NodeList of elements.
+function convertRangeToSlider()
+{
   const sliders = document.querySelectorAll('input[type="range"]');
   sliders.forEach(function (slider) {
     rangeSlider.create(slider, {
-      // polyfill: true,     // Boolean, if true, custom markup will be created
       root: document,
-      vertical: false,    // Boolean, if true slider will be displayed in vertical orientation
-      borderRadius: 3,   // Number, if you're using buffer + border-radius in css
+      vertical: false,
+      borderRadius: 3,
       onInit: function () {
       },
       onSlide: function (position, value) {
@@ -266,6 +213,36 @@ function convertRangeToSlider() {
       }
     });
   });
+}
+
+function displayTabContent(id, form, message = null)
+{
+  $('div[alt="model-' + id + '"]').html(form);
+  $('input[type="color"]').mColorPicker();
+  unique_field_id = 'div[alt="' + id + '"]'; // for tabs
+
+  createTabs();
+  displaySwitchInline();
+  convertRangeToSlider();
+  hideLoader();
+  createEditor('js_' + id, 'javascript');
+  createEditor('css_' + id, 'css');
+
+  if(message) {
+    displayMessage(message);
+  }
+}
+
+function  displayMessage(message) {
+  $('.module_error').remove();
+  $('.module_confirmation').parent().remove();
+  $("#amazingZoom").before(message).fadeIn();
+  setTimeout(function () {
+    $('.alert').fadeOut(500, function () {
+      $(this).remove();
+    });
+    ;
+  }, 5000);
 }
 
 function createTabs(id) {
