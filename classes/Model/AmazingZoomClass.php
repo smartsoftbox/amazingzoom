@@ -92,9 +92,9 @@ class AmazingZoomClass extends ObjectModel
         );
 
         foreach ($amazingzooms as $key => $amazingzoom) {
-            if($amazingzoom['name'] === "Default Settings") {
+            if ($amazingzoom['name'] === "Default Settings") {
                 unset($amazingzooms[$key]);
-                array_unshift($amazingzooms , $amazingzoom);
+                array_unshift($amazingzooms, $amazingzoom);
             }
         }
 

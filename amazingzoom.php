@@ -28,8 +28,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once 'classes/Data/Config.php';
-//require_once 'classes/Data/ModuleDisplay.php';
 require_once 'classes/AmazingZoomUninstall.php';
 require_once 'classes/AmazingZoomInstall.php';
 require_once 'classes/Model/AmazingZoomClass.php';
@@ -114,16 +112,9 @@ class Amazingzoom extends Module
     public function getContent()
     {
         // process ajax
-        if(Tools::getValue('ajax')) {
+        if (Tools::getValue('ajax')) {
             $this->hookAjaxCall();
         }
-//        /**
-//         * If values have been submitted in the form, process.
-//         */
-//        if (((bool)Tools::isSubmit('submitAmazingzoomModule')) == true ||
-//            ((bool)Tools::getValue('loadDefaultSettings')) === true) {
-//            $this->postProcess();
-//        }
 
         $this->context->smarty->assign(array(
             'pages' => AmazingZoomClass::getAll(),
@@ -182,7 +173,6 @@ class Amazingzoom extends Module
         $form = $helper->generateForm(array($this->geToolbarConfigForm($id_page)));
 
         return $form;
-
     }
 
     /**
@@ -288,14 +278,13 @@ class Amazingzoom extends Module
         );
 
         $form = '';
-        if((int)$id_page !== (int)$this->getDefaultId()) {
+        if ((int)$id_page !== (int)$this->getDefaultId()) {
             $form .= $this->renderToolbarForm($id_page);
         }
 
         $form .= $helper->generateForm(array($this->getConfigForm($id_page)));
 
         return $form;
-
     }
 
     /**
@@ -303,7 +292,6 @@ class Amazingzoom extends Module
      */
     protected function getConfigForm($id_page)
     {
-
         $images = ImageType::getImagesTypes('products');
         $images[] = array("name" => "upload");
 
@@ -347,15 +335,24 @@ class Amazingzoom extends Module
                         'class' => 'inline-radio',
                         'label' => $this->l('Zoom output window for mobile.'),
                         'values' => array(
-                            array('id' => 'icon-inside', 'value' => 'inside', 'label' => $this->l('Inside')),
-                            array('id' => 'icon-fullscreens', 'value' => 'fullscreen', 'label' => $this->l('Fullscreen'))
+                            array(
+                                'id' => 'icon-inside',
+                                'value' => 'inside',
+                                'label' => $this->l('Inside')
+                            ),
+                            array(
+                                'id' => 'icon-fullscreens',
+                                'value' => 'fullscreen',
+                                'label' => $this->l('Fullscreen')
+                            )
                         ),
                         'tab' => 'page1_' . $id_page
                     ),
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Zoom output window horizontal offset in pixels from output base position.'),
+                        'desc' =>
+                            $this->l('Zoom output window horizontal offset in pixels from output base position.'),
                         'name' => 'Xoffset_' . $id_page,
                         'label' => $this->l('Xoffset'),
                         'size' => 0, //min
@@ -366,7 +363,8 @@ class Amazingzoom extends Module
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Zoom output window vertical offset in pixels from output base position.'),
+                        'desc' =>
+                            $this->l('Zoom output window vertical offset in pixels from output base position.'),
                         'name' => 'Yoffset_' . $id_page,
                         'label' => $this->l('Yoffset'),
                         'size' => 0, //min
@@ -426,7 +424,9 @@ class Amazingzoom extends Module
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('You can setup default scale value of zoom on opening, from -1 to 1. Where -1 means -100%, and 1 means 100% of lens scale.'),
+                        'desc' =>
+                            $this->l('You can setup default scale value of zoom on opening, from -1 to 1. 
+                            Where -1 means -100%, and 1 means 100% of lens scale.'),
                         'name' => 'defaultScale_' . $id_page,
                         'label' => $this->l('defaultScale'),
                         'size' => -1, //min
@@ -506,7 +506,8 @@ class Amazingzoom extends Module
                         'type' => 'switch',
                         'label' => $this->l('lensCollision'),
                         'name' => 'lensCollision_' . $id_page,
-                        'desc' => $this->l('Lens will collide and not go out of main image borders. This option is always false for position "lens".'),
+                        'desc' => $this->l('Lens will collide and not go out of main image borders. 
+                        This option is always false for position "lens".'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -546,7 +547,8 @@ class Amazingzoom extends Module
                         'type' => 'switch',
                         'label' => $this->l('bg'),
                         'name' => 'bg_' . $id_page,
-                        'desc' => $this->l('Zoom image output as background, works only when position is set to "lens".'),
+                        'desc' => $this->l('Zoom image output as background, 
+                        works only when position is set to "lens".'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -583,7 +585,8 @@ class Amazingzoom extends Module
                         'type' => 'switch',
                         'label' => $this->l('show/hide opacity'),
                         'name' => 'swipe_showHideOpacity_' . $id_page,
-                        'desc' => $this->l('If set to false: background opacity and image scale will be animated (image opacity is always 1)'),
+                        'desc' => $this->l('If set to false: background opacity and image scale will 
+                        be animated (image opacity is always 1)'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -635,7 +638,8 @@ class Amazingzoom extends Module
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Spacing ratio between slides. For example, 0.12 will render as a 12% of sliding viewport width (rounded).'),
+                        'desc' => $this->l('Spacing ratio between slides. For example, 0.12 will render 
+                        as a 12% of sliding viewport width (rounded).'),
                         'name' => 'swipe_spacing_' . $id_page,
                         'label' => $this->l('Spacing'),
                         'size' => 0, //min
@@ -698,7 +702,8 @@ class Amazingzoom extends Module
                         'type' => 'switch',
                         'label' => $this->l('Pinch too close'),
                         'name' => 'swipe_pinchToClose_' . $id_page,
-                        'desc' => $this->l('Pinch to close gallery gesture. The gallery`s background will gradually fade out as the user zooms out.'),
+                        'desc' => $this->l('Pinch to close gallery gesture. The gallery`s background will 
+                        gradually fade out as the user zooms out.'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -718,7 +723,8 @@ class Amazingzoom extends Module
                         'type' => 'switch',
                         'label' => $this->l('Close on scroll'),
                         'name' => 'swipe_closeOnScroll_' . $id_page,
-                        'desc' => $this->l('Close gallery on page scroll. Option works just for devices without hardware touch support.'),
+                        'desc' => $this->l('Close gallery on page scroll. Option works just for devices without 
+                        hardware touch support.'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -738,7 +744,8 @@ class Amazingzoom extends Module
                         'type' => 'switch',
                         'label' => $this->l('Close on vertical drag'),
                         'name' => 'swipe_closeOnVerticalDrag_' . $id_page,
-                        'desc' => $this->l('Close gallery when dragging vertically and when image is not zoomed. Always false when mouse is used.'),
+                        'desc' => $this->l('Close gallery when dragging vertically and when image is not zoomed. 
+                        Always false when mouse is used.'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -778,7 +785,9 @@ class Amazingzoom extends Module
                         'type' => 'switch',
                         'label' => $this->l('Modal'),
                         'name' => 'swipe_modal_' . $id_page,
-                        'desc' => $this->l('Controls whether PhotoSwipe should expand to take up the entire viewport. If false, the PhotoSwipe element will take the size of the positioned parent of the template.'),
+                        'desc' => $this->l('Controls whether PhotoSwipe should expand to take up the entire 
+                        viewport. If false, the PhotoSwipe element will take the size of the positioned 
+                        parent of the template.'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -834,7 +843,7 @@ class Amazingzoom extends Module
             ),
         );
 
-        if((int)$id_page !== $this->getDefaultId()) {
+        if ((int)$id_page !== $this->getDefaultId()) {
             $form['form']['tabs']['page6_' . $id_page] = 'Display Page';
             $form['form']['input'][] = array(
                 'type' => 'duallist',
@@ -894,10 +903,8 @@ class Amazingzoom extends Module
         $id_cache = 'amazingzoom|' . $controller;
 
         if (!$this->isCached($templateFile, $this->getCacheId($id_cache))) {
-
             $active_amazingzooms = AmazingZoomClass::getEnabled();
             $default_amazingzoom =  AmazingZoomClass::getDefaultSettings();
-
             $amazingzoom = array();
 
             foreach ($active_amazingzooms as $key => $active_amazingzoom) {
@@ -921,9 +928,9 @@ class Amazingzoom extends Module
                         '-' . $active_amazingzoom['image_type']);
 
                     $amazingzoom[$key]['js'] =
-                        str_replace('{css_selector}',  $amazingzoom[$key]['css_selector'],  $amazingzoom[$key]['js']);
+                        str_replace('{css_selector}', $amazingzoom[$key]['css_selector'], $amazingzoom[$key]['js']);
                     $amazingzoom[$key]['css'] =
-                        str_replace('{css_selector}',   $amazingzoom[$key]['css_selector'], $amazingzoom[$key]['css']);
+                        str_replace('{css_selector}', $amazingzoom[$key]['css_selector'], $amazingzoom[$key]['css']);
 
                 }
             }
@@ -937,14 +944,14 @@ class Amazingzoom extends Module
                     'is_swipe_enable' => $this->isSwipeEnable($amazingzoom),
                     'is_17' => (_PS_VERSION_ >= 1.7 ? true : false)
                 ));
-
             } else {
                 return '';
             }
         }
 
         return $this->display(
-            __FILE__, 'views/templates/front/amazingzoom.tpl',
+            __FILE__,
+            'views/templates/front/amazingzoom.tpl',
             $this->getCacheId($id_cache)
         );
     }
@@ -959,17 +966,14 @@ class Amazingzoom extends Module
         $this->_clearCache('*');
     }
 
-    public function hookDisplayProductListFunctionalButtons()
-    {
-        /* Place your code here. */
-    }
-
     private function saveDefaultSettings($id_amazingzoom)
     {
         $ps_version = (_PS_VERSION_ >= 1.7 ? "17" : "");
         $amazingZoomClass = new AmazingZoomClass($id_amazingzoom);
-        require_once dirname(__FILE__) . '/classes/ModuleDisplay/' . $ps_version . '/' .
+        $file = dirname(__FILE__) . '/classes/ModuleDisplay/' . $ps_version . '/' .
             str_replace(' ', '', $amazingZoomClass->name) . $ps_version . '.php';
+        require_once $file;
+
         $class = basename($file, '.php');
 
         if (class_exists($class)) {
@@ -994,7 +998,7 @@ class Amazingzoom extends Module
         $fields_values = (array) $amazingZoomClass;
 
         foreach ($fields_values as $key => $fields_value) {
-            if($key !== 'id') {
+            if ($key !== 'id') {
                 $fields_values[$key . '_' . $id_page] = $fields_value;
                 unset($fields_values[$key]);
             }
@@ -1010,13 +1014,12 @@ class Amazingzoom extends Module
     {
         $this->postValidation($id_amazingzoom);
 
-        if(!empty($this->_errors)) {
+        if (!empty($this->_errors)) {
             $errors = '';
             foreach ($this->_errors as $error) {
                 $errors = '<div class="module_error alert alert-danger" >' . $error . '</div>';
             }
             return $errors;
-            exit();
         }
 
 
@@ -1035,8 +1038,11 @@ class Amazingzoom extends Module
 
     private function postValidation($id_amazingzoom)
     {
-        if (!$this->isUniqueCssElement($css_selector = Tools::getValue('css_selector_' . $id_amazingzoom),
-            $id_amazingzoom)) {
+        if (!$this->isUniqueCssElement(
+                $css_selector = Tools::getValue('css_selector_' . $id_amazingzoom),
+                $id_amazingzoom
+            )
+        ) {
             $this->_errors[] = $this->l('You already use "' . $css_selector . '" as image selector.');
         }
     }
@@ -1053,27 +1059,27 @@ class Amazingzoom extends Module
         foreach ($controllers as $key => $controller) {
             $name = str_replace('Controller', '', $controller);
             $name = preg_replace('/\B[A-Z]/', '-$0', $name);
-            $name = strtolower($name);
+            $name = Tools::strtolower($name);
 
             $result[$key]['page'] = $name;
             $result[$key]['link'] = $this->context->link->getPageLink($key);
 
-            if($key === 'category') {
+            if ($key === 'category') {
                 $category = new Category((int) Configuration::get('PS_HOME_CATEGORY'));
                 $result[$key]['link'] = $category->getLink();
             }
 
-            if($key === 'product') {
+            if ($key === 'product') {
                 $product = new Product($this->getFirstEnabled('product'));
                 $result[$key]['link'] = Context::getContext()->link->getProductLink($product);
             }
 
-            if($key === 'manufacturer') {
+            if ($key === 'manufacturer') {
                 $manufacturer = new Manufacturer($this->getFirstEnabled('manufacturer'));
                 $result[$key]['link'] = Context::getContext()->link->getManufacturerLink($manufacturer);
             }
 
-            if($key === 'supplier') {
+            if ($key === 'supplier') {
                 $supplier = new Supplier($this->getFirstEnabled('supplier'));
                 $result[$key]['link'] = Context::getContext()->link->getManufacturerLink($supplier);
             }
@@ -1118,7 +1124,7 @@ class Amazingzoom extends Module
     private function isZoomEnable($amazingzoom)
     {
         foreach ($amazingzoom as $ae) {
-            if($ae['is_enable']) {
+            if ($ae['is_enable']) {
                 return true;
             }
         }
@@ -1129,7 +1135,7 @@ class Amazingzoom extends Module
     private function isSwipeEnable($amazingzoom)
     {
         foreach ($amazingzoom as $ae) {
-            if($ae['swipe_is_enable']) {
+            if ($ae['swipe_is_enable']) {
                 return true;
             }
         }

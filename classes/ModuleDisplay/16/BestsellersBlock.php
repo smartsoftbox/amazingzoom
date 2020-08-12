@@ -62,5 +62,4 @@ $('{css_selector}').each(function () {
     public $swipe_modal = true;
     public $thumb_selector = '';
     public $image_type = 'upload';
-
 }

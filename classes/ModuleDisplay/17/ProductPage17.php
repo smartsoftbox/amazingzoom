@@ -61,13 +61,6 @@ $("{css_selector}").click(function () {
     public $swipe_closeOnVerticalDrag = true;
     public $swipe_arrowKeys = true;
     public $swipe_modal = true;
-
-
     public $thumb_selector = '.thumb';
-
     public $image_type = 'upload';
-
-
-
-
 }
