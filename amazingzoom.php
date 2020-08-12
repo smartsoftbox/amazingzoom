@@ -605,7 +605,8 @@ class Amazingzoom extends Module
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Initial zoom-in transition duration in milliseconds. Set to 0 to disable.'),
+                        'desc' => $this->l('Initial zoom-in transition duration in milliseconds. 
+                        Set to 0 to disable.'),
                         'name' => 'swipe_showAnimationDuration_' . $id_page,
                         'label' => $this->l('Show animation duration'),
                         'size' => 0, //min
@@ -616,7 +617,8 @@ class Amazingzoom extends Module
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Initial zoom-out transition duration in milliseconds. Set to 0 to disable.'),
+                        'desc' => $this->l('Initial zoom-out transition duration in milliseconds. 
+                        Set to 0 to disable.'),
                         'name' => 'swipe_hideAnimationDuration_' . $id_page,
                         'label' => $this->l('Hide animation duration'),
                         'size' => 0, //min
@@ -651,7 +653,8 @@ class Amazingzoom extends Module
                         'type' => 'switch',
                         'label' => $this->l('Allow pan to next'),
                         'name' => 'swipe_allowPanToNext_' . $id_page,
-                        'desc' => $this->l('Allow swipe navigation to next/prev item when current item is zoomed.'),
+                        'desc' => $this->l('Allow swipe navigation to next/prev item when current item 
+                        is zoomed.'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -670,7 +673,8 @@ class Amazingzoom extends Module
                     array(
                         'type' => 'slider',
                         'class' => 'fixed-width-xxl',
-                        'desc' => $this->l('Maximum zoom level when performing spread (zoom) gesture. 2 means that image can be zoomed 2x from original size. Try to avoid huge values.'),
+                        'desc' => $this->l('Maximum zoom level when performing spread (zoom) gesture. 
+                        2 means that image can be zoomed 2x from original size. Try to avoid huge values.'),
                         'name' => 'swipe_maxSpreadZoom_' . $id_page,
                         'label' => $this->l('Max spread zoom'),
                         'size' => 0, //min
@@ -682,7 +686,8 @@ class Amazingzoom extends Module
                         'type' => 'switch',
                         'label' => $this->l('Loop'),
                         'name' => 'swipe_loop_' . $id_page,
-                        'desc' => $this->l('Loop slides when using swipe gesture. If set to true you will be able to swipe from last to first image.'),
+                        'desc' => $this->l('Loop slides when using swipe gesture. If set to true you will 
+                        be able to swipe from last to first image.'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -931,7 +936,6 @@ class Amazingzoom extends Module
                         str_replace('{css_selector}', $amazingzoom[$key]['css_selector'], $amazingzoom[$key]['js']);
                     $amazingzoom[$key]['css'] =
                         str_replace('{css_selector}', $amazingzoom[$key]['css_selector'], $amazingzoom[$key]['css']);
-
                 }
             }
 
@@ -1039,10 +1043,9 @@ class Amazingzoom extends Module
     private function postValidation($id_amazingzoom)
     {
         if (!$this->isUniqueCssElement(
-                $css_selector = Tools::getValue('css_selector_' . $id_amazingzoom),
-                $id_amazingzoom
-            )
-        ) {
+            $css_selector = Tools::getValue('css_selector_' . $id_amazingzoom),
+            $id_amazingzoom
+        )) {
             $this->_errors[] = $this->l('You already use "' . $css_selector . '" as image selector.');
         }
     }

@@ -59,16 +59,16 @@
               {$az.js nofilter}
               // document is loaded and DOM is ready
               $("{$az.css_selector|escape:'htmlall':'UTF-8'}").each(function () {
-                  $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type}")
-                      .replace("-large_default", "{$az.image_type}").replace("-small_default", "{$az.image_type}"));
+                  $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type|escape:'html':'UTF-8'}")
+                      .replace("-large_default", "{$az.image_type|escape:'html':'UTF-8'}").replace("-small_default", "{$az.image_type|escape:'html':'UTF-8'}"));
               });
 
               {if $az.thumb_selector}
                 // document is loaded and DOM is ready
                 $("{$az.thumb_selector|escape:'htmlall':'UTF-8'}").each(function () {
-                    $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type}")
-                        .replace("-large_default", "{$az.image_type}").replace("-small_default", "{$az.image_type}")
-                        .replace("-cart_default", "{$az.image_type}"));
+                    $(this).attr("xoriginal", $(this).attr("src").replace("-home_default", "{$az.image_type|escape:'html':'UTF-8'}")
+                        .replace("-large_default", "{$az.image_type}").replace("-small_default", "{$az.image_type|escape:'html':'UTF-8'}")
+                        .replace("-cart_default", "{$az.image_type|escape:'html':'UTF-8'}"));
                 });
               {/if}
             {/if}
@@ -76,22 +76,22 @@
           /* calling script */
           $('{$az.css_selector}').each(function () {
               var xzoom = $(this).xzoom({
-                  'position': '{$az.position}',
-                  'mposition': '{$az.mposition}',
-                  'Xoffset': {$az.Xoffset},
-                  'Yoffset': {$az.Yoffset},
-                  'fadeIn': {$az.fadeIn},
-                  'fadeOut': {$az.fadeOut},
-                  'defaultScale': {$az.defaultScale},
-                  'scroll': {$az.scroll},
-                  'tint': '{$az.tint}',
-                  'tintOpacity': {$az.tintOpacity},
-                  'lens': '{$az.lens}',
-                  'lensOpacity': {$az.lensOpacity},
-                  'lensShape': '{$az.lensShape}',
-                  'lensCollision': {$az.lensCollision},
-                  'title': {$az.title},
-                  'bg': {$az.bg}
+                  'position': '{$az.position|escape:'html':'UTF-8'}',
+                  'mposition': '{$az.mposition|escape:'html':'UTF-8'}',
+                  'Xoffset': {$az.Xoffset|escape:'html':'UTF-8'},
+                  'Yoffset': {$az.Yoffset|escape:'html':'UTF-8'},
+                  'fadeIn': {$az.fadeIn|escape:'html':'UTF-8'},
+                  'fadeOut': {$az.fadeOut|escape:'html':'UTF-8'},
+                  'defaultScale': {$az.defaultScale|escape:'html':'UTF-8'},
+                  'scroll': {$az.scroll|escape:'html':'UTF-8'},
+                  'tint': '{$az.tint|escape:'html':'UTF-8'}',
+                  'tintOpacity': {$az.tintOpacity|escape:'html':'UTF-8'},
+                  'lens': '{$az.lens|escape:'html':'UTF-8'}',
+                  'lensOpacity': {$az.lensOpacity|escape:'html':'UTF-8'},
+                  'lensShape': '{$az.lensShape|escape:'html':'UTF-8'}',
+                  'lensCollision': {$az.lensCollision|escape:'html':'UTF-8'},
+                  'title': {$az.title|escape:'html':'UTF-8'},
+                  'bg': {$az.bg|escape:'html':'UTF-8'}
               });
 
 
@@ -176,20 +176,20 @@
               // var $index = images.indexOf(src);
               var options = {
                   index: $index,
-                  showHideOpacity: {$az.swipe_showHideOpacity},
-                  showAnimationDuration: {$az.swipe_showAnimationDuration},
-                  hideAnimationDuration: {$az.swipe_hideAnimationDuration},
-                  bgOpacity: {$az.swipe_bgOpacity},
-                  spacing: {$az.swipe_spacing},
-                  allowPanToNext: {$az.swipe_allowPanToNext},
+                  showHideOpacity: {$az.swipe_showHideOpacity|escape:'html':'UTF-8'},
+                  showAnimationDuration: {$az.swipe_showAnimationDuration|escape:'html':'UTF-8'},
+                  hideAnimationDuration: {$az.swipe_hideAnimationDuration|escape:'html':'UTF-8'},
+                  bgOpacity: {$az.swipe_bgOpacity|escape:'html':'UTF-8'},
+                  spacing: {$az.swipe_spacing|escape:'html':'UTF-8'},
+                  allowPanToNext: {$az.swipe_allowPanToNext|escape:'html':'UTF-8'},
                   history: false,
-                  maxSpreadZoom: {$az.swipe_maxSpreadZoom},
-                  loop: {$az.swipe_loop},
-                  pinchToClose: {$az.swipe_pinchToClose},
-                  closeOnScroll: {$az.swipe_closeOnScroll},
-                  closeOnVerticalDrag: {$az.swipe_closeOnVerticalDrag},
-                  arrowKeys: {$az.swipe_arrowKeys},
-                  modal: {$az.swipe_modal},
+                  maxSpreadZoom: {$az.swipe_maxSpreadZoom|escape:'html':'UTF-8'},
+                  loop: {$az.swipe_loop|escape:'html':'UTF-8'},
+                  pinchToClose: {$az.swipe_pinchToClose|escape:'html':'UTF-8'},
+                  closeOnScroll: {$az.swipe_closeOnScroll|escape:'html':'UTF-8'},
+                  closeOnVerticalDrag: {$az.swipe_closeOnVerticalDrag|escape:'html':'UTF-8'},
+                  arrowKeys: {$az.swipe_arrowKeys|escape:'html':'UTF-8'},
+                  modal: {$az.swipe_modal|escape:'html':'UTF-8'},
                   enableMouseWheel: false ,
                   enableKeyboard: false,
                   clickToCloseNonZoomable: false

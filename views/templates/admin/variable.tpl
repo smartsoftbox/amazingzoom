@@ -6,5 +6,5 @@
 *}
 
 <script type="text/javascript">
-    var ajax_url = "{$base|escape:'html'}&ajax=1&configure=amazingzoom&module_name=amazingzoom&token={$token|escape:'html'}";
+    var ajax_url = "{$base|escape:'html':'UTF-8'}&ajax=1&configure=amazingzoom&module_name=amazingzoom&token={$token|escape:'html':'UTF-8'}";
 </script>
