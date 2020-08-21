@@ -16,7 +16,7 @@ class ManufacturerPage extends ModuleDisplay
 
     public $name = 'Manufacturer Block';
     public $controller = array(
-        'Manufacturer'
+        'manufacturer'
     );
     public $id_page = 4;
     public $css_selector = '#product_list .product_img_link img';

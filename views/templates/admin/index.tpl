@@ -12,18 +12,9 @@
         <div class="list-group" id="amazingzooms">
             {foreach from=$pages item=page name=page}
               <a href="#" id="{$page.id_amazingzoom|intval}" class="amazingzoom-tab list-group-item">
-
                 <span class="{if $page.id_amazingzoom == 1}bold{/if}">{$page.name|escape:'htmlall':'UTF-8'}</span>
-                  {if $page.name != 'Default Settings'}
-                    <i class="icon-gear use_default {if !$page.use_default}active{/if}"></i>
-                  {/if}
-
-                  {if $page.name != 'Default Settings'}
-                    <i class="icon-circle is_enable {if $page.is_enable}active{/if}"></i>
-                  {/if}
-                  {if $page.name != 'Default Settings'}
-                    <i class="icon-circle swipe_is_enable {if $page.swipe_is_enable}active{/if}"></i>
-                  {/if}
+                <i class="icon-circle is_enable {if $page.is_enable}active{/if}"></i>
+                <i class="icon-circle swipe_is_enable {if $page.swipe_is_enable}active{/if}"></i>
               </a>
             {/foreach}
           <a href="#" id="welcome" class="list-group-item"><b>Documentation</b></a>

@@ -193,9 +193,8 @@ function hideLoader() {
 }
 
 function displaySwitchInline() {
-  $('input[name^="is_enable"]').closest('.form-group').css({'width': '30%', 'display': 'inline-block'});
-  $('input[name^="swipe_is_enable"]').closest('.form-group').css({'width': '30%', 'display': 'inline-block'});
-  $('input[name^="use_default"]').closest('.form-group').css({'width': '30%', 'display': 'inline-block'});
+  $('input[name^="is_enable"]').closest('.form-group').css({'width': '50%', 'display': 'inline-block'});
+  $('input[name^="swipe_is_enable"]').closest('.form-group').css({'width': '50%', 'display': 'inline-block'});
 }
 
 function convertRangeToSlider()
@@ -245,13 +244,10 @@ function  displayMessage(message) {
   }, 5000);
 }
 
-function createTabs(id) {
+function createTabs() {
   if (typeof helper_tabs != 'undefined' && typeof unique_field_id != 'undefined') {
     $.each(helper_tabs, function (index) {
-      var form = 'module_form';
-      if (!$('.amazingzoom-tab.list-group-item:first').hasClass('active')) {
-        form = 'module_form_1';
-      }
+      var form = 'module_form_1';
       $(unique_field_id + ' #' + form + ' .form-wrapper').prepend('<div class="tab-content panel" />');
       $(unique_field_id + ' #' + form + ' .form-wrapper').prepend('<ul class="nav nav-tabs" />');
       $.each(helper_tabs[index], function (key, value) {

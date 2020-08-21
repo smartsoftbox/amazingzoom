@@ -19,7 +19,7 @@ class SpecialsPage17 extends ModuleDisplay
         'prices-drop',
     );
     public $id_page = 11;
-    public $css_selector = 'article img';
+    public $css_selector = '#products article img';
     public $js = '';
     public $css = '';
     public $use_default = false;

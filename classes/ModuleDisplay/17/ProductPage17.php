@@ -19,11 +19,14 @@ class ProductPage17 extends ModuleDisplay
         'product',
     );
     public $id_page = 2;
-    public $css_selector = '.product-cover img';
+    public $css_selector = '#main .product-cover img';
     public $js = '<script>
 $(".product-cover").find(".layer").css("display", "none");
 $("{css_selector}").click(function () {
   $(".product-cover").find(".layer").click();
+});
+$("{thumb_selector}").click(function () {
+  $("{css_selector}").attr("xoriginal", $(this).attr("xoriginal"));
 });
         </script>';
     public $css = '';
@@ -47,7 +50,7 @@ $("{css_selector}").click(function () {
     public $bg = false;
 
     //photoswipe
-    public $swipe_is_enable = true;
+    public $swipe_is_enable = false;
     public $swipe_showHideOpacity = false;
     public $swipe_showAnimationDuration = 333;
     public $swipe_hideAnimationDuration = 334;

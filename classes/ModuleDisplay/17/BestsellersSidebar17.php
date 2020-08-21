@@ -24,7 +24,7 @@ class BestsellersSidebar17 extends ModuleDisplay
         'search',
     );
     public $id_page = 9;
-    public $css_selector = '.js-qv-product-cover, .thumbs';
+    public $css_selector = '';
     public $js = '';
     public $css = '';
     public $use_default = false;

@@ -19,7 +19,7 @@ class SearchPage17 extends ModuleDisplay
         'search',
     );
     public $id_page = 16;
-    public $css_selector = 'article img';
+    public $css_selector = '#products article img';
     public $js = '';
     public $css = '';
     public $use_default = false;

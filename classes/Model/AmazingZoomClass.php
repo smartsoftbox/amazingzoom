@@ -11,7 +11,6 @@
 class AmazingZoomClass extends ObjectModel
 {
     public $id;
-    public $use_default;
     public $is_enable;
     public $position;
     public $mposition ;
@@ -78,25 +77,11 @@ class AmazingZoomClass extends ObjectModel
         );
     }
 
-    public static function getDefaultSettings()
-    {
-        return Db::getInstance()->executeS(
-            'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom` WHERE name = "Default Settings"'
-        );
-    }
-
     public static function getAll()
     {
         $amazingzooms =  Db::getInstance()->ExecuteS(
             'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom`'
         );
-
-        foreach ($amazingzooms as $key => $amazingzoom) {
-            if ($amazingzoom['name'] === "Default Settings") {
-                unset($amazingzooms[$key]);
-                array_unshift($amazingzooms, $amazingzoom);
-            }
-        }
 
         return $amazingzooms;
     }
@@ -105,7 +90,7 @@ class AmazingZoomClass extends ObjectModel
     {
         return Db::getInstance()->ExecuteS(
             'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom` WHERE 
-            name != "Default Settings" AND is_enable = 1 OR name != "Default Settings" AND swipe_is_enable = 1 '
+            is_enable = 1 OR swipe_is_enable = 1 '
         );
     }
 
@@ -114,7 +99,6 @@ class AmazingZoomClass extends ObjectModel
         parent::validateFields();
         $fields = null;
         $fields['id_amazingzoom'] = (int)($this->id);
-        $fields['use_default'] = (bool)$this->use_default;
         $fields['is_enable'] = (bool)$this->is_enable;
         $fields['position'] = $this->position;
         $fields['mposition'] = $this->mposition;
@@ -164,7 +148,6 @@ class AmazingZoomClass extends ObjectModel
 
     public function getDefaultValues()
     {
-        $this->use_default = true;
         $this->is_enable = false;
         $this->position = 'right';
         $this->mposition  = 'inside';

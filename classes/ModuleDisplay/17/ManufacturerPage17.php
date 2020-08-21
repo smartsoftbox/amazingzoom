@@ -19,7 +19,7 @@ class ManufacturerPage17 extends ModuleDisplay
         'manufacturer'
     );
     public $id_page = 4;
-    public $css_selector = 'article img';
+    public $css_selector = '#products article img';
     public $js = '';
     public $css = '';
     public $use_default = false;

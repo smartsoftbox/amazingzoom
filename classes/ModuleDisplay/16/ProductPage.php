@@ -20,7 +20,11 @@ class ProductPage extends ModuleDisplay
     );
     public $id_page = 2;
     public $css_selector = '#bigpic';
-    public $js = '';
+    public $js = '<script>
+$("{thumb_selector}").mouseover(function () {
+  $("{css_selector}").attr("xoriginal", $(this).attr("xoriginal"));
+});
+        </script>';
     public $css = '';
     public $use_default = false;
     public $is_enable = true;
@@ -42,7 +46,7 @@ class ProductPage extends ModuleDisplay
     public $bg = false;
 
     //photoswipe
-    public $swipe_is_enable = true;
+    public $swipe_is_enable = false;
     public $swipe_showHideOpacity = false;
     public $swipe_showAnimationDuration = 333;
     public $swipe_hideAnimationDuration = 334;

@@ -225,24 +225,6 @@ class Amazingzoom extends Module
                             )
                         ),
                     ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Default'),
-                        'name' => 'use_default_' . $id_page,
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
                 ),
 //                'submit' => array(
 //                    'title' => $this->l('Save'),
@@ -277,11 +259,7 @@ class Amazingzoom extends Module
             'id_language' => $this->context->language->id,
         );
 
-        $form = '';
-        if ((int)$id_page !== (int)$this->getDefaultId()) {
-            $form .= $this->renderToolbarForm($id_page);
-        }
-
+        $form = $this->renderToolbarForm($id_page);
         $form .= $helper->generateForm(array($this->getConfigForm($id_page)));
 
         return $form;
@@ -567,20 +545,14 @@ class Amazingzoom extends Module
                     array(
                         'type' => 'text',
                         'class' => '',
-                        'desc' => $this->l('Css path to your image.'),
+                        'desc' => $this->l('Selector to your images. Only for advanced users. 
+                        In most cases you do not need to change this.'),
                         'name' => 'css_selector_' . $id_page,
                         'label' => $this->l('Selector image / trigger'),
                         'tab' => 'page2_' . $id_page
                     ),
 
-                    array(
-                        'type' => 'text',
-                        'class' => '',
-                        'desc' => $this->l('Css path to your thumbnails.'),
-                        'name' => 'thumb_selector_' . $id_page,
-                        'label' => $this->l('Selector thumbnails'),
-                        'tab' => 'page5_' . $id_page
-                    ),
+
                     array(
                         'type' => 'switch',
                         'label' => $this->l('show/hide opacity'),
@@ -808,10 +780,20 @@ class Amazingzoom extends Module
                         ),
                         'tab' => 'page5_' . $id_page
                     ),
+                    array(
+                        'type' => 'text',
+                        'class' => '',
+                        'desc' => $this->l('Selector to your thumbnails. This is used on your product page. 
+                        Only for advanced users. In most cases you do not need change it.'),
+                        'name' => 'thumb_selector_' . $id_page,
+                        'label' => $this->l('Selector thumbnails'),
+                        'tab' => 'page5_' . $id_page
+                    ),
 
                     array(
                         'type' => 'textarea',
                         'label' => $this->l('JavaScript Code'),
+                        'desc' => $this->l('Tags: {css_selector} and {thumb_selector}'),
                         'name' => 'js_' . $id_page,
                         'id' => 'js_' . $id_page,
                         'class' => '',
@@ -820,6 +802,7 @@ class Amazingzoom extends Module
                     array(
                         'type' => 'textarea',
                         'label' => $this->l('Css Code'),
+                        'desc' => $this->l('Tags: {css_selector} and {thumb_selector}'),
                         'name' => 'css_' . $id_page,
                         'id' => 'css_' . $id_page,
                         'class' => '',
@@ -848,26 +831,24 @@ class Amazingzoom extends Module
             ),
         );
 
-        if ((int)$id_page !== $this->getDefaultId()) {
-            $form['form']['tabs']['page6_' . $id_page] = 'Display Page';
-            $form['form']['input'][] = array(
-                'type' => 'duallist',
-                'label' => $this->l('Page'),
-                'name' => 'controller_' . $id_page,
-                'id' => 'controller',
-                'class' => '',
-                'multiple' => true,
+        $form['form']['tabs']['page6_' . $id_page] = 'Display Page';
+        $form['form']['input'][] = array(
+            'type' => 'duallist',
+            'label' => $this->l('Page'),
+            'name' => 'controller_' . $id_page,
+            'id' => 'controller',
+            'class' => '',
+            'multiple' => true,
+            'options' => array(
                 'options' => array(
-                    'options' => array(
-                        'query' => $this->getPages(),
-                        'id' => 'page',
-                        'name' => 'page',
-                        'link' => 'link'
-                    ),
+                    'query' => $this->getPages(),
+                    'id' => 'page',
+                    'name' => 'page',
+                    'link' => 'link'
                 ),
-                'tab' => 'page6_' . $id_page
-            );
-        }
+            ),
+            'tab' => 'page6_' . $id_page
+        );
 
         return $form;
     }
@@ -909,33 +890,29 @@ class Amazingzoom extends Module
 
         if (!$this->isCached($templateFile, $this->getCacheId($id_cache))) {
             $active_amazingzooms = AmazingZoomClass::getEnabled();
-            $default_amazingzoom =  AmazingZoomClass::getDefaultSettings();
             $amazingzoom = array();
 
             foreach ($active_amazingzooms as $key => $active_amazingzoom) {
                 $controllers = explode(',', $active_amazingzoom['controller']);
                 if (in_array($controller, $controllers)) {
-                    if ($active_amazingzoom['use_default']) {
-                        $amazingzoom[$key] = $default_amazingzoom[0];
-                        $amazingzoom[$key]['use_default'] = $active_amazingzoom['use_default'];
-                        $amazingzoom[$key]['is_enable'] = $active_amazingzoom['is_enable'];
-                        $amazingzoom[$key]['controller'] = $active_amazingzoom['controller'];
-                        $amazingzoom[$key]['name'] = $active_amazingzoom['name'];
-                        $amazingzoom[$key]['css_selector'] = $active_amazingzoom['css_selector'];
-
-                        $amazingzoom[$key]['js'] = $active_amazingzoom['js'];
-                        $amazingzoom[$key]['css'] = $active_amazingzoom['css'];
-                    } else {
-                        $amazingzoom[$key] = $active_amazingzoom;
-                    }
+                    $amazingzoom[$key] = $active_amazingzoom;
 
                     $amazingzoom[$key]['image_type'] = ($active_amazingzoom['image_type'] === 'upload' ? '' :
                         '-' . $active_amazingzoom['image_type']);
+
+                    $image_size = Image::getSize($active_amazingzoom['image_type']);
+                    $amazingzoom[$key]['image_width'] = ($image_size['width'] ? $image_size['width'] : 1000);
+                    $amazingzoom[$key]['image_height'] = ($image_size['height'] ? $image_size['height'] : 1000);
 
                     $amazingzoom[$key]['js'] =
                         str_replace('{css_selector}', $amazingzoom[$key]['css_selector'], $amazingzoom[$key]['js']);
                     $amazingzoom[$key]['css'] =
                         str_replace('{css_selector}', $amazingzoom[$key]['css_selector'], $amazingzoom[$key]['css']);
+
+                    $amazingzoom[$key]['js'] =
+                        str_replace('{thumb_selector}', $amazingzoom[$key]['thumb_selector'], $amazingzoom[$key]['js']);
+                    $amazingzoom[$key]['css'] =
+                        str_replace('{thumb_selector}', $amazingzoom[$key]['thumb_selector'], $amazingzoom[$key]['css']);
                 }
             }
 
@@ -972,10 +949,11 @@ class Amazingzoom extends Module
 
     private function saveDefaultSettings($id_amazingzoom)
     {
-        $ps_version = (_PS_VERSION_ >= 1.7 ? "17" : "");
+        $ps_version = (_PS_VERSION_ >= 1.7 ? "17" : "16");
         $amazingZoomClass = new AmazingZoomClass($id_amazingzoom);
         $file = dirname(__FILE__) . '/classes/ModuleDisplay/' . $ps_version . '/' .
-            str_replace(' ', '', $amazingZoomClass->name) . $ps_version . '.php';
+            str_replace(' ', '', $amazingZoomClass->name) .
+            ($ps_version === '16' ? '' : $ps_version) . '.php';
         require_once $file;
 
         $class = basename($file, '.php');
@@ -1029,7 +1007,7 @@ class Amazingzoom extends Module
 
         $amazingZoomClass = new AmazingZoomClass($id_amazingzoom);
         $amazingZoomClass->copyFromPost($id_amazingzoom);
-        $amazingZoomClass->js = str_replace("'", '"', $amazingZoomClass->css);
+        $amazingZoomClass->js = str_replace("'", '"', $amazingZoomClass->js);
         $amazingZoomClass->save();
 
         $this->clearCache();
@@ -1050,11 +1028,6 @@ class Amazingzoom extends Module
         }
     }
 
-    private function getDefaultId()
-    {
-        return (int)AmazingZoomClass::getDefaultSettingsId();
-    }
-
     private function getPages()
     {
         $controllers = Dispatcher::getControllers(_PS_FRONT_CONTROLLER_DIR_);
@@ -1068,7 +1041,7 @@ class Amazingzoom extends Module
             $result[$key]['link'] = $this->context->link->getPageLink($key);
 
             if ($key === 'category') {
-                $category = new Category((int) Configuration::get('PS_HOME_CATEGORY'));
+                $category = new Category($this->getFirstEnabled('category'));
                 $result[$key]['link'] = $category->getLink();
             }
 
@@ -1093,12 +1066,21 @@ class Amazingzoom extends Module
 
     private function isUniqueCssElement($css_selector, $id_amazingzoom)
     {
-        $pages = DB::getInstance()->executeS(
-            'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom` WHERE css_selector = "' . $css_selector . '" AND
-            `id_amazingzoom` != ' . $id_amazingzoom
+        $amazingzoom_save = new AmazingZoomClass($id_amazingzoom);
+        $amazingzooms = DB::getInstance()->executeS(
+            'SELECT * FROM `' . _DB_PREFIX_ . 'amazingzoom` WHERE `id_amazingzoom` != ' . $id_amazingzoom
         );
 
-        return ($pages ? false : true);
+        foreach ($amazingzooms as $amazingzoom) {
+            $controllers = explode(",",$amazingzoom['controller']);
+
+            if($amazingzoom['css_selector'] === $css_selector &&
+            (count(array_intersect($controllers, $amazingzoom_save->controller))) ? true : false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function copyFrom($id, $id_to)
@@ -1148,8 +1130,27 @@ class Amazingzoom extends Module
 
     private function getFirstEnabled($entity)
     {
+        if($entity === 'category') {
+            return $this->getFirstEnabledCategory($entity);
+        }
+
         $id = DB::getInstance()->getValue(
             'SELECT id_' . $entity . ' FROM `' . _DB_PREFIX_ . $entity .'` WHERE active = 1'
+        );
+
+        return $id;
+    }
+
+    /**
+     * @param $entity
+     * @return mixed
+     */
+    private function getFirstEnabledCategory($entity)
+    {
+        $id = DB::getInstance()->getValue(
+            'SELECT id_' . $entity . ' FROM `' . _DB_PREFIX_ . $entity . '` WHERE active = 1 
+                AND id_' . $entity . ' != ' . Configuration::getGlobalValue('PS_ROOT_CATEGORY') .
+            ' AND id_' . $entity . ' != ' . Configuration::getGlobalValue('PS_HOME_CATEGORY')
         );
 
         return $id;

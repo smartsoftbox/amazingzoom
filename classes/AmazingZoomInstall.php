@@ -41,7 +41,6 @@ class AmazingZoomInstall
     {
         $query = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'amazingzoom` (
 			 `id_amazingzoom` int(10) unsigned NOT NULL auto_increment,
-             `use_default` BOOL NOT NULL DEFAULT 0,
              `is_enable`  BOOL NOT NULL DEFAULT 0,
              `position` varchar(255) NOT NULL,
              `mposition` varchar(255) NOT NULL,
@@ -94,7 +93,7 @@ class AmazingZoomInstall
     {
         $ps_version = (_PS_VERSION_ >= 1.7 ? "17" : "16");
         foreach (glob(dirname(__FILE__) . '/ModuleDisplay/' . $ps_version . '/*.php') as $file) {
-            if (strpos($file, 'ModuleDisplay.php') === false) {
+            if (strpos($file, 'ModuleDisplay.php') === false && strpos($file, 'index.php') === false) {
                 require_once $file;
 
                 // get the file name of the current file without the extension

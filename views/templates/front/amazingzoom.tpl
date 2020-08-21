@@ -62,7 +62,8 @@
                   $(this).attr("xoriginal", $(this).attr("src")
                       .replace("-home_default", "{$az.image_type|escape:'html':'UTF-8'}")
                       .replace("-large_default", "{$az.image_type|escape:'html':'UTF-8'}")
-                      .replace("-small_default", "{$az.image_type|escape:'html':'UTF-8'}"));
+                      .replace("-small_default", "{$az.image_type|escape:'html':'UTF-8'}")
+                  );
               });
 
               {if $az.thumb_selector}
@@ -72,7 +73,8 @@
                         .replace("-home_default", "{$az.image_type|escape:'html':'UTF-8'}")
                         .replace("-large_default", "{$az.image_type|escape:'html':'UTF-8'}")
                         .replace("-small_default", "{$az.image_type|escape:'html':'UTF-8'}")
-                        .replace("-cart_default", "{$az.image_type|escape:'html':'UTF-8'}"));
+                        .replace("-cart_default", "{$az.image_type|escape:'html':'UTF-8'}")
+                    );
                 });
               {/if}
             {/if}
@@ -164,8 +166,8 @@
               gallery.each(function (index, value) {
                   var image = {
                       src: $(this).attr('xoriginal'),
-                      w: 800,
-                      h: 800
+                      w: {$az.image_width|intval},
+                      h: {$az.image_height|intval}
                   };
                   var src = trigger.attr('xoriginal');
                   if (image.src === src) {

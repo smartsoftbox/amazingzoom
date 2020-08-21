@@ -20,7 +20,7 @@ class BestsellersBlock17 extends ModuleDisplay
     public $js = '';
     public $css = '';
     public $use_default = false;
-    public $is_enable = true;
+    public $is_enable = false;
     public $position = 'inside';
     public $mposition = 'inside';
     public $Xoffset = 0;
@@ -39,7 +39,7 @@ class BestsellersBlock17 extends ModuleDisplay
     public $bg = false;
 
     //photoswipe
-    public $swipe_is_enable = true;
+    public $swipe_is_enable = false;
     public $swipe_showHideOpacity = false;
     public $swipe_showAnimationDuration = 333;
     public $swipe_hideAnimationDuration = 334;
