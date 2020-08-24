@@ -822,8 +822,8 @@ class Amazingzoom extends Module
             if (method_exists($this->context->controller, 'addJquery')) {
                 $this->context->controller->addJquery();
 
-                $this->context->controller->addJS($this->_path . 'views/js/range-slider.min.js');
-                $this->context->controller->addCSS($this->_path . 'views/css/range-slider.css');
+                $this->context->controller->addJS($this->_path . 'views/js/rangeslider.min.js');
+                $this->context->controller->addCSS($this->_path . 'views/css/rangeslider.css');
                 $this->context->controller->addJS($this->_path . 'views/js/back.js');
                 $this->context->controller->addCSS($this->_path . 'views/css/back.css');
                 $this->context->controller->addCSS($this->_path . 'views/css/duallist.css');

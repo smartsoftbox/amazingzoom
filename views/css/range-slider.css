@@ -6,7 +6,7 @@
 
 .rangeSlider {
     position: relative;
-    background: #ceddde;
+    background: #7f8c8d;
 }
 
 .rangeSlider__horizontal {
@@ -25,7 +25,7 @@
 }
 
 .rangeSlider__fill {
-    background: #33c0f9;
+    background: #16a085;
     position: absolute;
 }
 
@@ -45,8 +45,8 @@
     border: 1px solid #ccc;
     cursor: pointer;
     display: inline-block;
-    width: 25px;
-    height: 25px;
+    width: 40px;
+    height: 40px;
     position: absolute;
     background: white linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.1));
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
@@ -73,7 +73,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    /*background-image: linear-gradient(rgba(0, 0, 0, 0.13), rgba(255, 255, 255, 0));*/
+    background-image: linear-gradient(rgba(0, 0, 0, 0.13), rgba(255, 255, 255, 0));
     border-radius: 50%;
 }
 
@@ -87,10 +87,10 @@ input[type="range"]:focus + .rangeSlider .rangeSlider__handle {
 
 .rangeSlider__buffer {
     position: absolute;
-    /*top: 3px;*/
-    height: 5px;
+    top: 3px;
+    height: 14px;
     background: #2c3e50;
-    border-radius: 1px;
+    border-radius: 10px;
 }
 
 
