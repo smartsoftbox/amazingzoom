@@ -822,7 +822,7 @@ class Amazingzoom extends Module
             if (method_exists($this->context->controller, 'addJquery')) {
                 $this->context->controller->addJquery();
 
-                $this->context->controller->addJS($this->_path . 'views/js/range-slider.js');
+                $this->context->controller->addJS($this->_path . 'views/js/range-slider.min.js');
                 $this->context->controller->addCSS($this->_path . 'views/css/range-slider.css');
                 $this->context->controller->addJS($this->_path . 'views/js/back.js');
                 $this->context->controller->addCSS($this->_path . 'views/css/back.css');
@@ -1018,9 +1018,9 @@ class Amazingzoom extends Module
         );
 
         foreach ($amazingzooms as $amazingzoom) {
-            $controllers = explode(",",$amazingzoom['controller']);
+            $controllers = explode(",", $amazingzoom['controller']);
 
-            if($amazingzoom['css_selector'] === $css_selector &&
+            if ($amazingzoom['css_selector'] === $css_selector &&
             (count(array_intersect($controllers, $amazingzoom_save->controller))) ? true : false) {
                 return false;
             }
@@ -1076,7 +1076,7 @@ class Amazingzoom extends Module
 
     private function getFirstEnabled($entity)
     {
-        if($entity === 'category') {
+        if ($entity === 'category') {
             return $this->getFirstEnabledCategory($entity);
         }
 
