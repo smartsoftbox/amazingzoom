@@ -51,9 +51,6 @@ class AmazingZoomClass extends ObjectModel
     public $thumb_selector;
     public $image_type;
 
-    public $css;
-    public $js;
-
     public static $definition = array(
         'table' => 'amazingzoom',
         'primary' => 'id_amazingzoom',
@@ -138,10 +135,6 @@ class AmazingZoomClass extends ObjectModel
         $fields['css_selector'] = $this->css_selector;
         $fields['thumb_selector'] = $this->thumb_selector;
         $fields['image_type'] = $this->image_type;
-
-        $fields['css'] = $this->css;
-        $fields['js'] = $this->js;
-
 
         return $fields;
     }

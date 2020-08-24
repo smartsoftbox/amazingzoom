@@ -164,24 +164,6 @@ $(document).ready(function () {
   }
 });
 
-function createEditor(name, mode) {
-  var textarea = $("textarea#" + name);
-  var editDiv = $('<div id="div-' + name + '">').insertBefore(textarea);
-  textarea.css('display', 'none');
-
-  var editor = ace.edit(editDiv[0], {
-    mode: "ace/mode/" + mode,
-    selectionStyle: "text"
-  });
-  editor.getSession().setValue(textarea.val());
-  editor.setTheme("ace/theme/tomorrow");
-
-  // copy back to textarea on form submit...
-  editor.getSession().on('change', function () {
-    textarea.val(editor.getSession().getValue());
-  });
-}
-
 function showLoader() {
   $('#right-column div.tab-content').hide();
   $('#ajax-loader').css('display', 'flex');
@@ -219,14 +201,10 @@ function displayTabContent(id, form, message = null)
   $('div[alt="model-' + id + '"]').html(form);
   $('input[type="color"]').mColorPicker();
   unique_field_id = 'div[alt="' + id + '"]'; // for tabs
-
   createTabs();
   displaySwitchInline();
   convertRangeToSlider();
   hideLoader();
-  createEditor('js_' + id, 'javascript');
-  createEditor('css_' + id, 'css');
-
   if(message) {
     displayMessage(message);
   }

@@ -284,7 +284,6 @@ class Amazingzoom extends Module
                     'page1_' . $id_page => 'Zoom 1',
                     'page2_' . $id_page => 'Zoom 2',
                     'page5_' . $id_page => 'Photo swipe',
-                    'page7_' . $id_page => 'Additional Code',
                 ),
                 'input' => array(
                     array(
@@ -486,26 +485,6 @@ class Amazingzoom extends Module
                         'name' => 'lensCollision_' . $id_page,
                         'desc' => $this->l('Lens will collide and not go out of main image borders. 
                         This option is always false for position "lens".'),
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                        'tab' => 'page2_' . $id_page
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('title'),
-                        'name' => 'title_' . $id_page,
-                        'desc' => $this->l('Output title/caption of the image, in the zoom output window..'),
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -789,25 +768,6 @@ class Amazingzoom extends Module
                         'label' => $this->l('Selector thumbnails'),
                         'tab' => 'page5_' . $id_page
                     ),
-
-                    array(
-                        'type' => 'textarea',
-                        'label' => $this->l('JavaScript Code'),
-                        'desc' => $this->l('Tags: {css_selector} and {thumb_selector}'),
-                        'name' => 'js_' . $id_page,
-                        'id' => 'js_' . $id_page,
-                        'class' => '',
-                        'tab' => 'page7_' . $id_page,
-                    ),
-                    array(
-                        'type' => 'textarea',
-                        'label' => $this->l('Css Code'),
-                        'desc' => $this->l('Tags: {css_selector} and {thumb_selector}'),
-                        'name' => 'css_' . $id_page,
-                        'id' => 'css_' . $id_page,
-                        'class' => '',
-                        'tab' => 'page7_' . $id_page,
-                    )
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
@@ -870,11 +830,6 @@ class Amazingzoom extends Module
 
                 $this->context->controller->addJS($this->_path . 'views/js/duallist.js');
                 $this->context->controller->addJS($this->_path . 'views/js/jquery.cooki-plugin.js');
-
-                $this->context->controller->addJS($this->_path . 'views/js/ace.js');
-                $this->context->controller->addJS($this->_path . 'views/js/theme-tomorrow.js');
-                $this->context->controller->addJS($this->_path . 'views/js/mode-css.js');
-                $this->context->controller->addJS($this->_path . 'views/js/mode-javascript.js');
             }
         }
     }
@@ -903,16 +858,6 @@ class Amazingzoom extends Module
                     $image_size = Image::getSize($active_amazingzoom['image_type']);
                     $amazingzoom[$key]['image_width'] = ($image_size['width'] ? $image_size['width'] : 1000);
                     $amazingzoom[$key]['image_height'] = ($image_size['height'] ? $image_size['height'] : 1000);
-
-                    $amazingzoom[$key]['js'] =
-                        str_replace('{css_selector}', $amazingzoom[$key]['css_selector'], $amazingzoom[$key]['js']);
-                    $amazingzoom[$key]['css'] =
-                        str_replace('{css_selector}', $amazingzoom[$key]['css_selector'], $amazingzoom[$key]['css']);
-
-                    $amazingzoom[$key]['js'] =
-                        str_replace('{thumb_selector}', $amazingzoom[$key]['thumb_selector'], $amazingzoom[$key]['js']);
-                    $amazingzoom[$key]['css'] =
-                        str_replace('{thumb_selector}', $amazingzoom[$key]['thumb_selector'], $amazingzoom[$key]['css']);
                 }
             }
 
@@ -923,7 +868,8 @@ class Amazingzoom extends Module
                     'amazingzooms' => $amazingzoom,
                     'is_zoom_enable' => $this->isZoomEnable($amazingzoom),
                     'is_swipe_enable' => $this->isSwipeEnable($amazingzoom),
-                    'is_17' => (_PS_VERSION_ >= 1.7 ? true : false)
+                    'is_17' => (_PS_VERSION_ >= 1.7 ? true : false),
+                    'is_product_page' => ($controller === 'product' ? true : false)
                 ));
             } else {
                 return '';

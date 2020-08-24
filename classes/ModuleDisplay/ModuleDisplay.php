@@ -14,9 +14,6 @@ abstract class ModuleDisplay
     protected $controller;
     protected $id_page;
     protected $css_selector;
-    protected $js;
-    protected $css;
-    protected $use_default;
     protected $is_enable;
     protected $position;
     protected $mposition;
@@ -53,24 +50,6 @@ abstract class ModuleDisplay
     protected $thumb_selector;
     protected $image_type;
 
-    protected function getJS()
-    {
-        $js = str_replace('<script>', '', $this->js);
-        $js = str_replace('</script>', '', $js);
-        $js = trim($js);
-
-        return pSQL($js);
-    }
-
-    protected function getCSS()
-    {
-        $css = str_replace('<style>', '', $this->css);
-        $css = str_replace('</style>', '', $css);
-        $css = trim($css);
-
-        return pSQL($css);
-    }
-
     public function save()
     {
         $amazingZoomClass = new AmazingZoomClass();
@@ -80,9 +59,6 @@ abstract class ModuleDisplay
         $amazingZoomClass->thumb_selector = $this->thumb_selector;
         $amazingZoomClass->image_type = $this->image_type;
 
-        $amazingZoomClass->css = $this->getCSS();
-        $amazingZoomClass->js = $this->getJS();
-        $amazingZoomClass->use_default = $this->use_default;
         $amazingZoomClass->is_enable = $this->is_enable;
         $amazingZoomClass->position = $this->position;
         $amazingZoomClass->mposition = $this->mposition;

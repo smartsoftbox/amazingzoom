@@ -26,8 +26,6 @@ class NewProductsSideabar extends ModuleDisplay
     );
     public $id_page = 6;
     public $css_selector = '#new-products_block_right .products-block-image img';
-    public $js = '';
-    public $css = '';
     public $use_default = false;
     public $is_enable = false;
     public $position = 'inside';

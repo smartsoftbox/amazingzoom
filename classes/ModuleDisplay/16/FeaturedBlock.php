@@ -20,13 +20,6 @@ class FeaturedBlock extends ModuleDisplay
     );
     public $id_page = 15;
     public $css_selector = '#homefeatured .product_img_link img';
-    public $js = "<script>
-$('{css_selector}').each(function () {
-    $(this).closest('.product-image-container').css('padding', '0px');
-    $(this).attr('width', '268px').attr('height', '268px').css('width', '268px');
-});
-            </script>";
-    public $css = '';
     public $use_default = false;
     public $is_enable = true;
     public $position = 'inside';

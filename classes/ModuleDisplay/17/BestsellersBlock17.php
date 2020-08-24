@@ -17,8 +17,6 @@ class BestsellersBlock17 extends ModuleDisplay
     public $controller = array('index');
     public $id_page = 10;
     public $css_selector = '.js-qv-product-cover, .thumbs';
-    public $js = '';
-    public $css = '';
     public $use_default = false;
     public $is_enable = false;
     public $position = 'inside';

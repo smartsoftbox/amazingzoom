@@ -20,15 +20,6 @@ class SearchPage extends ModuleDisplay
     );
     public $id_page = 16;
     public $css_selector = '#product_list .product_img_link img';
-    public $js = "<script>
-$('{css_selector}').each(function () {
-    $(this).closest('.product-image-container').css('padding', '0px');
-    $(this).attr('width', '268px');
-    $(this).attr('height', '268px');
-    $(this).css('width', '268px');
-});
-            </script>";
-    public $css = '';
     public $use_default = false;
     public $is_enable = true;
     public $position = 'inside';

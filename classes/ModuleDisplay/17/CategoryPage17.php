@@ -20,8 +20,6 @@ class CategoryPage17 extends ModuleDisplay
     );
     public $id_page = 3;
     public $css_selector = '#products article img';
-    public $js = '';
-    public $css = '';
     public $use_default = false;
     public $is_enable = true;
     public $position = 'inside';

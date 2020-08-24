@@ -26,8 +26,6 @@ class SpecialsSidebar extends ModuleDisplay
     );
     public $id_page = 12;
     public $css_selector = '#special_block_right .products-block-image img';
-    public $js = '';
-    public $css = '';
     public $use_default = false;
     public $is_enable = false;
     public $position = 'inside';

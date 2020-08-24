@@ -20,8 +20,6 @@ class ManufacturerPage extends ModuleDisplay
     );
     public $id_page = 4;
     public $css_selector = '#product_list .product_img_link img';
-    public $js = '';
-    public $css = '';
     public $use_default = false;
     public $is_enable = true;
     public $position = 'inside';

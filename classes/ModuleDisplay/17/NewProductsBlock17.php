@@ -20,8 +20,6 @@ class NewProductsBlock17 extends ModuleDisplay
     );
     public $id_page = 7;
     public $css_selector = '.js-qv-product-cover, .thumbs';
-    public $js = '';
-    public $css = '';
     public $use_default = false;
     public $is_enable = true;
     public $position = 'inside';

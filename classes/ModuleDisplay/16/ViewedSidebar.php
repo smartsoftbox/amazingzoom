@@ -26,8 +26,6 @@ class ViewedSidebar extends ModuleDisplay
     );
     public $id_page = 14;
     public $css_selector = '#viewed-products_block_left .products-block-image img';
-    public $js = '';
-    public $css = '';
     public $use_default = false;
     public $is_enable = false;
     public $position = 'inside';

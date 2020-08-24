@@ -20,12 +20,6 @@ class ProductPage extends ModuleDisplay
     );
     public $id_page = 2;
     public $css_selector = '#bigpic';
-    public $js = '<script>
-$("{thumb_selector}").mouseover(function () {
-  $("{css_selector}").attr("xoriginal", $(this).attr("xoriginal"));
-});
-        </script>';
-    public $css = '';
     public $use_default = false;
     public $is_enable = true;
     public $position = 'right';
@@ -60,6 +54,6 @@ $("{thumb_selector}").mouseover(function () {
     public $swipe_closeOnVerticalDrag = true;
     public $swipe_arrowKeys = true;
     public $swipe_modal = true;
-    public $thumb_selector = '';
+    public $thumb_selector = '#thumbs_list img';
     public $image_type = 'upload';
 }

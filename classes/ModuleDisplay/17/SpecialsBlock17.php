@@ -20,8 +20,6 @@ class SpecialsBlock17 extends ModuleDisplay
     );
     public $id_page = 13;
     public $css_selector = 'article img';
-    public $js = '';
-    public $css = '';
     public $use_default = false;
     public $is_enable = true;
     public $position = 'inside';

@@ -25,8 +25,6 @@ class ViewedSidebar17 extends ModuleDisplay
     );
     public $id_page = 14;
     public $css_selector = '';
-    public $js = '';
-    public $css = '';
     public $use_default = false;
     public $is_enable = false;
     public $position = 'right';

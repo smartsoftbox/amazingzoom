@@ -79,9 +79,6 @@ class AmazingZoomInstall
              `css_selector` varchar(255) NOT NULL,
              `thumb_selector` varchar(255) NOT NULL,
              `image_type` varchar(255) NOT NULL,
-            
-             `css` TEXT NOT NULL DEFAULT "", 
-             `js` TEXT NOT NULL DEFAULT "", 
  
 			PRIMARY KEY  (`id_amazingzoom`)
 			) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
