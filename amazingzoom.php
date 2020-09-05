@@ -41,6 +41,7 @@ class Amazingzoom extends Module
     {
         $this->name = 'amazingzoom';
         $this->tab = 'front_office_features';
+        $this->module_key = 'd84237f80b67d33373f6d1b5ca7a9c8b';
         $this->version = '1.0.0';
         $this->author = 'Smart Soft';
         $this->need_instance = 0;
