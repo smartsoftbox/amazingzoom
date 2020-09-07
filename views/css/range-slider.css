@@ -25,7 +25,7 @@
 }
 
 .rangeSlider__fill {
-    background: #16a085;
+    background: #00aff0;
     position: absolute;
 }
 
@@ -45,10 +45,10 @@
     border: 1px solid #ccc;
     cursor: pointer;
     display: inline-block;
-    width: 40px;
-    height: 40px;
+    width: 25px;
+    height: 25px;
     position: absolute;
-    background: white linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.1));
+    background: white;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     border-radius: 50%;
 }

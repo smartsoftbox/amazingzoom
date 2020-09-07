@@ -823,8 +823,8 @@ class Amazingzoom extends Module
             if (method_exists($this->context->controller, 'addJquery')) {
                 $this->context->controller->addJquery();
 
-                $this->context->controller->addJS($this->_path . 'views/js/rangeslider.min.js');
-                $this->context->controller->addCSS($this->_path . 'views/css/rangeslider.css');
+                $this->context->controller->addJS($this->_path . 'views/js/range-slider.min.js');
+                $this->context->controller->addCSS($this->_path . 'views/css/range-slider.css');
                 $this->context->controller->addJS($this->_path . 'views/js/back.js');
                 $this->context->controller->addCSS($this->_path . 'views/css/back.css');
                 $this->context->controller->addCSS($this->_path . 'views/css/duallist.css');
@@ -946,7 +946,7 @@ class Amazingzoom extends Module
         if (!empty($this->_errors)) {
             $errors = '';
             foreach ($this->_errors as $error) {
-                $errors = '<div class="module_error alert alert-danger" >' . $error . '</div>';
+                $errors = $this->displayError($error);
             }
             return $errors;
         }
@@ -967,6 +967,10 @@ class Amazingzoom extends Module
 
     private function postValidation($id_amazingzoom)
     {
+        if (!Tools::getValue('css_selector_' . $id_amazingzoom)) {
+            $this->_errors[] = $this->l('Selector image is empty');
+        }
+
         if (!$this->isUniqueCssElement(
             $css_selector = Tools::getValue('css_selector_' . $id_amazingzoom),
             $id_amazingzoom
