@@ -58,7 +58,9 @@ class Amazingzoom extends Module
         parent::__construct();
 
         $this->displayName = $this->l('Amazing Zoom Product Image');
-        $this->description = $this->l('Zoom Effect for Product Image');
+        $this->description = $this->l('Zoom Effect for Product Image. Amazing Zoom is a modern and highly 
+        configurable image zoom plugin for PrestaShop. It allows you to create a magnifying glass on your images, 
+        and large image zoom effect for your store.');
 
         $this->confirmUninstall = $this->l('Are you sure you want uninstall module ?');
     }
