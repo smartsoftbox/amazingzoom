@@ -42,7 +42,7 @@ class Amazingzoom extends Module
         $this->name = 'amazingzoom';
         $this->tab = 'front_office_features';
         $this->module_key = 'd84237f80b67d33373f6d1b5ca7a9c8b';
-        $this->version = '1.0.0';
+        $this->version = '1.0.1';
         $this->author = 'Smart Soft';
         $this->need_instance = 0;
         $this->path = dirname(__FILE__);
@@ -166,7 +166,7 @@ class Amazingzoom extends Module
         $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false)
             .'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
-
+        $helper->first_call = false;
         $helper->tpl_vars = array(
             'fields_value' => $this->getConfigFormValues($id_page), /* Add values for your inputs */
             'languages' => $this->context->controller->getLanguages(),
@@ -255,7 +255,7 @@ class Amazingzoom extends Module
         $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false)
             .'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
-
+        $helper->first_call = false;
         $helper->tpl_vars = array(
             'fields_value' => $this->getConfigFormValues($id_page), /* Add values for your inputs */
             'languages' => $this->context->controller->getLanguages(),
