@@ -956,7 +956,6 @@ class Amazingzoom extends Module
 
         $amazingZoomClass = new AmazingZoomClass($id_amazingzoom);
         $amazingZoomClass->copyFromPost($id_amazingzoom);
-        $amazingZoomClass->js = str_replace("'", '"', $amazingZoomClass->js);
         $amazingZoomClass->save();
 
         $this->clearCache();
@@ -969,15 +968,17 @@ class Amazingzoom extends Module
 
     private function postValidation($id_amazingzoom)
     {
-        if (!Tools::getValue('css_selector_' . $id_amazingzoom)) {
-            $this->_errors[] = $this->l('Selector image is empty');
-        }
+        if (Tools::getIsset('css_selector_' . $id_amazingzoom)) {
+            if (!Tools::getValue('css_selector_' . $id_amazingzoom)) {
+                $this->_errors[] = $this->l('Selector image is empty');
+            }
 
-        if (!$this->isUniqueCssElement(
-            $css_selector = Tools::getValue('css_selector_' . $id_amazingzoom),
-            $id_amazingzoom
-        )) {
-            $this->_errors[] = $this->l('You already use "' . $css_selector . '" as image selector.');
+            if (!$this->isUniqueCssElement(
+                $css_selector = Tools::getValue('css_selector_' . $id_amazingzoom),
+                $id_amazingzoom
+            )) {
+                $this->_errors[] = $this->l('You already use "' . $css_selector . '" as image selector.');
+            }
         }
     }
 
